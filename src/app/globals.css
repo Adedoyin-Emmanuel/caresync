@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 @font-face {
+  src: url("/fonts/space-grotesk.ttf");
   font-family: SpaceMono;
-  src: url("./fonts/space-mono.ttf") format(true);
   font-weight: normal;
   font-style: normal;
 }
 
-* {
+*, body {
   font-family: SpaceMono !important;
 }
 
@@ -27,12 +27,3 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
