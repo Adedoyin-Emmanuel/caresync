@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: SpaceMono;
+  src: url("./fonts/space-mono.ttf") format(true);
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: SpaceMono !important;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
