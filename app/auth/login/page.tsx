@@ -38,7 +38,7 @@ const Login = () => {
 
         <section>
           <Text className="inline">
-            don&apos;t have an account?
+            don't have an account?
             <Link
               className="capitalize text-secondary px-1"
               href={"/auth/signup"}
