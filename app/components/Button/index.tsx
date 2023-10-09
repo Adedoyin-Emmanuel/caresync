@@ -8,7 +8,7 @@ interface ButtonProps {
 const Button = ({ className, children }: ButtonProps) => {
   return (
     <button
-      className={`capitalize text-white w-48 rounded w p-3 btn-secondary ${className}`}
+      className={`capitalize text-white w-full rounded p-3 btn-secondary ${className}`}
     >
       {children}
     </button>
