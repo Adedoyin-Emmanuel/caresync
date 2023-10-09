@@ -1,6 +1,7 @@
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Text from "@/app/components/Text";
+import Link from "next/link";
 
 const Login = () => {
   return (
@@ -33,6 +34,18 @@ const Login = () => {
 
         <section className="my-4 mb-5 w-full">
           <Button> Login</Button>
+        </section>
+
+        <section>
+          <Text className="inline">
+            don't have an account?
+            <Link
+              className="capitalize text-secondary px-1"
+              href={"/auth/signup"}
+            >
+              create account
+            </Link>
+          </Text>
         </section>
       </form>
     </section>
