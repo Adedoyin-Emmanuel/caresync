@@ -1,12 +1,11 @@
+import Image from "next/image";
+import Button from "./components/Button";
+import Navbar from "./components/Navbar";
+
 export default function Home() {
   return (
-    <section>
-      <header>
-
-      </header>
-
-
-      <section></section>
+    <section className="w-screen">
+      <Navbar />
     </section>
   );
 }
