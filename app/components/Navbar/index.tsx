@@ -38,7 +38,7 @@ const Navbar: React.FC = (): JSX.Element => {
     },
   ];
   return (
-    <nav className="w-screen flex items-center md:justify-center justify-between md:flex-row flex-col  py-5 overflow-x-hidden z-10">
+    <nav className="w-screen flex items-center md:justify-center justify-between md:flex-row flex-col  py-5 overflow-x-hidden z-10" >
       <h2 className="font-extrabold text-4xl text-secondary  mx-5 md:flex items-center  hidden cursor-pointer ">
         <Link href="/">Caresync</Link>
       </h2>
@@ -82,7 +82,7 @@ const Navbar: React.FC = (): JSX.Element => {
 
         <section
           ref={mobileLinksRef}
-          className="mx-5 my-11 overflow-hidden transition-max-h duration-500 ease-in-out"
+          className="mx-5 my-2 overflow-hidden transition-max-h duration-500 ease-in-out"
         >
           <Link href="/auth/login" className="capitalize block  my-6">
             login
