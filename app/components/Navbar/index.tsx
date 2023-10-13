@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { FiGithub, FiTwitter, FiYoutube } from "react-icons/fi";
 
 const Navbar: React.FC = (): JSX.Element => {
   const mobileLinksRef = useRef<HTMLElement>(null);
@@ -21,19 +21,36 @@ const Navbar: React.FC = (): JSX.Element => {
     setNavToggled(!navToggled);
   };
 
+  const navItemsClassname= "h-6 w-6 text-accent transition-color hover:text-secondary"
+  const navItems = [
+    {
+      link: "https://github.com/adedoyin-emmanuel/caresync",
+      element: <FiGithub className={navItemsClassname} />,
+    },
+
+    {
+      link: "https://youtube.com/adedoyin-emmanuel/",
+      element: <FiYoutube className={navItemsClassname} />,
+    },
+    {
+      link: "https://github.com/Emmysoft_Tm/",
+      element: <FiTwitter className={navItemsClassname} />,
+    },
+  ];
   return (
     <nav className="w-screen flex items-center md:justify-center justify-between md:flex-row flex-col  py-5 overflow-x-hidden z-10">
       <h2 className="font-extrabold text-4xl text-secondary  mx-5 md:flex items-center  hidden cursor-pointer ">
         <Link href="/">Caresync</Link>
       </h2>
 
-      <section className="hidden md:flex items-end justify-end w-4/6 overflow-x-hidden">
-        <Link
-          href="/auth?login=true"
-          className="capitalize inline-block text-center border-transparent border-solid border-2 border-spacing-3  mx-5 p-3 bg-secondary text-white w-40 rounded-sm hover:bg-transparent hover:border-secondary hover:text-black transition-all duration-150 ease-in-out"
-        >
-          login
-        </Link>
+      <section className="hidden md:flex items-end justify-end w-4/6 overflow-x-hidden space-x-6">
+        {navItems.map((navItem, index) => {
+          return (
+            <Link href={navItem.link} key={index}>
+              {navItem.element}
+            </Link>
+          );
+        })}
       </section>
 
       <section className="md:hidden flex w-full flex-col">
@@ -67,14 +84,15 @@ const Navbar: React.FC = (): JSX.Element => {
           ref={mobileLinksRef}
           className="mx-5 my-11 overflow-hidden transition-max-h duration-500 ease-in-out"
         >
-          <Link href="/" className="capitalize block  my-6">
+          <Link href="/auth/login" className="capitalize block  my-6">
             login
           </Link>
-          <Link href="about" className="capitalize block  my-6">
+          <Link href="/auth/signup" className="capitalize block  my-6">
             signup
           </Link>
-          <Link href="contact" className="capitalize block  my-6">
-            star project
+          <Link href="https://github.com/adedoyin-emmanuel/caresync" className="capitalize flex items-center gap-x-3 my-6">
+             star project
+            <FiGithub className="text-accent"/>
           </Link>
         </section>
       </section>
