@@ -54,6 +54,16 @@ const Signup = () => {
           />
         </section>
 
+        <section className="my-4 mb-5">
+          <label htmlFor="email" className="text-md block my-2">
+            Signup As
+          </label>
+          <select className="select  border-2 border-gray-300 focus:outline-none rounded-md w-full h-16">
+            <option>User</option>
+            <option>Hospital</option>
+          </select>
+        </section>
+
         <section className="my-4 mb-5 w-full">
           <Button>Sign up</Button>
         </section>
@@ -61,7 +71,10 @@ const Signup = () => {
         <section>
           <Text className="inline">
             have an account?
-            <Link className="capitalize text-secondary px-1" href={"/auth/login"}>
+            <Link
+              className="capitalize text-secondary px-1"
+              href={"/auth/login"}
+            >
               login
             </Link>
           </Text>
