@@ -12,8 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="mytheme">
-  
-      <body>{children}</body>
+      <body className="bg-zinc-50">{children}</body>
     </html>
   );
 }
