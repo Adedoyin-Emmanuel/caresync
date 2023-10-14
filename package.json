@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/react-icons": "^3.0.0",
+    "axios": "^1.5.1",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
