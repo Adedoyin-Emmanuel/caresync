@@ -3,6 +3,7 @@ import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
+import ChatBotButton from "@/app/components/ChatBotButton";
 
 import { SlBadge } from "react-icons/sl";
 
@@ -38,12 +39,12 @@ const Home = () => {
               </h3>
 
               <section className="appointments mt-4">
-                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-gray-200 flex items-center justify-between p-4 rounded cursor-pointer my-4">
+                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
                   <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
                     <BsCameraVideo className="w-6 h-6" />
                   </section>
 
-                  <section className="other-content w-10/12 flex items-center justify-around">
+                  <section className="other-content w-11/12 flex items-center justify-around">
                     <Text className="text-sm">14/09/2023</Text>
                     <Text className="text-sm font-bold">@Mayfair</Text>
                     <section className="status-badge text-black rounded bg-green-300 flex items-center justify-center h-5 w-20">
@@ -52,14 +53,14 @@ const Home = () => {
                   </section>
                 </section>
 
-                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-gray-200  flex items-center justify-between p-4 rounded cursor-pointer my-4">
+                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
                   <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
                     <BsCameraVideo className="w-6 h-6" />
                   </section>
 
-                  <section className="other-content w-10/12 flex items-center justify-around">
+                  <section className="other-content w-11/12 flex items-center justify-around">
                     <Text className="text-sm">14/09/2023</Text>
-                    <Text className="text-sm font-bold">@jefis</Text>
+                    <Text className="text-sm font-bold">@bloom</Text>
                     <section className="status-badge  text-black rounded bg-red-400 flex items-center justify-center h-5 w-20">
                       <Text className="text-[12px] font-bold">failed</Text>
                     </section>
@@ -68,6 +69,7 @@ const Home = () => {
               </section>
             </section>
           </section>
+          <ChatBotButton/>
         </section>
       </SidebarLayout>
     </div>
