@@ -7,7 +7,7 @@ interface AppHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const AppHeader = ({ className }: AppHeaderProps) => {
   return (
-    <div className={`${className} flex items-center justify-between`}>
+    <div className={`${className} flex items-center justify-between p-2 md:p-0`}>
       <section className="user-name">
         <h2 className="font-bold capitalize text-2xl">hi, emmysoft 👋</h2>
       </section>
