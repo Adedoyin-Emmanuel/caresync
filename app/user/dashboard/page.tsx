@@ -30,9 +30,27 @@ const Home = () => {
                 <Text>28 total reviews</Text>
               </section>
             </section>
+
+            <section className="health-care-history w-full my-5 p-2">
+              <h3 className="font-bold capitalize text-2xl">
+                healthcare history
+              </h3>
+
+                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
+                  <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
+                    <HiOutlineShieldCheck className="w-6 h-6" />
+                  </section>
+
+                  <section className="other-content w-11/12 flex items-center justify-around">
+                    <Text className="text-sm">14/09/2023</Text>
+                    <Text className="text-sm font-bold">@Mayfair</Text>
+                   
+                  </section>
+                </section>
+            </section>
           </section>
 
-          <section className="second-section w-full xl:w-4/12 mt-16 md:mt-0 grid grid-cols-1  items-center justify-center p-2">
+          <section className="second-section w-full xl:w-4/12 mt-16 md:mt-0 grid grid-cols-1 items-center justify-center p-2">
             <section className="user-appointments">
               <h3 className="font-bold capitalize text-2xl">
                 recent appointments
@@ -69,7 +87,7 @@ const Home = () => {
               </section>
             </section>
           </section>
-          <ChatBotButton/>
+          <ChatBotButton />
         </section>
       </SidebarLayout>
     </div>

@@ -10,12 +10,12 @@ import { IoAnalytics, IoSettingsOutline } from "react-icons/io5";
 import MobileNav from "../MobileNav";
 import Text from "../Text";
 
-interface SidebarLayoutProps{
+interface SidebarLayoutProps {
   className?: string;
   children?: React.ReactNode;
 }
 
-const SidebarLayout = ({className, children}: SidebarLayoutProps) => {
+const SidebarLayout = ({ className, children }: SidebarLayoutProps) => {
   const currentPath = usePathname();
 
   return (
@@ -48,7 +48,7 @@ const SidebarLayout = ({className, children}: SidebarLayoutProps) => {
           <Link
             href={"/user/dashboard"}
             className={`dashboard cursor-pointer  ${
-              currentPath.includes("dashboard") && "text-white bg-[#C0A3F5]"
+              currentPath.includes("dashboard") && "text-white bg-[#C0A3F6]"
             }  transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4 hover:bg-accent duration-100 ease-in hover:text-white`}
           >
             <IoAnalytics className="w-6 h-6" />
@@ -108,13 +108,20 @@ const SidebarLayout = ({className, children}: SidebarLayoutProps) => {
       </div>
       <section className="w-full md:w-3/4 lg:w-5/6 md:p-8 p-2 pl-1/4 overflow-y-auto ml-auto">
         {children}
+
+        <section className="spacer md:hidden my-10">
+          <br /> <br /> <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </section>
       </section>
 
       <MobileNav />
     </section>
   );
 };
-
 
 const HospitalSidebarLayout = () => {
   const currentPath = usePathname();

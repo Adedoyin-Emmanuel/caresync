@@ -14,6 +14,7 @@ interface MobileNavProps {
 const MobileNav = ({ className, children, ...others }: MobileNavProps) => {
   const currentPath = usePathname();
   return (
+    
     <section
       className={`w-screen flex items-center justify-between fixed bottom-0 left-0 md:hidden  bg-gray-100 h-20 z-10 p-2 ${className}`}
       {...others}
