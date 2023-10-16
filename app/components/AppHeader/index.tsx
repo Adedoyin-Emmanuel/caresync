@@ -3,14 +3,19 @@ import { GoBell } from "react-icons/go";
 
 interface AppHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
+  showWelcomeMessage?: boolean
 }
 
-const AppHeader = ({ className }: AppHeaderProps) => {
+const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
   return (
-    <div className={`${className} flex items-center justify-between p-2 md:p-0`}>
-      <section className="user-name">
-        <h2 className="font-bold capitalize text-2xl">hi, emmysoft 👋</h2>
-      </section>
+    <div
+      className={`${className} flex items-center ${showWelcomeMessage ? "justify-between" : "justify-end"} p-2 md:p-0`}
+    >
+      {showWelcomeMessage && (
+        <section className="user-name">
+          <h2 className="font-bold capitalize text-2xl">hi, emmysoft 👋</h2>
+        </section>
+      )}
 
       <section className="user-profile flex items-center gap-x-4">
         <section className="notification">

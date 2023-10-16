@@ -10,7 +10,7 @@ import { SlBadge } from "react-icons/sl";
 const Home = () => {
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      <SidebarLayout>
+      <SidebarLayout showWelcomeMesage={true}>
         <section className="general-container w-full items-start flex flex-col xl:flex-row gap-x-5">
           <section className="first-section w-full xl:w-8/12 flex flex-col items-center justify-center">
             <section className="stats-container grid p-1 lg:grid-cols-3 gap-10 w-full">

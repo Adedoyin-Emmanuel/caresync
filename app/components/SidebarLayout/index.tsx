@@ -14,9 +14,10 @@ import AppHeader from "../AppHeader";
 interface SidebarLayoutProps {
   className?: string;
   children?: React.ReactNode;
+  showWelcomeMesage?: boolean;
 }
 
-const SidebarLayout = ({ className, children }: SidebarLayoutProps) => {
+const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayoutProps) => {
   const currentPath = usePathname();
 
   return (
@@ -108,7 +109,7 @@ const SidebarLayout = ({ className, children }: SidebarLayoutProps) => {
         </section>
       </div>
       <section className="w-full md:w-3/4 lg:w-5/6 md:p-8 p-2 pl-1/4 overflow-y-auto ml-auto">
-        <AppHeader />
+        <AppHeader showWelcomeMessage={showWelcomeMesage} />
         {children}
 
         <section className="spacer md:hidden my-10">
