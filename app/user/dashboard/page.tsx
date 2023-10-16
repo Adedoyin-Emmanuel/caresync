@@ -1,9 +1,9 @@
-import AppHeader from "@/app/components/AppHeader";
+import Button from "@/app/components/Button";
+import ChatBotButton from "@/app/components/ChatBotButton";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
-import ChatBotButton from "@/app/components/ChatBotButton";
 
 import { SlBadge } from "react-icons/sl";
 
@@ -11,7 +11,6 @@ const Home = () => {
   return (
     <div className="w-screen h-screen bg-zinc-50">
       <SidebarLayout>
-        <AppHeader />
         <section className="general-container w-full items-start flex flex-col xl:flex-row gap-x-5">
           <section className="first-section w-full xl:w-8/12 flex flex-col items-center justify-center">
             <section className="stats-container grid p-1 lg:grid-cols-3 gap-10 w-full">
@@ -36,17 +35,16 @@ const Home = () => {
                 healthcare history
               </h3>
 
-                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                  <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                    <HiOutlineShieldCheck className="w-6 h-6" />
-                  </section>
-
-                  <section className="other-content w-11/12 flex items-center justify-around">
-                    <Text className="text-sm">14/09/2023</Text>
-                    <Text className="text-sm font-bold">@Mayfair</Text>
-                   
-                  </section>
+              <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
+                <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
+                  <HiOutlineShieldCheck className="w-6 h-6" />
                 </section>
+
+                <section className="other-content w-11/12 flex items-center justify-around">
+                  <Text className="text-sm">14/09/2023</Text>
+                  <Text className="text-sm font-bold">@Mayfair</Text>
+                </section>
+              </section>
             </section>
           </section>
 
@@ -83,6 +81,9 @@ const Home = () => {
                       <Text className="text-[12px] font-bold">failed</Text>
                     </section>
                   </section>
+                </section>
+                <section className="new-appointment w-full flex items-end justify-end">
+                  <Button className="w-44">New appointment</Button>
                 </section>
               </section>
             </section>
