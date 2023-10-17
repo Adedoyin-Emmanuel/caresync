@@ -83,7 +83,7 @@ const Home = () => {
                   </section>
                 </section>
                 <section className="new-appointment w-full flex items-end justify-end">
-                  <Button className="w-44">New appointment</Button>
+                  <Button className="bg-accent">New appointment</Button>
                 </section>
               </section>
             </section>

@@ -1,5 +1,9 @@
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
+import Link from "next/link";
+import { BsPenFill, BsPeopleFill } from "react-icons/bs";
+import { FaKey } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 const Settings = () => {
   return (
@@ -21,6 +25,9 @@ const Settings = () => {
                       alt="user profile image"
                     />
                   </div>
+                  <section className="pen-container bg-accent flex items-center justify-center rounded-full w-6 h-6 transform-gpu text-white translate-y-10 -translate-x-7 hover:scale-110 duration-100 ease-linear hover:bg-secondary hover:text-slate-200">
+                    <BsPenFill />
+                  </section>
                 </div>
                 <section className="user-info">
                   <h3 className="font-bold capitalize flex items-center gap-x-1">
@@ -44,6 +51,41 @@ const Settings = () => {
                     @doyin
                   </Text>
                   <Text className="text-sm">i am twenty eight 🚀</Text>
+                </section>
+              </section>
+            </section>
+
+            <section className="action-container w-full flex flex-col items-center md:justify-center">
+              <section className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12">
+                <FaKey className="h-5 w-5" />
+
+                <Link href="/user/profile" className="details">
+                  <h3 className="account font-bold capitalize text-[18px]">
+                    account{" "}
+                  </h3>
+                  <Text>update your account info</Text>
+                </Link>
+              </section>
+
+              <section className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12">
+                <BsPeopleFill className="h-5 w-5" />
+
+                <section className="details">
+                  <h3 className="account font-bold capitalize text-[18px]">
+                    Invite{" "}
+                  </h3>
+                  <Text>invite your friends to caresync</Text>
+                </section>
+              </section>
+
+              <section className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12">
+                <FiLogOut className="h-5 w-5" />
+
+                <section className="details">
+                  <h3 className="account font-bold capitalize text-[18px]">
+                    Logout{" "}
+                  </h3>
+                  <Text>log out of your account</Text>
                 </section>
               </section>
             </section>

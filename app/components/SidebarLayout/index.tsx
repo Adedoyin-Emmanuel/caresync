@@ -7,9 +7,9 @@ import { BiMessageRoundedDots } from "react-icons/bi";
 import { BsCameraVideo } from "react-icons/bs";
 import { FiLogOut, FiSearch } from "react-icons/fi";
 import { IoAnalytics, IoSettingsOutline } from "react-icons/io5";
+import AppHeader from "../AppHeader";
 import MobileNav from "../MobileNav";
 import Text from "../Text";
-import AppHeader from "../AppHeader";
 
 interface SidebarLayoutProps {
   className?: string;
@@ -17,7 +17,11 @@ interface SidebarLayoutProps {
   showWelcomeMesage?: boolean;
 }
 
-const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayoutProps) => {
+const SidebarLayout = ({
+  className,
+  children,
+  showWelcomeMesage,
+}: SidebarLayoutProps) => {
   const currentPath = usePathname();
 
   return (
@@ -50,8 +54,10 @@ const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayout
           <Link
             href={"/user/dashboard"}
             className={`dashboard cursor-pointer  ${
-              currentPath.includes("dashboard") && "text-white bg-[#C0A3F6]"
-            }  transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4 hover:bg-accent duration-100 ease-in hover:text-white`}
+              currentPath.includes("dashboard")
+                ? "text-white bg-accent"
+                : "bg-gray-200"
+            }  transition-colors flex items-center gap-x-4  p-5 rounded my-4 hover:bg-accent duration-100 ease-in hover:text-white`}
           >
             <IoAnalytics className="w-6 h-6" />
             <Text>Dashboard</Text>
@@ -59,9 +65,11 @@ const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayout
 
           <Link
             href="/user/appointments"
-            className={`dashboard cursor-pointer ${
-              currentPath.includes("appointments") && "bg-[#C0A3F6] text-white"
-            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4`}
+            className={`dashboard cursor-pointer  ${
+              currentPath.includes("appointments")
+                ? "text-white bg-accent"
+                : "bg-gray-200"
+            }  hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}
           >
             <BsCameraVideo className="w-6 h-6" />
             <Text>Appointments</Text>
@@ -69,9 +77,11 @@ const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayout
 
           <Link
             href="/user/search"
-            className={`dashboard cursor-pointer ${
-              currentPath.includes("search") && "bg-[#C0A3F6] text-white"
-            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4`}
+            className={`dashboard cursor-pointer  ${
+              currentPath.includes("search")
+                ? "text-white bg-accent"
+                : "bg-gray-200"
+            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}
           >
             <FiSearch className="w-6 h-6" />
             <Text>Find Hospitals</Text>
@@ -79,9 +89,11 @@ const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayout
 
           <Link
             href="/user/messages"
-            className={`dashboard cursor-pointer ${
-              currentPath.includes("messages") && "bg-[#C0A3F6] text-white"
-            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4`}
+            className={`dashboard cursor-pointer  ${
+              currentPath.includes("messages")
+                ? "text-white bg-accent"
+                : "bg-gray-200"
+            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}
           >
             <BiMessageRoundedDots className="w-6 h-6" />
             <Text>Messages</Text>
@@ -90,8 +102,11 @@ const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayout
           <Link
             href="/user/settings"
             className={`dashboard cursor-pointer ${
-              currentPath.includes("settings") && "bg-[#C0A3F6] text-white"
-            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4`}
+              currentPath.includes("settings") ||
+              currentPath.includes("profile")
+                ? "text-white bg-accent"
+                : "bg-gray-200"
+            }  hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}
           >
             <IoSettingsOutline className="w-6 h-6" />
             <Text>Settings</Text>
@@ -99,9 +114,11 @@ const SidebarLayout = ({ className, children, showWelcomeMesage }: SidebarLayout
 
           <Link
             href="logout"
-            className={`dashboard cursor-pointer ${
-              currentPath.includes("logout") && "bg-[#C0A3F6] text-white"
-            } hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 bg-gray-200 p-5 rounded my-4`}
+            className={`dashboard cursor-pointer  ${
+              currentPath.includes("logout")
+                ? "text-white bg-accent"
+                : "bg-gray-200"
+            }  hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}
           >
             <FiLogOut className="w-6 h-6" />
             <Text>Logout</Text>
