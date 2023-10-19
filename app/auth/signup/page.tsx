@@ -1,12 +1,21 @@
+"use client";
+
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Text from "@/app/components/Text";
 import Link from "next/link";
 
 const Signup = () => {
+
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(e.target);
+  };
+  
   return (
     <section className="w-screen h-screen flex items-center justify-center">
-      <form className="w-11/12 md:w-1/2 xl:w-1/4">
+      <form className="w-11/12 md:w-1/2 xl:w-1/4" onSubmit={handleSubmit}>
         <section className="header-section my-8">
           <h3 className="text-4xl capitalize font-bold text-secondary">
             Signup

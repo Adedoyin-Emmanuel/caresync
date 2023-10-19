@@ -1,3 +1,5 @@
+"use client";
+
 import { apiSlice } from "./api.slice";
 const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";

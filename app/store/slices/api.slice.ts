@@ -1,3 +1,4 @@
+"use client";
 import Axios from "@/app/api/axios";
 import { createApi } from "@reduxjs/toolkit/query";
 
