@@ -2,6 +2,7 @@
 
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
+import Loader from "@/app/components/Loader";
 import Text from "@/app/components/Text";
 import {
   useRegisterHospitalMutation,
@@ -13,7 +14,6 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import Loader from "@/app/components/Loader";
 
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
@@ -54,9 +54,16 @@ const Signup = () => {
       }
     } else if (signupAs === "hospital") {
       try {
-        const { name, email, username, password } = rest;
-        const response = await registerHospital(rest).unwrap();
-        console.log(response);
+        const { name, signupAs, ...rest } = formData;
+        const newData = {
+          clinicName: name,
+          ...rest,
+        };
+        const response = await registerHospital(newData).unwrap();
+        if (response) {
+          toast.success(response.message);
+          router.push("/auth/login");
+        }
       } catch (error: any) {
         console.log(error);
         toast.error(error?.data?.message || error.error || error?.data);
@@ -69,10 +76,12 @@ const Signup = () => {
   return (
     <>
       <section className="w-screen h-screen flex items-center justify-center">
-        {userLoading && <Loader/>}
+        {userLoading || (hospitalLoading && <Loader />)}
         <form
           className="w-11/12 md:w-1/2 xl:w-1/4"
-          onSubmit={(e) => {handleSubmit(e)}}
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
           ref={formRef}
         >
           <section className="header-section my-8">
