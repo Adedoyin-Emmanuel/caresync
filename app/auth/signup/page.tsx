@@ -6,6 +6,7 @@ import Text from "@/app/components/Text";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useRef, useState } from "react";
+import Loader from "@/app/components/Loader";
 
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
@@ -30,6 +31,7 @@ const Signup = () => {
 
   return (
     <section className="w-screen h-screen flex items-center justify-center">
+      <Loader/>
       <form
         className="w-11/12 md:w-1/2 xl:w-1/4"
         onSubmit={handleSubmit}
