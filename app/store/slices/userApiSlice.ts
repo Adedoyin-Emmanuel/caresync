@@ -11,7 +11,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${AUTH_URL}/login`,
         method: "POST",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -26,7 +26,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${AUTH_URL}/verify-email`,
         method: "GET",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -34,7 +34,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${AUTH_URL}/confirm-email`,
         method: "GET",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -42,15 +42,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${AUTH_URL}/forgot-password`,
         method: "POST",
-        body: data,
+        data: data,
       }),
     }),
-
     registerUser: builder.mutation({
       query: (data) => ({
         url: USERS_URL,
         method: "POST",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -58,7 +57,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: HOSPITALS_URL,
         method: "POST",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -66,7 +65,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: USERS_URL,
         method: "PUT",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -74,7 +73,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: HOSPITALS_URL,
         method: "PUT",
-        body: data,
+        data: data,
       }),
     }),
 
@@ -122,7 +121,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-
 export const {
   useLoginMutation,
   useLogoutMutation,
@@ -140,4 +138,3 @@ export const {
   useDeleteUserMutation,
   useDeleteHospitalMutation,
 } = userApiSlice;
-

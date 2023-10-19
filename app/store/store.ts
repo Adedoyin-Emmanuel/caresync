@@ -1,8 +1,8 @@
 "use client";
 import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { apiSlice } from "./slices/api.slice";
 import authReducer from "./slices/auth.slice";
-import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 //import other reducerers
 

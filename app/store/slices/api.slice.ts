@@ -2,7 +2,6 @@
 import Axios from "@/app/api/axios";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
-
 interface AxiosBaseQueryProps {
   url: string;
   method: "GET" | "POST" | "PUT" | "DELETE";
@@ -12,37 +11,35 @@ interface AxiosBaseQueryProps {
 }
 
 const axiosBaseQuery = async ({
-    url,
-    method,
-    data,
-    params,
-    headers,
+  url,
+  method,
+  data,
+  params,
+  headers,
 }: AxiosBaseQueryProps) => {
-    try {
-        const response = await Axios({
-            url,
-            method,
-            data,
-            params,
-            headers,
-        });
+  try {
+    const response = await Axios({
+      url,
+      method,
+      data,
+      params,
+      headers,
+    });
 
-        return { data: response.data };
-    } catch (error: any) {
-        // Handle errors here
-        return {
-            error: {
-                status: error?.response?.status,
-                data: error?.response?.data || error?.message,
-            }
-        }
+    return { data: response.data };
+  } catch (error: any) {
+    return {
+      error: {
+        status: error?.response?.status,
+        data: error?.response?.data || error?.message,
+      },
     };
-}
-
+  }
+};
 
 // Define the API service
 export const apiSlice = createApi({
-    baseQuery: axiosBaseQuery,
-    tagTypes:["User", "Hospital"],
-    endpoints: (builder) => ({}),
-})
+  baseQuery: axiosBaseQuery,
+  tagTypes: ["User", "Hospital"],
+  endpoints: (builder) => ({}),
+});

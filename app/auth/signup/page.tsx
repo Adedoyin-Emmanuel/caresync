@@ -7,12 +7,12 @@ import {
   useRegisterHospitalMutation,
   useRegisterUserMutation,
 } from "@/app/store/slices/userApiSlice";
+import { AppDispatch } from "@/app/store/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const Signup = () => {
     signupAs: "user",
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const [registerUser, { isLoading: userLoading }] = useRegisterUserMutation();
@@ -50,6 +50,7 @@ const Signup = () => {
       }
     } else if (signupAs === "hospital") {
       try {
+        const { name, email, username, password } = rest;
         const response = await registerHospital(rest).unwrap();
         console.log(response);
       } catch (error: any) {
@@ -66,7 +67,7 @@ const Signup = () => {
       <section className="w-screen h-screen flex items-center justify-center">
         <form
           className="w-11/12 md:w-1/2 xl:w-1/4"
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {handleSubmit(e)}}
           ref={formRef}
         >
           <section className="header-section my-8">
