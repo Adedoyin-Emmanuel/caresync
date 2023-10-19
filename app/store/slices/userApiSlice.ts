@@ -5,7 +5,7 @@ const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 
-export const userApiSlice:any = apiSlice.injectEndpoints({
+export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({

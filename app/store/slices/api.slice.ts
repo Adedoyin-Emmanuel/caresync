@@ -1,6 +1,6 @@
 "use client";
 import Axios from "@/app/api/axios";
-import { createApi } from "@reduxjs/toolkit/query";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 
 interface AxiosBaseQueryProps {
