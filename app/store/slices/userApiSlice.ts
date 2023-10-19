@@ -46,7 +46,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
     registerUser: builder.mutation({
       query: (data) => ({
-        url: `${USERS_URL}`,
+        url: USERS_URL,
         method: "POST",
         body: data,
       }),
@@ -54,12 +54,68 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
     registerHospital: builder.mutation({
       query: (data) => ({
-        url: `${HOSPITALS_URL}`,
+        url: HOSPITALS_URL,
         method: "POST",
         body: data,
       }),
     }),
 
-    
+    updateUser: builder.mutation({
+      query: (data) => ({
+        url: USERS_URL,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+
+    updateHospital: builder.mutation({
+      query: (data) => ({
+        url: HOSPITALS_URL,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+
+    getAllUsers: builder.query({
+      query: (data) => ({
+        url: USERS_URL,
+        method: "GET",
+      }),
+    }),
+
+    getAllHospitals: builder.query({
+      query: (data) => ({
+        url: HOSPITALS_URL,
+        method: "GET",
+      }),
+    }),
+
+    getUserById: builder.query({
+      query: (data) => ({
+        url: `${USERS_URL}/${data.id}`,
+        method: "GET",
+      }),
+    }),
+
+    getHospitalsById: builder.query({
+      query: (data) => ({
+        url: `${HOSPITALS_URL}/${data.id}`,
+        method: "GET",
+      }),
+    }),
+
+    deleteUser: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/${data.id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    deleteHospital: builder.mutation({
+      query: (data) => ({
+        url: `${HOSPITALS_URL}/${data.id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
