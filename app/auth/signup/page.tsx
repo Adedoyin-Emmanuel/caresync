@@ -8,12 +8,10 @@ import {
   useRegisterHospitalMutation,
   useRegisterUserMutation,
 } from "@/app/store/slices/userApiSlice";
-import { AppDispatch } from "@/app/store/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
 
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
@@ -25,7 +23,6 @@ const Signup = () => {
     signupAs: "user",
   });
 
-  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const [registerUser, { isLoading: userLoading }] = useRegisterUserMutation();
