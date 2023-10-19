@@ -42,6 +42,6 @@ const axiosBaseQuery = async ({
 // Define the API service
 export const apiSlice = createApi({
     baseQuery: axiosBaseQuery,
-    tagTypes:["User", "Hospita"],
+    tagTypes:["User", "Hospital"],
     endpoints: (builder) => ({}),
 })

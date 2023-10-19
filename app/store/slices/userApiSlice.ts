@@ -3,7 +3,7 @@ const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 
-export const userApiSlice = apiSlice.injectEndpoints({
+export const userApiSlice:any = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
@@ -119,3 +119,23 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
   }),
 });
+
+
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useVerifyEmailQuery,
+  useConfirmEmailQuery,
+  useForgotPasswordMutation,
+  useRegisterUserMutation,
+  useRegisterHospitalMutation,
+  useUpdateUserMutation,
+  useUpdateHospitalMutation,
+  useGetAllUsersQuery,
+  useGetAllHospitalsQuery,
+  useGetUserByIdQuery,
+  useGetHospitalsByIdQuery,
+  useDeleteUserMutation,
+  useDeleteHospitalMutation,
+} = userApiSlice;
+
