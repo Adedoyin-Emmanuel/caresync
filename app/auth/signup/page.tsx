@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import Loader from "@/app/components/Loader";
+
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
   const [formData, setFormData] = useState({
@@ -41,9 +43,11 @@ const Signup = () => {
 
     if (signupAs === "user") {
       try {
-        console.log(rest)
         const response = await registerUser(rest).unwrap();
-        console.log(response);
+        if (response) {
+          toast.success(response.message);
+          router.push("/auth/login");
+        }
       } catch (error: any) {
         console.log(error);
         toast.error(error?.data?.message || error.error || error?.data);
@@ -65,6 +69,7 @@ const Signup = () => {
   return (
     <>
       <section className="w-screen h-screen flex items-center justify-center">
+        {userLoading && <Loader/>}
         <form
           className="w-11/12 md:w-1/2 xl:w-1/4"
           onSubmit={(e) => {handleSubmit(e)}}
