@@ -1,12 +1,18 @@
 "use client";
+("");
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
 import Text from "@/app/components/Text";
+import { loginUser } from "@/app/store/slices/auth.slice";
 import { useLoginMutation } from "@/app/store/slices/userApiSlice";
+import { AppDispatch } from "@/app/store/store";
+import jwt from "jsonwebtoken";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,14 +27,28 @@ const Login = () => {
   };
 
   const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const response = await login(formData).unwrap();
       if (response) {
         toast.success(response.message);
+        const accessToken = response.data.accessToken;
+        const jwtPayload: any = jwt.decode(accessToken);
+        dispatch(loginUser(jwtPayload));
+
+        //route the user to their respective page
+        if (jwtPayload.role === "user") {
+          router.push("/user/dashboard");
+        } else if (jwtPayload.role === "hospital") {
+          router.push("/hospital/dashboard");
+        } else {
+          toast.error("Invalid token, please login!");
+          router.push("/auth/login");
+        }
       }
     } catch (error: any) {
       toast.error(error?.data?.message || error.error || error?.data);
@@ -92,7 +112,7 @@ const Login = () => {
         </section>
 
         <section className="my-4 mb-5 w-full">
-          <Button> Login</Button>
+          <Button disabled={isLoading}> Login</Button>
         </section>
 
         <section>

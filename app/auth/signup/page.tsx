@@ -154,7 +154,7 @@ const Signup = () => {
           </section>
 
           <section className="my-4 mb-5 w-full">
-            <Button>Sign up</Button>
+            <Button disabled={userLoading || hospitalLoading}>Sign up</Button>
           </section>
 
           <section>

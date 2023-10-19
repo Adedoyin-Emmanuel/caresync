@@ -2,9 +2,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isAuthenticated: false,
-  role: "",
-  data: null,
+  userInfo: localStorage.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo")!)
+    : null,
 };
 
 const authSlice = createSlice({
@@ -12,24 +12,15 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginUser: (state, action) => {
-      state.isAuthenticated = true;
-      state.role = "user";
-      state.data = action.payload.data;
-    },
-
-    loginHospital: (state, action) => {
-      state.isAuthenticated = true;
-      state.role = "hospital";
-      state.data = action.payload.data;
+      state.userInfo = action.payload;
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
 
     logout: (state, action) => {
-      state.isAuthenticated = false;
-      state.role = "";
-      state.data = null;
+      return initialState;
     },
   },
 });
 
-export const { loginUser, loginHospital, logout } = authSlice.actions;
+export const { loginUser, logout } = authSlice.actions;
 export default authSlice.reducer;

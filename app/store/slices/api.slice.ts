@@ -25,7 +25,6 @@ const axiosBaseQuery = async ({
       params,
       headers,
     });
-
     return { data: response.data };
   } catch (error: any) {
     return {
