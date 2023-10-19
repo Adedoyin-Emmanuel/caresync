@@ -4,8 +4,9 @@ import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Text from "@/app/components/Text";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { signupAs, ...rest } = formData;
-
+    toast.success("Successfully login");
   };
 
   return (
