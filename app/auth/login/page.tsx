@@ -1,15 +1,18 @@
 "use client";
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
+import Loader from "@/app/components/Loader";
 import Text from "@/app/components/Text";
+import { useLoginMutation } from "@/app/store/slices/userApiSlice";
 import Link from "next/link";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    loginAs: "user",
+    userType: "user",
   });
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
@@ -17,14 +20,23 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const [login, { isLoading }] = useLoginMutation();
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { loginAs, ...rest } = formData;
-    console.log(loginAs);
-    console.log(rest);
+
+    try {
+      const response = await login(formData).unwrap();
+      if (response) {
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || error.error || error?.data);
+    }
   };
   return (
     <section className="w-screen h-screen flex items-center justify-center">
+      {isLoading && <Loader />}
       <form
         className="w-11/12 md:w-1/2 xl:w-1/4"
         onSubmit={(e) => {
@@ -65,13 +77,13 @@ const Login = () => {
         </section>
 
         <section className="my-4 mb-5">
-          <label htmlFor="loginAs" className="text-md block my-2">
+          <label htmlFor="signupAs" className="text-md block my-2">
             Login As
           </label>
           <select
             className="select border-2 border-gray-300 focus:outline-none rounded-md w-full h-16"
-            name="loginAs"
-            value={formData.loginAs}
+            name="userType"
+            value={formData.userType}
             onChange={handleInputChange}
           >
             <option value="user">User</option>

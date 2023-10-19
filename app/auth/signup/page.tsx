@@ -46,7 +46,6 @@ const Signup = () => {
           router.push("/auth/login");
         }
       } catch (error: any) {
-        console.log(error);
         toast.error(error?.data?.message || error.error || error?.data);
       }
     } else if (signupAs === "hospital") {
@@ -62,7 +61,6 @@ const Signup = () => {
           router.push("/auth/login");
         }
       } catch (error: any) {
-        console.log(error);
         toast.error(error?.data?.message || error.error || error?.data);
       }
     } else {
