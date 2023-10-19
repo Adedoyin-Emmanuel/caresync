@@ -1,3 +1,4 @@
+"use client";
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Text from "@/app/components/Text";

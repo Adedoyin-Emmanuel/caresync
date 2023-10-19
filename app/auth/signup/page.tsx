@@ -4,18 +4,36 @@ import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Text from "@/app/components/Text";
 import Link from "next/link";
-
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const Signup = () => {
+  const formRef = useRef<HTMLFormElement | any>(null);
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    username: "",
+    password: "",
+    signupAs: "User",
+  });
 
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log(e.target);
+  const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
-  
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { signupAs, ...rest } = formData;
+
+  };
+
   return (
     <section className="w-screen h-screen flex items-center justify-center">
-      <form className="w-11/12 md:w-1/2 xl:w-1/4" onSubmit={handleSubmit}>
+      <form
+        className="w-11/12 md:w-1/2 xl:w-1/4"
+        onSubmit={handleSubmit}
+        ref={formRef}
+      >
         <section className="header-section my-8">
           <h3 className="text-4xl capitalize font-bold text-secondary">
             Signup
@@ -31,6 +49,8 @@ const Signup = () => {
             type="text"
             name="fullname"
             placeholder="Enter your fullname"
+            value={formData.fullname}
+            onChange={handleInputChange}
           />
         </section>
 
@@ -38,7 +58,13 @@ const Signup = () => {
           <label htmlFor="email" className="text-md block my-2">
             Email
           </label>
-          <Input type="email" name="email" placeholder="Enter your email" />
+          <Input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
         </section>
 
         <section className="my-4 mb-5">
@@ -49,6 +75,8 @@ const Signup = () => {
             type="text"
             name="username"
             placeholder="Enter a unique username"
+            value={formData.username}
+            onChange={handleInputChange}
           />
         </section>
 
@@ -60,6 +88,8 @@ const Signup = () => {
             type="password"
             name="password"
             placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleInputChange}
           />
         </section>
 
@@ -67,9 +97,14 @@ const Signup = () => {
           <label htmlFor="email" className="text-md block my-2">
             Signup As
           </label>
-          <select className="select  border-2 border-gray-300 focus:outline-none rounded-md w-full h-16">
-            <option>User</option>
-            <option>Hospital</option>
+          <select
+            className="select border-2 border-gray-300 focus:outline-none rounded-md w-full h-16"
+            name="signupAs"
+            value={formData.signupAs}
+            onChange={handleInputChange}
+          >
+            <option value="User">User</option>
+            <option value="Hospital">Hospital</option>
           </select>
         </section>
 
