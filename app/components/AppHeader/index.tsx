@@ -1,5 +1,9 @@
 import React from "react";
 import { GoBell } from "react-icons/go";
+import { useDispatch } from "react-redux";
+import { useAppSelector, AppDispatch } from "@/app/store/store";
+import { useRouter } from "next/navigation";
+import { useLogoutMutation } from "@/app/store/slices/userApiSlice";
 
 interface AppHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -7,6 +11,11 @@ interface AppHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [logout, { isLoading }] = useLogoutMutation();
+  const { userInfo } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+
   return (
     <div
       className={`${className} flex items-center ${showWelcomeMessage ? "justify-between" : "justify-end"} p-2 md:p-0`}
