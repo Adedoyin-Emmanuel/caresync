@@ -11,13 +11,13 @@ const Axios = axios.create({
   withCredentials: true,
 });
 
-const accessToken = Cookies.get("X-Auth-Access-Token");
+const accessToken = Cookies.get("accessToken");
 
 if (accessToken) {
   console.log(`Access Token is ${accessToken}`);
   Axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 } else {
-  console.log("X-Auth-Access-Token cookie not found.");
+  console.log("Access Token cookie not found.");
 }
 
 const refreshAccessToken = async () => {
@@ -25,7 +25,7 @@ const refreshAccessToken = async () => {
     const response = await Axios.post("/auth/refresh-token");
     console.log(response);
 
-    const newAccessToken = Cookies.get("X-Auth-Access-Token");
+    const newAccessToken = Cookies.get("accessToken");
 
     if (newAccessToken) {
       console.log(`The new access token is ${newAccessToken}`);
