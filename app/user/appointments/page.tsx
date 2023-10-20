@@ -1,6 +1,8 @@
 import Button from "@/app/components/Button";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
+import Loader from "@/app/components/Loader";
+
 
 const Appointment = () => {
   return (

@@ -1,11 +1,12 @@
 "use client";
 
-import { apiSlice } from "./api.slice";
 import { createSlice } from "@reduxjs/toolkit";
+import { apiSlice } from "./api.slice";
 
 const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
+const APPOINTMENTS_URL = "/appointment";
 
 export interface userDashboardInfoProps {
   _id: string;
@@ -23,10 +24,24 @@ export interface userDashboardInfoProps {
   createdAt: any;
 }
 
+export interface userAppointmentInfoProps {
+  _id: string;
+  title: string;
+  description: string;
+  hospitalId: string;
+  userId: string;
+  status: "pending" | "success" | "failed";
+  startDate: Date;
+  endDate: Date;
+  reviews: any[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const initialState = {
   userDashboardInfo: null as userDashboardInfoProps | null,
+  appointmentInfo: null as userAppointmentInfoProps | null,
 };
-
 
 const userSlice = createSlice({
   name: "userDashboardInfo",
@@ -39,9 +54,12 @@ const userSlice = createSlice({
     resetDashboard: () => {
       return initialState;
     },
+
+    saveAppointmentInfo: (state, action) => {
+      state.appointmentInfo = action.payload;
+    },
   },
 });
-
 
 export const userApiCall = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -172,6 +190,14 @@ export const userApiCall = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    //appointments based endpoints
+    getUserAppointments: builder.mutation({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/${data.id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -193,7 +219,10 @@ export const {
   useDeleteHospitalMutation,
 
   useGetUserMutation,
-  useGetHospitalMutation
+  useGetHospitalMutation,
+
+  useGetUserAppointmentsMutation,
 } = userApiCall;
-export const { saveDashboardInfo, resetDashboard } = userSlice.actions;
+export const { saveDashboardInfo, resetDashboard, saveAppointmentInfo } =
+  userSlice.actions;
 export default userSlice.reducer;
