@@ -65,12 +65,12 @@ useEffect(() => {
 
               <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                 <HiOutlineShieldCheck className="w-8 h-8" />
-                <Text>28 total checkups</Text>
+                <Text>{userDashboardInfo?.allTotalAppointments} total checkups</Text>
               </section>
 
               <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                 <SlBadge className="w-8 h-8" />
-                <Text>28 total reviews</Text>
+                <Text>{userDashboardInfo?.reviews.length} total reviews</Text>
               </section>
             </section>
 

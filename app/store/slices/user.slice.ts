@@ -7,7 +7,7 @@ const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 
-export interface userDashboardInfoProps{
+export interface userDashboardInfoProps {
   _id: string;
   name: string;
   username: string;
@@ -15,6 +15,7 @@ export interface userDashboardInfoProps{
   profilePicture: string;
   bio: string;
   isVerified: boolean;
+  allTotalAppointments: number;
   appointments: any[];
   messages: any[];
   reviews: any[];
