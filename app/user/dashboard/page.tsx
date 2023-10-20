@@ -24,8 +24,6 @@ useEffect(() => {
   const abortController = new AbortController();
   const { signal } = abortController;
 
-  console.log("I am fetching");
-
   const fetchData = async () => {
     try {
       const response: any = await getUser({ signal });
