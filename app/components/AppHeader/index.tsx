@@ -1,5 +1,5 @@
 import { logoutUser } from "@/app/store/slices/auth.slice";
-import { useLogoutMutation } from "@/app/store/slices/userApiSlice";
+import { useLogoutMutation } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";

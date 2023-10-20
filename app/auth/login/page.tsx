@@ -4,7 +4,7 @@ import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
 import Text from "@/app/components/Text";
 import { loginUser } from "@/app/store/slices/auth.slice";
-import { useLoginMutation } from "@/app/store/slices/userApiSlice";
+import { useLoginMutation } from "@/app/store/slices/user.slice";
 import { AppDispatch } from "@/app/store/store";
 import jwt from "jsonwebtoken";
 import Link from "next/link";

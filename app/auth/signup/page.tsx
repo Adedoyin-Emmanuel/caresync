@@ -7,7 +7,7 @@ import Text from "@/app/components/Text";
 import {
   useRegisterHospitalMutation,
   useRegisterUserMutation,
-} from "@/app/store/slices/userApiSlice";
+} from "@/app/store/slices/user.slice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
