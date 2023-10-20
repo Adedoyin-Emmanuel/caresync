@@ -1,11 +1,11 @@
+import { logoutUser } from "@/app/store/slices/auth.slice";
 import { useLogoutMutation } from "@/app/store/slices/userApiSlice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { GoBell } from "react-icons/go";
 import { useDispatch } from "react-redux";
-import toast from "react-hot-toast";
-import { logoutUser } from "@/app/store/slices/auth.slice";
 
 interface AppHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -16,6 +16,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [logout] = useLogoutMutation();
   const { userInfo } = useAppSelector((state) => state.auth);
+  console.log(userInfo);
   const router = useRouter();
 
   const [isNotificationDropdownVisible, setIsNotificationDropdownVisible] =
@@ -135,10 +136,9 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
             dispatch(logoutUser());
             router.push("/auth/login");
           }
-          
-        } catch (error:any) {
+        } catch (error: any) {
           toast.error(error?.data?.message || error.error || error?.data);
-          }
+        }
       },
     },
   ];
@@ -152,7 +152,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
       {showWelcomeMessage && (
         <section className="user-name">
           <h2 className="font-bold capitalize text-2xl">
-            hi, {userInfo.username} 👋
+            hi, {userInfo?.username} 👋
           </h2>
         </section>
       )}
@@ -188,7 +188,10 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
           <div className="w-10 rounded-full" onClick={toggleProfileDropdown}>
             <img
               className=""
-              src="https://api.dicebear.com/7.x/micah/svg?seed=micah"
+              src={
+                userInfo?.profilePicture ||
+                `https://api.dicebear.com/7.x/micah/svg?seed=${userInfo.username}}`
+              }
               alt="user profile image"
             />
           </div>
@@ -219,135 +222,134 @@ export const HospitalAppHeader = ({
   className,
   showWelcomeMessage,
 }: AppHeaderProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [logout] = useLogoutMutation();
+  const { userInfo } = useAppSelector((state) => state.auth);
+  const router = useRouter();
 
-    const dispatch = useDispatch<AppDispatch>();
-    const [logout] = useLogoutMutation();
-    const { userInfo } = useAppSelector((state) => state.auth);
-    const router = useRouter();
+  const [isNotificationDropdownVisible, setIsNotificationDropdownVisible] =
+    useState(false);
+  const [isProfileDropdownVisible, setIsProfileDropdownVisible] =
+    useState(false);
 
-    const [isNotificationDropdownVisible, setIsNotificationDropdownVisible] =
-      useState(false);
-    const [isProfileDropdownVisible, setIsProfileDropdownVisible] =
-      useState(false);
+  const notificationRef: any = useRef(null);
+  const profileRef: any = useRef(null);
 
-    const notificationRef: any = useRef(null);
-    const profileRef: any = useRef(null);
-
-    useEffect(() => {
-      const closeDropdowns = (event: MouseEvent) => {
-        if (
-          isNotificationDropdownVisible &&
-          notificationRef.current &&
-          !notificationRef.current.contains(event.target as Node)
-        ) {
-          setIsNotificationDropdownVisible(false);
-        }
-      };
-
-      window.addEventListener("click", closeDropdowns);
-
-      return () => {
-        window.removeEventListener("click", closeDropdowns);
-      };
-    }, [isNotificationDropdownVisible]);
-
-    useEffect(() => {
-      const closeDropdowns = (event: MouseEvent) => {
-        if (
-          isProfileDropdownVisible &&
-          profileRef.current &&
-          !profileRef.current.contains(event.target as Node)
-        ) {
-          setIsProfileDropdownVisible(false);
-        }
-      };
-
-      window.addEventListener("click", closeDropdowns);
-
-      return () => {
-        window.removeEventListener("click", closeDropdowns);
-      };
-    }, [isProfileDropdownVisible]);
-
-    const toggleNotificationDropdown = () => {
-      setIsNotificationDropdownVisible(!isNotificationDropdownVisible);
+  useEffect(() => {
+    const closeDropdowns = (event: MouseEvent) => {
+      if (
+        isNotificationDropdownVisible &&
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target as Node)
+      ) {
+        setIsNotificationDropdownVisible(false);
+      }
     };
 
-    const toggleProfileDropdown = () => {
-      setIsProfileDropdownVisible(!isProfileDropdownVisible);
+    window.addEventListener("click", closeDropdowns);
+
+    return () => {
+      window.removeEventListener("click", closeDropdowns);
+    };
+  }, [isNotificationDropdownVisible]);
+
+  useEffect(() => {
+    const closeDropdowns = (event: MouseEvent) => {
+      if (
+        isProfileDropdownVisible &&
+        profileRef.current &&
+        !profileRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileDropdownVisible(false);
+      }
     };
 
-    const notificationItems = [
-      {
-        id: 1,
-        text: "New message from Emmysoft",
-        onClick: () => {
-          console.log(`Hello notification`);
-        },
-      },
-      {
-        id: 2,
-        text: "Reminder: Appointment at 5 PM",
-        onClick: () => {
-          console.log(`Hello notification`);
-        },
-      },
-      {
-        id: 3,
-        text: "Emmysoft booked an appointment",
-        onClick: () => {
-          console.log(`Hello notification`);
-        },
-      },
-    ];
+    window.addEventListener("click", closeDropdowns);
 
-    const profileMenuItems = [
-      {
-        id: 1,
-        text: "view appointments",
-        onClick: () => {},
-      },
+    return () => {
+      window.removeEventListener("click", closeDropdowns);
+    };
+  }, [isProfileDropdownVisible]);
 
-      {
-        id: 2,
-        text: "healthcare history",
-        onClick: () => {},
-      },
-      {
-        id: 3,
-        text: "your users",
-        onClick: () => {},
-      },
+  const toggleNotificationDropdown = () => {
+    setIsNotificationDropdownVisible(!isNotificationDropdownVisible);
+  };
 
-      {
-        id: 4,
-        text: "view profile",
-        onClick: () => {},
-      },
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownVisible(!isProfileDropdownVisible);
+  };
 
-      {
-        id: 5,
-        text: "settings",
-        onClick: () => {},
+  const notificationItems = [
+    {
+      id: 1,
+      text: "New message from Emmysoft",
+      onClick: () => {
+        console.log(`Hello notification`);
       },
+    },
+    {
+      id: 2,
+      text: "Reminder: Appointment at 5 PM",
+      onClick: () => {
+        console.log(`Hello notification`);
+      },
+    },
+    {
+      id: 3,
+      text: "Emmysoft booked an appointment",
+      onClick: () => {
+        console.log(`Hello notification`);
+      },
+    },
+  ];
 
-      {
-        id: 6,
-        text: "Logout",
-        onClick: async () => {
-          try {
-            const response = await logout({}).unwrap();
-            if (response) {
-              toast.success(response.message);
-              dispatch(logoutUser());
-              router.push("/auth/login");
-            }
-          } catch (error: any) {
-            toast.error(error?.data?.message || error.error || error?.data);
+  const profileMenuItems = [
+    {
+      id: 1,
+      text: "view appointments",
+      onClick: () => {},
+    },
+
+    {
+      id: 2,
+      text: "healthcare history",
+      onClick: () => {},
+    },
+    {
+      id: 3,
+      text: "your users",
+      onClick: () => {},
+    },
+
+    {
+      id: 4,
+      text: "view profile",
+      onClick: () => {},
+    },
+
+    {
+      id: 5,
+      text: "settings",
+      onClick: () => {},
+    },
+
+    {
+      id: 6,
+      text: "Logout",
+      onClick: async () => {
+        try {
+          const response = await logout({}).unwrap();
+          if (response) {
+            toast.success(response.message);
+            dispatch(logoutUser());
+            router.push("/auth/login");
           }
-        },
+        } catch (error: any) {
+          toast.error(error?.data?.message || error.error || error?.data);
+        }
       },
-    ];
+    },
+  ];
 
   return (
     <div
@@ -358,7 +360,7 @@ export const HospitalAppHeader = ({
       {showWelcomeMessage && (
         <section className="user-name">
           <h2 className="font-bold capitalize text-2xl">
-            hi, {userInfo.username} 👋
+            hi, {userInfo?.username} 👋
           </h2>
         </section>
       )}
@@ -394,7 +396,10 @@ export const HospitalAppHeader = ({
           <div className="w-10 rounded-full" onClick={toggleProfileDropdown}>
             <img
               className=""
-              src="https://api.dicebear.com/7.x/micah/svg?seed=micah"
+              src={
+                userInfo?.profilePicture ||
+                `https://api.dicebear.com/7.x/micah/svg?seed=${userInfo.username}}`
+              }
               alt="user profile image"
             />
           </div>

@@ -1,5 +1,4 @@
 "use client";
-("");
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
@@ -36,14 +35,19 @@ const Login = () => {
       const response = await login(formData).unwrap();
       if (response) {
         toast.success(response.message);
-        const accessToken = response.data.accessToken;
-        const jwtPayload: any = jwt.decode(accessToken);
-        dispatch(loginUser(jwtPayload));
+        const token = response.data.accessToken;
+        const jwtPayload: any = jwt.decode(token);
+        const tempData = jwtPayload;
+        const { role } = tempData;
+        const { accessToken, ...data } = response.data;
+        const userData = { ...data, role };
+
+        dispatch(loginUser(userData));
 
         //route the user to their respective page
-        if (jwtPayload.role === "user") {
+        if (userData.role === "user") {
           router.push("/user/dashboard");
-        } else if (jwtPayload.role === "hospital") {
+        } else if (userData.role === "hospital") {
           router.push("/hospital/dashboard");
         } else {
           toast.error("Invalid token, please login!");
