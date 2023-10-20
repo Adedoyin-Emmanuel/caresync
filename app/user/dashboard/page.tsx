@@ -19,31 +19,37 @@ const Home = () => {
   const [getUser, { isLoading }] = useGetUserMutation();
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
 
-    const fetchData = async () => {
-      try {
-        const response:any = await getUser({ signal });
-        const { data } = response.data;
-        const payload:userDashboardInfoProps = data;
-        dispatch(saveDashboardInfo(payload));
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Request was aborted due to unmounting.");
-        } else {
-          console.error("Error:", error);
-        }
+useEffect(() => {
+  const abortController = new AbortController();
+  const { signal } = abortController;
+
+  console.log("I am fetching");
+
+  const fetchData = async () => {
+    try {
+      const response: any = await getUser({ signal });
+      const { data } = response.data;
+      const payload: userDashboardInfoProps = data;
+      dispatch(saveDashboardInfo(payload));
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.log("Request was aborted due to unmounting.");
+      } else {
+        console.error("Error:", error);
       }
-    };
+    }
+  };
 
-    fetchData();
+  fetchData();
 
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+  return () => {
+  
+    abortController.abort();
+  };
+}, []);
+
+
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -54,7 +60,7 @@ const Home = () => {
             <section className="stats-container grid p-1 lg:grid-cols-3 gap-10 w-full">
               <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                 <BsCameraVideo className="w-8 h-8" />
-                <Text> appointments</Text>
+                <Text>{userDashboardInfo?.appointments.length} appointments</Text>
               </section>
 
               <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">

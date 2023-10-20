@@ -30,6 +30,8 @@ const refreshAccessToken = async () => {
       Axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${newAccessToken}`;
+
+      return newAccessToken
     } else {
       console.log("New access token not found in the cookie.");
     }
@@ -43,14 +45,21 @@ Axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response && error.response.status === 401) {
-       console.log("Request intercepted due to 401 error:", error.config);
-      // The token has expired, make a new request
-      await refreshAccessToken();
+      console.log("Request intercepted due to 401 error:", error.config);
 
-      // Retry the original request
+      // The token has expired, make a new request to refresh the token
+      const newAccessToken = await refreshAccessToken();
+
+      // Update the "Authorization" header with the new access token
+      Axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${newAccessToken}`;
+
+      // Retry the original request with the updated header
       error.config.headers[
         "Authorization"
-      ] = `Bearer ${Axios.defaults.headers.common["Authorization"]}`;
+      ] = `Bearer ${newAccessToken}`;
+      return Axios(error.config);
     }
 
     return Promise.reject(error);
