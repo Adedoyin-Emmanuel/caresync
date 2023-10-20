@@ -1,7 +1,6 @@
 "use client";
 
 import axios from "axios";
-import Cookies from "js-cookie";
 
 export const apiBaseUrl =
   process.env.NEXT_BASE_URL || "http://localhost:2800/api";
@@ -11,55 +10,33 @@ const Axios = axios.create({
   withCredentials: true,
 });
 
-const accessToken = Cookies.get("accessToken");
 
-if (accessToken) {
-  console.log(`Access Token is ${accessToken}`);
-  Axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-} else {
-  console.log("Access Token cookie not found.");
-}
+
 
 const refreshAccessToken = async () => {
   try {
     const response = await Axios.post("/auth/refresh-token");
 
-    const newAccessToken = response.data.data || Cookies.get("accessToken");
-
-    if (newAccessToken) {
-      Axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${newAccessToken}`;
-
-      return newAccessToken
-    } else {
-      console.log("New access token not found in the cookie.");
+    if (response) {
+      console.log("Request to refresh token endpoint successful");
+      console.log(response.data.data);
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-// Interceptors for token expiration
+// // Interceptors for token expiration
 Axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response && error.response.status === 401) {
+      console.log(error.response);
       console.log("Request intercepted due to 401 error:", error.config);
 
-      // The token has expired, make a new request to refresh the token
-      const newAccessToken = await refreshAccessToken();
+      await refreshAccessToken();
 
-      // Update the "Authorization" header with the new access token
-      Axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${newAccessToken}`;
-
-      // Retry the original request with the updated header
-      error.config.headers[
-        "Authorization"
-      ] = `Bearer ${newAccessToken}`;
-      return Axios(error.config);
+      //return Axios(error.config);
     }
 
     return Promise.reject(error);

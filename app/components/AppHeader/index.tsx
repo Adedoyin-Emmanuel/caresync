@@ -189,7 +189,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
               className=""
               src={
                 userInfo?.profilePicture ||
-                `https://api.dicebear.com/7.x/micah/svg?seed=${userInfo.username}}`
+                `https://api.dicebear.com/7.x/micah/svg?seed=${userInfo?.username}}`
               }
               alt="user profile image"
             />

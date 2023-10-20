@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import Axios from "@/app/api/axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -40,6 +41,7 @@ const Login = () => {
         const tempData = jwtPayload;
         const { role } = tempData;
         const { accessToken, ...data } = response.data;
+
         const userData = { ...data, role };
 
         dispatch(loginUser(userData));
