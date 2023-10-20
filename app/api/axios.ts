@@ -23,9 +23,8 @@ if (accessToken) {
 const refreshAccessToken = async () => {
   try {
     const response = await Axios.post("/auth/refresh-token");
-    console.log(response);
 
-    const newAccessToken = Cookies.get("accessToken");
+    const newAccessToken = response.data.data || Cookies.get("accessToken");
 
     if (newAccessToken) {
       console.log(`The new access token is ${newAccessToken}`);
@@ -45,6 +44,7 @@ Axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response && error.response.status === 401) {
+       console.log("Request intercepted due to 401 error:", error.config);
       // The token has expired, make a new request
       await refreshAccessToken();
 

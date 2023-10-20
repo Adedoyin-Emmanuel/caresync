@@ -3,12 +3,14 @@ import Axios from "@/app/api/axios";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 interface AxiosBaseQueryProps {
-  url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE";
+  url?: string;
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   data?: any;
   params?: any;
   headers?: any;
 }
+
+
 
 const axiosBaseQuery = async ({
   url,
@@ -39,6 +41,7 @@ const axiosBaseQuery = async ({
 // Define the API service
 export const apiSlice = createApi({
   baseQuery: axiosBaseQuery,
-  tagTypes: ["User", "Hospital"],
+  tagTypes: ["User", "Hospital", "userDashboardInfo"],
   endpoints: (builder) => ({}),
 });
+

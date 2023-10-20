@@ -1,15 +1,48 @@
+"use client";
+
 import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";
+import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
+import { useGetUserMutation } from "@/app/store/slices/user.slice";
+import { useEffect } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
-
 import { SlBadge } from "react-icons/sl";
 
 const Home = () => {
+  //const { dashboardInfo } = useAppSelector((state) => state.dashboard);
+  //const [getAllUsers, { isLoading }] = useGetAllUsersQuery();
+  const [getUser, { isLoading }] = useGetUserMutation();
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
+    const fetchData = async () => {
+      try {
+        const response = await getUser({ signal });
+        console.log(response);
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          console.log("Request was aborted due to unmounting.");
+        } else {
+          console.error("Error:", error);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [isLoading]);
+
   return (
     <div className="w-screen h-screen bg-zinc-50">
+      {isLoading && <Loader />}
       <SidebarLayout showWelcomeMesage={true}>
         <section className="general-container w-full items-start flex flex-col xl:flex-row gap-x-5">
           <section className="first-section w-full xl:w-8/12 flex flex-col items-center justify-center">

@@ -1,11 +1,36 @@
 "use client";
 
 import { apiSlice } from "./api.slice";
+import { createSlice } from "@reduxjs/toolkit";
+
 const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 
-export const userApiSlice = apiSlice.injectEndpoints({
+
+
+const initialState = {
+  userDashboardInfo: null,
+};
+
+
+
+const userSlice = createSlice({
+  name: "userDashboardInfo",
+  initialState,
+  reducers: {
+    saveDashboardInfo: (state, action) => {
+      state.userDashboardInfo = action.payload;
+    },
+
+    resetDashboard: () => {
+      return initialState;
+    },
+  },
+});
+
+
+export const userApiCall = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
@@ -118,6 +143,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+
+    //dashboard based endpoints
+
+    getUser: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/me`,
+        method: "GET",
+      }),
+    }),
+
+    getHospital: builder.query({
+      query: () => ({
+        url: `${HOSPITALS_URL}/me`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -137,4 +178,9 @@ export const {
   useGetHospitalsByIdQuery,
   useDeleteUserMutation,
   useDeleteHospitalMutation,
-} = userApiSlice;
+
+  useGetUserMutation,
+  useGetHospitalQuery
+} = userApiCall;
+export const { saveDashboardInfo, resetDashboard } = userSlice.actions;
+export default userSlice.reducer;
