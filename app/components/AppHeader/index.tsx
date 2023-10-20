@@ -16,7 +16,6 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [logout] = useLogoutMutation();
   const { userInfo } = useAppSelector((state) => state.auth);
-  console.log(userInfo);
   const router = useRouter();
 
   const [isNotificationDropdownVisible, setIsNotificationDropdownVisible] =

@@ -7,12 +7,24 @@ const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 
-
+export interface userDashboardInfoProps{
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  profilePicture: string;
+  bio: string;
+  isVerified: boolean;
+  appointments: any[];
+  messages: any[];
+  reviews: any[];
+  updatedAt: any;
+  createdAt: any;
+}
 
 const initialState = {
-  userDashboardInfo: null,
+  userDashboardInfo: null as userDashboardInfoProps | null,
 };
-
 
 
 const userSlice = createSlice({
@@ -153,7 +165,7 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
     }),
 
-    getHospital: builder.query({
+    getHospital: builder.mutation({
       query: () => ({
         url: `${HOSPITALS_URL}/me`,
         method: "GET",
@@ -180,7 +192,7 @@ export const {
   useDeleteHospitalMutation,
 
   useGetUserMutation,
-  useGetHospitalQuery
+  useGetHospitalMutation
 } = userApiCall;
 export const { saveDashboardInfo, resetDashboard } = userSlice.actions;
 export default userSlice.reducer;

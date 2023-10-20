@@ -27,7 +27,6 @@ const refreshAccessToken = async () => {
     const newAccessToken = response.data.data || Cookies.get("accessToken");
 
     if (newAccessToken) {
-      console.log(`The new access token is ${newAccessToken}`);
       Axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${newAccessToken}`;
@@ -52,7 +51,6 @@ Axios.interceptors.response.use(
       error.config.headers[
         "Authorization"
       ] = `Bearer ${Axios.defaults.headers.common["Authorization"]}`;
-      return Axios(error.config);
     }
 
     return Promise.reject(error);

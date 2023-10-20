@@ -5,16 +5,19 @@ import ChatBotButton from "@/app/components/ChatBotButton";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
-import { useGetUserMutation } from "@/app/store/slices/user.slice";
+import { saveDashboardInfo, useGetUserMutation, userDashboardInfoProps } from "@/app/store/slices/user.slice";
+import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
-  //const { dashboardInfo } = useAppSelector((state) => state.dashboard);
-  //const [getAllUsers, { isLoading }] = useGetAllUsersQuery();
+  const {userDashboardInfo} = useAppSelector((state) => state.user);
+ 
   const [getUser, { isLoading }] = useGetUserMutation();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -22,8 +25,10 @@ const Home = () => {
 
     const fetchData = async () => {
       try {
-        const response = await getUser({ signal });
-        console.log(response);
+        const response:any = await getUser({ signal });
+        const { data } = response.data;
+        const payload:userDashboardInfoProps = data;
+        dispatch(saveDashboardInfo(payload));
       } catch (error: any) {
         if (error.name === "AbortError") {
           console.log("Request was aborted due to unmounting.");
@@ -38,18 +43,18 @@ const Home = () => {
     return () => {
       abortController.abort();
     };
-  }, [isLoading]);
+  }, []);
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      {isLoading && <Loader />}
-      <SidebarLayout showWelcomeMesage={true}>
+     
+      {isLoading ? <Loader/> : <SidebarLayout showWelcomeMesage={true}>
         <section className="general-container w-full items-start flex flex-col xl:flex-row gap-x-5">
           <section className="first-section w-full xl:w-8/12 flex flex-col items-center justify-center">
             <section className="stats-container grid p-1 lg:grid-cols-3 gap-10 w-full">
               <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                 <BsCameraVideo className="w-8 h-8" />
-                <Text>7 appointments</Text>
+                <Text> appointments</Text>
               </section>
 
               <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
@@ -123,7 +128,7 @@ const Home = () => {
           </section>
           <ChatBotButton />
         </section>
-      </SidebarLayout>
+      </SidebarLayout>}
     </div>
   );
 };
