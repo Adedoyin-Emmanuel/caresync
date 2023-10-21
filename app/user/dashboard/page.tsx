@@ -49,6 +49,7 @@ const Home = () => {
         );
 
         dispatch(saveRecentAppointmentInfo(appointmentResponse.data.data));
+        console.log(recentAppointmentInfo);
         const { data } = response.data;
         const payload: userDashboardInfoProps = data;
         dispatch(saveDashboardInfo(payload));
@@ -67,7 +68,6 @@ const Home = () => {
       abortController.abort();
     };
   }, []);
-
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
