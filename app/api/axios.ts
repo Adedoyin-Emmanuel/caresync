@@ -10,16 +10,12 @@ const Axios = axios.create({
   withCredentials: true,
 });
 
-
-
-
 const refreshAccessToken = async () => {
   try {
     const response = await Axios.post("/auth/refresh-token");
 
     if (response) {
       console.log("Request to refresh token endpoint successful");
-      console.log(response.data.data);
     }
   } catch (error) {
     console.log(error);
@@ -36,7 +32,7 @@ Axios.interceptors.response.use(
 
       await refreshAccessToken();
 
-      //return Axios(error.config);
+      return Axios(error.config);
     }
 
     return Promise.reject(error);

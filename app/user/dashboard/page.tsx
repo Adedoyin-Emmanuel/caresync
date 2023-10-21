@@ -8,6 +8,7 @@ import Text from "@/app/components/Text";
 import {
   saveDashboardInfo,
   useGetUserMutation,
+  useGetUserAppointmentsMutation,
   userDashboardInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
@@ -16,6 +17,7 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
+import { AppointmentLabel } from "@/app/components/AppointmentCard";
 
 
 const Home = () => {
@@ -64,7 +66,7 @@ const Home = () => {
                   <BsCameraVideo className="w-8 h-8" />
                   <Text>
                     {userDashboardInfo?.appointments.length}{" "}
-                    {userDashboardInfo?.appointments?.length ! > 1
+                    {userDashboardInfo?.appointments?.length! > 1
                       ? "Appointments"
                       : "Appointment"}
                   </Text>
@@ -74,7 +76,7 @@ const Home = () => {
                   <HiOutlineShieldCheck className="w-8 h-8" />
                   <Text>
                     {userDashboardInfo?.allTotalAppointments} total{" "}
-                    {userDashboardInfo?.allTotalAppointments ! > 1
+                    {userDashboardInfo?.allTotalAppointments! > 1
                       ? "Checkups"
                       : "Checkup"}
                   </Text>
@@ -84,7 +86,7 @@ const Home = () => {
                   <SlBadge className="w-8 h-8" />
                   <Text>
                     {userDashboardInfo?.reviews?.length} total{" "}
-                    {userDashboardInfo?.reviews?.length ! > 1
+                    {userDashboardInfo?.reviews?.length! > 1
                       ? "Reviews"
                       : "Review"}
                   </Text>
@@ -102,7 +104,7 @@ const Home = () => {
                   </section>
 
                   <section className="other-content w-11/12 flex items-center justify-around">
-                    <Text className="text-sm">14/09/2023</Text>
+                    <Text className="tmeetingext-sm">14/09/2023</Text>
                     <Text className="text-sm font-bold">@Mayfair</Text>
                   </section>
                 </section>

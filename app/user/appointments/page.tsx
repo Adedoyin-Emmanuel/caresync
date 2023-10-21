@@ -1,5 +1,5 @@
 "use client";
-import ApppointmentCard from "@/app/components/AppointmentCard";
+import {ApppointmentCard} from "@/app/components/AppointmentCard";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";

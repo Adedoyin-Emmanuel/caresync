@@ -38,10 +38,21 @@ export interface userAppointmentInfoProps {
   updatedAt: Date;
 }
 
+
+export interface useAppointment {
+  className?: string;
+  attender: string;
+  dateCreated: Date;
+  status: "pending" | "failed" | "success";
+  id: string;
+  href: string;
+}
+
 const initialState = {
   userDashboardInfo: null as userDashboardInfoProps | null,
   userAppointmentInfo: null as userAppointmentInfoProps[] | null,
-};
+  recentAppointmentInfo: null as useAppointment | null,
+}
 
 const userSlice = createSlice({
   name: "userDashboardInfo",
@@ -198,6 +209,13 @@ export const userApiCall = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getLatestAppointments: builder.mutation({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/latest?limit${data.limit}&userType${data.userType}`,
+        method: "GET"
+      })
+    })
   }),
 });
 
@@ -222,6 +240,7 @@ export const {
   useGetHospitalMutation,
 
   useGetUserAppointmentsMutation,
+  useGetLatestAppointmentsMutation
 } = userApiCall;
 export const { saveDashboardInfo, resetDashboard, saveAppointmentInfo } =
   userSlice.actions;
