@@ -119,6 +119,7 @@ const userSlice = createSlice({
       localStorage.removeItem("userDashboardInfo");
       localStorage.removeItem("userAppointmentInfo");
       localStorage.removeItem("userRecentAppointmentInfo");
+      localStorage.removeItem("userHealthCareHistoryInfo");
     },
   },
 });
