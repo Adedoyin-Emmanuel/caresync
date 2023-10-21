@@ -71,3 +71,7 @@ const HealthCareHistoryCard = ({
     </Link>
   );
 };
+
+
+
+export { HealthCareHistoryCard };

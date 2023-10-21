@@ -20,7 +20,6 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
-import { LuTimer } from "react-icons/lu";
 
 const Home = () => {
   const [getUser, { isLoading }] = useGetUserMutation();
@@ -114,19 +113,11 @@ const Home = () => {
                   healthcare history
                 </h3>
 
-                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                  <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                    <HiOutlineShieldCheck className="w-6 h-6" />
-                  </section>
-
-                  <section className="other-content w-11/12 flex items-center justify-around">
-                    <Text className="text-sm font-bold">@Mayfair</Text>
-                    <div className="text-[13px] lowercase flex items-center  gap-x-1">
-                      <LuTimer className="w-5 h-5" />
-                      <Text className="font-bold"> 5 days ago</Text>
-                    </div>
-                  </section>
-                </section>
+                {userDashboardInfo?.healthCareHistory.length === 0 ? (
+                  <Text className="text-center my-5">No healthcare history</Text>
+                ) : (
+                  <Text>History dey</Text>
+                )}
               </section>
             </section>
 
