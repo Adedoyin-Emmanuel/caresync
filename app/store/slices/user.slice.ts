@@ -40,7 +40,7 @@ export interface userAppointmentInfoProps {
 
 const initialState = {
   userDashboardInfo: null as userDashboardInfoProps | null,
-  userAppointmentInfo: null as userAppointmentInfoProps | null,
+  userAppointmentInfo: null as userAppointmentInfoProps[] | null,
 };
 
 const userSlice = createSlice({
@@ -193,8 +193,8 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     //appointments based endpoints
     getUserAppointments: builder.mutation({
-      query: () => ({
-        url: `${APPOINTMENTS_URL}/user`,
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/user/${data}`,
         method: "GET",
       }),
     }),

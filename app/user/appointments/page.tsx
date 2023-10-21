@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/app/components/Button";
+import ApppointmentCard from "@/app/components/AppointmentCard";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
@@ -10,7 +10,7 @@ import {
   userAppointmentInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 const Appointment = () => {
@@ -19,6 +19,7 @@ const Appointment = () => {
 
   const [getUserAppointments, { isLoading }] = useGetUserAppointmentsMutation();
   const [getUser] = useGetUserMutation();
+  const [totalAppointments, setTotalAppointments] = useState<number>(0);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -27,11 +28,12 @@ const Appointment = () => {
 
     const fetchData = async () => {
       try {
-        const response: any = await getUserAppointments({signal});
+        const userId = userInfo?._id;
+        const response: any = await getUserAppointments(userId);
         console.log(response);
         const { data } = response.data;
+        setTotalAppointments(data.length);
         const payload: userAppointmentInfoProps = data;
-        console.log(payload);
         dispatch(saveAppointmentInfo(payload));
       } catch (error: any) {
         if (error.name === "AbortError") {
@@ -48,6 +50,7 @@ const Appointment = () => {
       abortController.abort();
     };
   }, []);
+
   return (
     <div className="w-screen h-screen bg-zinc-50">
       {isLoading ? (
@@ -58,42 +61,44 @@ const Appointment = () => {
             <h3 className="font-bold text-2xl capitalize text-accent">
               Scheduled appointments
             </h3>
-            <Text className="text-sm">Your appointment with hospitals</Text>
+            <Text className="text-sm flex items-center gap-x-2">
+              Your appointment with hospitals{" "}
+              <span
+                className="bg-accent  text-center flex items-center justify-center font-bold h-6 w-6
+             text-white rounded-full"
+              >
+                <span>
+                  {totalAppointments > 9 ? `${9}+` : totalAppointments}
+                </span>
+              </span>
+            </Text>
 
-            <section className="appointment-container items-center justify-center mx-auto gap-10 grid sm:grid-cols-2 xl:grid-cols-3 my-5">
-              <section className="appointment-one bg-gray-100  rounded p-2 md:w-96">
-                <h3 className="text-[18px] capitalize font-bold my-2">
-                  mayfair checkup
-                </h3>
-                <Text className="text-sm text-slate-700">
-                  october 16, 2023 [04:30AM - 4-21PM]
-                </Text>
-
-                <Text className="my-2 text-sm ">
-                  Your optician appointment with mayfair, we would be discussing
-                  about your eye issue and how better you can protect your eye.
-                </Text>
-                <section className="button-container my-2 mt-3">
-                  <Button>start meeting</Button>
-                </section>
-              </section>
-
-              <section className="appointment-one bg-gray-100  rounded p-2 md:w-96">
-                <h3 className="text-[18px] capitalize font-bold my-2">
-                  bloomcare checkup
-                </h3>
-                <Text className="text-sm text-slate-700">
-                  october 18, 2023 [06:30AM - 8-21PM]
-                </Text>
-
-                <Text className="my-2 text-sm ">
-                  Your optician appointment with mayfair, we would be discussing
-                  about your eye issue and how better you can protect your eye.
-                </Text>
-                <section className="button-container my-2 mt-3">
-                  <Button>start meeting</Button>
-                </section>
-              </section>
+            <section
+              className={`appointment-container items-center justify-center mx-auto gap-10 ${
+                totalAppointments !== 0 && "grid"
+              } sm:grid-cols-2 xl:grid-cols-3 my-8`}
+            >
+              {totalAppointments == 0 ? (
+                <div className="w-full mx-auto  p-4">
+                  <Text className="text-center">No appointment found!</Text>
+                </div>
+              ) : (
+                userAppointmentInfo?.map(
+                  (appointment: userAppointmentInfoProps, index: number) => {
+                    return (
+                      <ApppointmentCard
+                        key={appointment._id}
+                        title={appointment.title}
+                        description={appointment.description}
+                        dateCreated={appointment.createdAt}
+                        startDate={appointment.startDate}
+                        endDate={appointment.endDate}
+                        id={appointment._id}
+                      />
+                    );
+                  }
+                )
+              )}
             </section>
           </section>
         </SidebarLayout>

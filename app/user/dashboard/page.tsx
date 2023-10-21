@@ -17,10 +17,12 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
 
+
 const Home = () => {
   const [getUser, { isLoading }] = useGetUserMutation();
   const dispatch = useDispatch<AppDispatch>();
-
+  const { userDashboardInfo } = useAppSelector((state) => state.user);
+  
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
@@ -47,9 +49,7 @@ const Home = () => {
     };
   }, []);
 
-  const { userDashboardInfo } = useAppSelector(
-    (state) => state.user
-  );
+
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
