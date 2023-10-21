@@ -1,14 +1,17 @@
 "use client";
 
+import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";
-import Loader from "@/app/components/Loader";
+import Loader, { LoaderSmall } from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
   saveDashboardInfo,
+  saveRecentAppointmentInfo,
+  useGetLatestAppointmentsMutation,
   useGetUserMutation,
-  useGetUserAppointmentsMutation,
+  userAppointmentInfoProps,
   userDashboardInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
@@ -17,14 +20,17 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
-import { AppointmentLabel } from "@/app/components/AppointmentCard";
-
 
 const Home = () => {
   const [getUser, { isLoading }] = useGetUserMutation();
+  const [getLatestAppointments, { isLoading: latestAppointmentLoading }] =
+    useGetLatestAppointmentsMutation();
   const dispatch = useDispatch<AppDispatch>();
-  const { userDashboardInfo } = useAppSelector((state) => state.user);
-  
+  const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
+    (state) => state.user
+  );
+  const { userInfo } = useAppSelector((state) => state.auth);
+
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
@@ -32,6 +38,17 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response: any = await getUser({ signal });
+        const dataToPass = {
+          id: userInfo._id,
+          limit: 5,
+          userType: userInfo.role,
+        };
+
+        const appointmentResponse: any = await getLatestAppointments(
+          dataToPass
+        );
+
+        dispatch(saveRecentAppointmentInfo(appointmentResponse.data.data));
         const { data } = response.data;
         const payload: userDashboardInfoProps = data;
         dispatch(saveDashboardInfo(payload));
@@ -50,7 +67,6 @@ const Home = () => {
       abortController.abort();
     };
   }, []);
-
 
 
   return (
@@ -118,34 +134,29 @@ const Home = () => {
                 </h3>
 
                 <section className="appointments mt-4">
-                  <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                    <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                      <BsCameraVideo className="w-6 h-6" />
-                    </section>
-
-                    <section className="other-content w-11/12 flex items-center justify-around">
-                      <Text className="text-sm">14/09/2023</Text>
-                      <Text className="text-sm font-bold">@Mayfair</Text>
-                      <section className="status-badge text-black rounded bg-green-300 flex items-center justify-center h-5 w-20">
-                        <Text className="text-[12px] font-bold">success</Text>
-                      </section>
-                    </section>
-                  </section>
-
-                  <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                    <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                      <BsCameraVideo className="w-6 h-6" />
-                    </section>
-
-                    <section className="other-content w-11/12 flex items-center justify-around">
-                      <Text className="text-sm">14/09/2023</Text>
-                      <Text className="text-sm font-bold">@bloom</Text>
-                      <section className="status-badge  text-black rounded bg-red-400 flex items-center justify-center h-5 w-20">
-                        <Text className="text-[12px] font-bold">failed</Text>
-                      </section>
-                    </section>
-                  </section>
-                  <section className="new-appointment w-full flex items-end justify-end">
+                  {latestAppointmentLoading ? (
+                    <LoaderSmall className="my-2" />
+                  ) : recentAppointmentInfo?.length == 0 ? (
+                    <Text className="text-center my-3">
+                      No recent appointments
+                    </Text>
+                  ) : (
+                    recentAppointmentInfo?.map(
+                      (appointment: userAppointmentInfoProps) => {
+                        return (
+                          <AppointmentLabel
+                            key={appointment._id}
+                            status={appointment.status}
+                            attender={appointment.hospitalId}
+                            id={appointment._id}
+                            href={`/user/dashboard/appointment/${appointment._id}`}
+                            dateCreated={appointment.createdAt}
+                          />
+                        );
+                      }
+                    )
+                  )}
+                  <section className="new-appointment w-full flex items-end justify-end my-2">
                     <Button className="bg-accent">New appointment</Button>
                   </section>
                 </section>

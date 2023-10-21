@@ -5,6 +5,7 @@ import { BsCameraVideo } from "react-icons/bs";
 import { LuTimer } from "react-icons/lu";
 import Button from "../Button";
 import Text from "../Text";
+import { userAppointmentInfoProps } from "@/app/store/slices/user.slice";
 
 interface AppointmentCardProps {
   className?: string;
@@ -21,8 +22,8 @@ interface AppointmentLabelProps {
   attender: string;
   dateCreated: Date;
   status: "pending" | "failed" | "success";
-    id: string;
-    href: string;
+  id: string;
+  href: string;
 }
 
 const ApppointmentCard = ({
@@ -67,8 +68,8 @@ const AppointmentLabel = ({
   status,
   dateCreated,
   attender,
-  href
-}: AppointmentLabelProps) => {
+  href,
+}: AppointmentLabelProps ) => {
   let defaultStatus = (
     <section className="status-badge text-black rounded bg-yellow-300 flex items-center justify-center h-5 w-20">
       <Text className="text-[12px] font-bold">pending</Text>
@@ -121,4 +122,4 @@ const AppointmentLabel = ({
   );
 };
 
-export { ApppointmentCard, AppointmentLabel };
+export { AppointmentLabel, ApppointmentCard };

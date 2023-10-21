@@ -26,20 +26,19 @@ export interface userDashboardInfoProps {
 
 export interface userAppointmentInfoProps {
   _id: string;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   hospitalId: string;
-  userId: string;
+  userId?: string;
   status: "pending" | "success" | "failed";
-  startDate: Date;
-  endDate: Date;
-  reviews: any[];
+  startDate?: Date;
+  endDate?: Date;
+  reviews?: any[];
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
-
-export interface useAppointment {
+export interface useAppointment extends userAppointmentInfoProps {
   className?: string;
   attender: string;
   dateCreated: Date;
@@ -51,8 +50,8 @@ export interface useAppointment {
 const initialState = {
   userDashboardInfo: null as userDashboardInfoProps | null,
   userAppointmentInfo: null as userAppointmentInfoProps[] | null,
-  recentAppointmentInfo: null as useAppointment | null,
-}
+  recentAppointmentInfo: null as useAppointment[] | null,
+};
 
 const userSlice = createSlice({
   name: "userDashboardInfo",
@@ -60,14 +59,29 @@ const userSlice = createSlice({
   reducers: {
     saveDashboardInfo: (state, action) => {
       state.userDashboardInfo = action.payload;
+      localStorage.setItem("userDashboardInfo", JSON.stringify(action.payload));
     },
 
-    resetDashboard: () => {
-      return initialState;
+    resetUser: () => {
+      localStorage.removeItem("userDashboardInfo");
+      localStorage.removeItem("userAppointmentInfo");
+      localStorage.removeItem("userRecentAppointmentInfo");
     },
 
     saveAppointmentInfo: (state, action) => {
       state.userAppointmentInfo = action.payload;
+      localStorage.setItem(
+        "userAppointmentInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
+    saveRecentAppointmentInfo: (state, action) => {
+      state.recentAppointmentInfo = action.payload;
+      localStorage.setItem(
+        "userRecentAppointmentInfo",
+        JSON.stringify(action.payload)
+      );
     },
   },
 });
@@ -165,7 +179,7 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
     }),
 
-    getHospitalsById: builder.query({
+    getHospitalsById: builder.mutation({
       query: (data) => ({
         url: `${HOSPITALS_URL}/${data.id}`,
         method: "GET",
@@ -212,10 +226,14 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     getLatestAppointments: builder.mutation({
       query: (data) => ({
-        url: `${APPOINTMENTS_URL}/latest?limit${data.limit}&userType${data.userType}`,
-        method: "GET"
-      })
-    })
+        url: `${APPOINTMENTS_URL}/latest/${data.id}`,
+        method: "GET",
+        params: {
+          limit: data.limit,
+          userType: data.userType,
+        },
+      }),
+    }),
   }),
 });
 
@@ -232,7 +250,7 @@ export const {
   useGetAllUsersQuery,
   useGetAllHospitalsQuery,
   useGetUserByIdQuery,
-  useGetHospitalsByIdQuery,
+  useGetHospitalsByIdMutation,
   useDeleteUserMutation,
   useDeleteHospitalMutation,
 
@@ -240,8 +258,8 @@ export const {
   useGetHospitalMutation,
 
   useGetUserAppointmentsMutation,
-  useGetLatestAppointmentsMutation
+  useGetLatestAppointmentsMutation,
 } = userApiCall;
-export const { saveDashboardInfo, resetDashboard, saveAppointmentInfo } =
+export const { saveDashboardInfo, resetUser, saveAppointmentInfo, saveRecentAppointmentInfo } =
   userSlice.actions;
 export default userSlice.reducer;

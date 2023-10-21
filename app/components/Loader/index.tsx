@@ -14,12 +14,12 @@ const Loader = ({ size, className }: LoaderProps) => {
   );
 };
 
-export const LoaderInfinity = ({ size, className }: LoaderProps) => {
+export const LoaderSmall = ({ size, className }: LoaderProps) => {
   const loaderSize = size || "lg";
   return (
-    <div className="loader-container fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50">
+    <div className="loader-container flex items-center justify-center z-50">
       <span
-        className={`loading loading-infinity loading-${loaderSize} text-center bg-accent  ${className}`}
+        className={`loading loading-ring  loading-${loaderSize} text-center bg-accent w-10 h-10  ${className}`}
       ></span>
     </div>
   );
