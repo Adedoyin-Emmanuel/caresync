@@ -8,6 +8,18 @@ const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 const APPOINTMENTS_URL = "/appointment";
 
+const loadFromLocalStorage = (key: string, defaultValue: any) => {
+  const storedData = localStorage.getItem(key);
+  if (storedData) {
+    try {
+      return JSON.parse(storedData);
+    } catch (error) {
+      console.error("Error parsing data from localStorage:", error);
+    }
+  }
+  return defaultValue;
+};
+
 export interface userDashboardInfoProps {
   _id: string;
   name: string;
@@ -38,7 +50,7 @@ export interface userAppointmentInfoProps {
   updatedAt?: Date;
 }
 
-export interface useAppointment extends userAppointmentInfoProps {
+export interface userAppointment extends userAppointmentInfoProps {
   className?: string;
   attender: string;
   dateCreated: Date;
@@ -47,10 +59,26 @@ export interface useAppointment extends userAppointmentInfoProps {
   href: string;
 }
 
+export interface healthCareHistoryProps {
+  attender: string;
+  _id: string;
+  dateCreated: string;
+  href: string;
+}
+
 const initialState = {
-  userDashboardInfo: null as userDashboardInfoProps | null,
-  userAppointmentInfo: null as userAppointmentInfoProps[] | null,
-  recentAppointmentInfo: null as useAppointment[] | null,
+  userDashboardInfo: loadFromLocalStorage(
+    "userDashboardInfo",
+    null
+  ) as userDashboardInfoProps | null,
+  userAppointmentInfo: loadFromLocalStorage("userAppointmentInfo", null) as
+    | userAppointmentInfoProps[]
+    | null,
+  recentAppointmentInfo: loadFromLocalStorage(
+    "userRecentAppointmentInfo",
+    null
+  ) as userAppointment[] | null,
+  healthCareHistoryInfo: null as healthCareHistoryProps[] | null,
 };
 
 const userSlice = createSlice({
@@ -60,12 +88,6 @@ const userSlice = createSlice({
     saveDashboardInfo: (state, action) => {
       state.userDashboardInfo = action.payload;
       localStorage.setItem("userDashboardInfo", JSON.stringify(action.payload));
-    },
-
-    resetUser: () => {
-      localStorage.removeItem("userDashboardInfo");
-      localStorage.removeItem("userAppointmentInfo");
-      localStorage.removeItem("userRecentAppointmentInfo");
     },
 
     saveAppointmentInfo: (state, action) => {
@@ -83,8 +105,26 @@ const userSlice = createSlice({
         JSON.stringify(action.payload)
       );
     },
+
+    saveHealthCareHistoryInfo: (state, action) => {
+      state.healthCareHistoryInfo = action.payload;
+      localStorage.setItem(
+        "userHealthCareHistoryInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
+    resetUser: () => {
+      localStorage.removeItem("userDashboardInfo");
+      localStorage.removeItem("userAppointmentInfo");
+      localStorage.removeItem("userRecentAppointmentInfo");
+    },
   },
 });
+
+/*
+  UserApiCalls
+*/
 
 export const userApiCall = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -172,16 +212,16 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
     }),
 
-    getUserById: builder.query({
+    getUserById: builder.mutation({
       query: (data) => ({
-        url: `${USERS_URL}/${data.id}`,
+        url: `${USERS_URL}/${data}`,
         method: "GET",
       }),
     }),
 
-    getHospitalsById: builder.mutation({
+    getHospitalById: builder.mutation({
       query: (data) => ({
-        url: `${HOSPITALS_URL}/${data.id}`,
+        url: `${HOSPITALS_URL}/${data}`,
         method: "GET",
       }),
     }),
@@ -249,8 +289,8 @@ export const {
   useUpdateHospitalMutation,
   useGetAllUsersQuery,
   useGetAllHospitalsQuery,
-  useGetUserByIdQuery,
-  useGetHospitalsByIdMutation,
+  useGetUserByIdMutation,
+  useGetHospitalByIdMutation,
   useDeleteUserMutation,
   useDeleteHospitalMutation,
 
@@ -260,6 +300,11 @@ export const {
   useGetUserAppointmentsMutation,
   useGetLatestAppointmentsMutation,
 } = userApiCall;
-export const { saveDashboardInfo, resetUser, saveAppointmentInfo, saveRecentAppointmentInfo } =
-  userSlice.actions;
+export const {
+  saveDashboardInfo,
+  resetUser,
+  saveAppointmentInfo,
+  saveRecentAppointmentInfo,
+  saveHealthCareHistoryInfo,
+} = userSlice.actions;
 export default userSlice.reducer;

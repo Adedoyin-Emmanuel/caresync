@@ -1,5 +1,8 @@
 "use client";
-import {ApppointmentCard} from "@/app/components/AppointmentCard";
+import {
+  ApppointmentCard,
+  AppointmentCardProps,
+} from "@/app/components/AppointmentCard";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
@@ -84,16 +87,16 @@ const Appointment = () => {
                 </div>
               ) : (
                 userAppointmentInfo?.map(
-                  (appointment: userAppointmentInfoProps, index: number) => {
+                  (appointment: AppointmentCardProps | any) => {
                     return (
                       <ApppointmentCard
                         key={appointment._id}
                         title={appointment.title}
                         description={appointment.description}
-                        dateCreated={appointment.createdAt}
+                        createdAt={appointment.createdAt}
                         startDate={appointment.startDate}
                         endDate={appointment.endDate}
-                        id={appointment._id}
+                        _id={appointment._id}
                       />
                     );
                   }

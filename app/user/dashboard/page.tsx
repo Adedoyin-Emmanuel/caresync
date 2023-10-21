@@ -26,7 +26,7 @@ const Home = () => {
   const [getLatestAppointments, { isLoading: latestAppointmentLoading }] =
     useGetLatestAppointmentsMutation();
   const dispatch = useDispatch<AppDispatch>();
-  const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
+  const { userDashboardInfo, recentAppointmentInfo, healthCareHistoryInfo } = useAppSelector(
     (state) => state.user
   );
   const { userInfo } = useAppSelector((state) => state.auth);
@@ -49,7 +49,6 @@ const Home = () => {
         );
 
         dispatch(saveRecentAppointmentInfo(appointmentResponse.data.data));
-        console.log(recentAppointmentInfo);
         const { data } = response.data;
         const payload: userDashboardInfoProps = data;
         dispatch(saveDashboardInfo(payload));
@@ -146,11 +145,12 @@ const Home = () => {
                         return (
                           <AppointmentLabel
                             key={appointment._id}
+                            userType="hospital"
                             status={appointment.status}
                             attender={appointment.hospitalId}
-                            id={appointment._id}
+                            _id={appointment._id}
                             href={`/user/dashboard/appointment/${appointment._id}`}
-                            dateCreated={appointment.createdAt}
+                            createdAt={appointment.createdAt}
                           />
                         );
                       }
