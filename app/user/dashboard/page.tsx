@@ -20,13 +20,14 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
+import { LuTimer } from "react-icons/lu";
 
 const Home = () => {
   const [getUser, { isLoading }] = useGetUserMutation();
   const [getLatestAppointments, { isLoading: latestAppointmentLoading }] =
     useGetLatestAppointmentsMutation();
   const dispatch = useDispatch<AppDispatch>();
-  const { userDashboardInfo, recentAppointmentInfo, healthCareHistoryInfo } = useAppSelector(
+  const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
     (state) => state.user
   );
   const { userInfo } = useAppSelector((state) => state.auth);
@@ -119,8 +120,11 @@ const Home = () => {
                   </section>
 
                   <section className="other-content w-11/12 flex items-center justify-around">
-                    <Text className="tmeetingext-sm">14/09/2023</Text>
                     <Text className="text-sm font-bold">@Mayfair</Text>
+                    <div className="text-[13px] lowercase flex items-center  gap-x-1">
+                      <LuTimer className="w-5 h-5" />
+                      <Text className="font-bold"> 5 days ago</Text>
+                    </div>
                   </section>
                 </section>
               </section>

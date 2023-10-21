@@ -29,11 +29,12 @@ export interface userDashboardInfoProps {
   bio: string;
   isVerified: boolean;
   allTotalAppointments: number;
-  appointments: any[];
+  appointments: userAppointment[];
   messages: any[];
   reviews: any[];
-  updatedAt: any;
-  createdAt: any;
+  healthCareHistory: healthCareHistoryProps[];
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface userAppointmentInfoProps {
@@ -62,7 +63,7 @@ export interface userAppointment extends userAppointmentInfoProps {
 export interface healthCareHistoryProps {
   attender: string;
   _id: string;
-  dateCreated: string;
+  createdAt: Date;
   href: string;
 }
 

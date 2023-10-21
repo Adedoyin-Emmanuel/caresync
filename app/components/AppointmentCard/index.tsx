@@ -147,7 +147,7 @@ const AppointmentLabel = ({
         </section>
 
         <section className="other-content w-11/12 flex items-center justify-around">
-          <Text className="text-sm">14/09/2023</Text>
+          <Text className="text-sm">{formattedDate.formattedDate}</Text>
           <Text className="text-sm font-bold" noCapitalize={true}>
             @{attenderName}
           </Text>
