@@ -67,6 +67,20 @@ export interface healthCareHistoryProps {
   href: string;
 }
 
+export interface hospitalProps {
+  clinicName: string;
+  username: string;
+  email: string;
+  password: string;
+  profilePicture: string;
+  isVerified: boolean;
+  appointments: userAppointment[];
+  messages: [];
+  reviews: [];
+  healthCareHistory: healthCareHistoryProps[];
+  allTotalAppointments: number;
+}
+
 const initialState = {
   userDashboardInfo: loadFromLocalStorage(
     "userDashboardInfo",
@@ -79,7 +93,13 @@ const initialState = {
     "userRecentAppointmentInfo",
     null
   ) as userAppointment[] | null,
-  healthCareHistoryInfo: null as healthCareHistoryProps[] | null,
+  healthCareHistoryInfo: loadFromLocalStorage(
+    "userHealthCareHistoryInfo",
+    null
+  ) as healthCareHistoryProps[] | null,
+  hospitalSearchInfo: loadFromLocalStorage("userHospitalSearchInfo", null) as
+    | hospitalProps[]
+    | null,
 };
 
 const userSlice = createSlice({
@@ -115,11 +135,20 @@ const userSlice = createSlice({
       );
     },
 
+    saveHospitalSearchInfo: (state, action) => {
+      state.hospitalSearchInfo = action.payload;
+      localStorage.setItem(
+        "userHospitalSearchInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
     resetUser: () => {
       localStorage.removeItem("userDashboardInfo");
       localStorage.removeItem("userAppointmentInfo");
       localStorage.removeItem("userRecentAppointmentInfo");
       localStorage.removeItem("userHealthCareHistoryInfo");
+      localStorage.removeItem("userHospitalSearchInfo");
     },
   },
 });
@@ -130,6 +159,8 @@ const userSlice = createSlice({
 
 export const userApiCall = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    //auth based endpoints
+
     login: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/login`,
@@ -187,6 +218,8 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
     }),
 
+    // miscellaneous
+
     updateUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/${data.id}`,
@@ -236,6 +269,19 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
       providesTags: ["User", "Hospital"],
     }),
+
+    searchHospital: builder.query({
+      query: (data) => ({
+        url: `${HOSPITALS_URL}/search`,
+        method: "GET",
+        params: {
+          searchTerm: data,
+        },
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
+    // user resource deletion
 
     deleteUser: builder.mutation({
       query: (data) => ({
@@ -313,6 +359,8 @@ export const {
   useGetHospitalByIdQuery,
   useDeleteUserMutation,
   useDeleteHospitalMutation,
+
+  useSearchHospitalQuery,
 
   useGetUserQuery,
   useGetHospitalQuery,
