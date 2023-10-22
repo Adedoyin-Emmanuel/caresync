@@ -79,10 +79,8 @@ export interface hospitalProps {
   reviews: [];
   healthCareHistory: healthCareHistoryProps[];
   allTotalAppointments: number;
-  rating: Number
+  rating: Number;
 }
-
-
 
 const initialState = {
   userDashboardInfo: loadFromLocalStorage(
@@ -103,7 +101,6 @@ const initialState = {
   hospitalSearchInfo: loadFromLocalStorage("userHospitalSearchInfo", null) as
     | hospitalProps[]
     | null,
-
 };
 
 const userSlice = createSlice({
@@ -285,6 +282,16 @@ export const userApiCall = apiSlice.injectEndpoints({
       providesTags: ["User", "Hospital"],
     }),
 
+    //search user
+
+    getHospitalRating: builder.query({
+      query: (data) => ({
+        url: `${HOSPITALS_URL}/rating/${data}`,
+        method: "GET",
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
     // user resource deletion
 
     deleteUser: builder.mutation({
@@ -365,6 +372,7 @@ export const {
   useDeleteHospitalMutation,
 
   useSearchHospitalQuery,
+  useGetHospitalRatingQuery,
 
   useGetUserQuery,
   useGetHospitalQuery,
@@ -378,5 +386,6 @@ export const {
   saveAppointmentInfo,
   saveRecentAppointmentInfo,
   saveHealthCareHistoryInfo,
+  saveHospitalSearchInfo,
 } = userSlice.actions;
 export default userSlice.reducer;
