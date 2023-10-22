@@ -1,17 +1,12 @@
 "use client";
 
-import { AppointmentLabel } from "@/app/components/AppointmentCard";
-import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";
-import Loader, { LoaderSmall } from "@/app/components/Loader";
+import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
   saveDashboardInfo,
-  useGetLatestAppointmentsQuery,
   useGetUserQuery,
-  userAppointmentInfoProps,
-  saveRecentAppointmentInfo
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect } from "react";
@@ -23,29 +18,19 @@ import { useDispatch } from "react-redux";
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { data: userData, isLoading } = useGetUserQuery({});
+  const { userInfo } = useAppSelector((state) => state.auth);
+  // let dataToPass = {
+  //   id: userInfo._id,
+  //   limit: 5,
+  //   userType: "user",
+  // };
 
   useEffect(() => {
-    dispatch(saveDashboardInfo(userData));
+    dispatch(saveDashboardInfo(userData?.data));
   }, [userData]);
-  const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
-    (state) => state.user
-  );
 
-  const { userInfo } = useAppSelector((state) => state.auth);
+  const { userDashboardInfo } = useAppSelector((state) => state.user);
 
-  const dataToPass = {
-    id: userInfo._id,
-    limit: 5,
-    userType: "user",
-  };
-  const {
-    data: latestAppointmentData,
-    isError,
-    isLoading: latestAppointmentLoading,
-  } = useGetLatestAppointmentsQuery(dataToPass);
-  console.log(latestAppointmentData);
-  dispatch(saveRecentAppointmentInfo(latestAppointmentData?.data.data));
-console.log(recentAppointmentInfo);
   return (
     <div className="w-screen h-screen bg-zinc-50">
       {isLoading ? (
@@ -107,7 +92,7 @@ console.log(recentAppointmentInfo);
                   recent appointments
                 </h3>
 
-                <section className="appointments mt-4">
+                {/* <section className="appointments mt-4">
                   {latestAppointmentLoading ? (
                     <LoaderSmall className="my-2" />
                   ) : recentAppointmentInfo?.length == 0 ? (
@@ -115,7 +100,6 @@ console.log(recentAppointmentInfo);
                       No recent appointments
                     </Text>
                   ) : (
-                  
                     recentAppointmentInfo?.map(
                       (appointment: userAppointmentInfoProps) => {
                         return (
@@ -135,7 +119,7 @@ console.log(recentAppointmentInfo);
                   <section className="new-appointment w-full flex items-end justify-end my-2">
                     <Button className="bg-accent">New appointment</Button>
                   </section>
-                </section>
+                </section> */}
               </section>
             </section>
             <ChatBotButton />
