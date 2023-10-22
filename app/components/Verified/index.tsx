@@ -2,7 +2,7 @@ interface VerifiedProps {
   big?: boolean;
 }
 
-const Verified = ({ big = false }: VerifiedProps) => {
+const Verified = ({ big }: VerifiedProps) => {
   const component = big ? (
     <svg
       width="24"
@@ -30,7 +30,7 @@ const Verified = ({ big = false }: VerifiedProps) => {
       ></path>
     </svg>
   );
-  return { component };
+  return component;
 };
 
-export { Verified };
+export default Verified;
