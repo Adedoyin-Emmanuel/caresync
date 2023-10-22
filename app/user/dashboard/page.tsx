@@ -8,11 +8,10 @@ import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
   saveDashboardInfo,
-  saveRecentAppointmentInfo,
-  useGetLatestAppointmentsMutation,
-  useGetUserMutation,
+  useGetLatestAppointmentsQuery,
+  useGetUserQuery,
   userAppointmentInfoProps,
-  userDashboardInfoProps,
+  saveRecentAppointmentInfo
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect } from "react";
@@ -22,52 +21,31 @@ import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
 
 const Home = () => {
-  const [getUser, { isLoading }] = useGetUserMutation();
-  const [getLatestAppointments, { isLoading: latestAppointmentLoading }] =
-    useGetLatestAppointmentsMutation();
   const dispatch = useDispatch<AppDispatch>();
+  const { data: userData, isLoading } = useGetUserQuery({});
+
+  useEffect(() => {
+    dispatch(saveDashboardInfo(userData));
+  }, [userData]);
   const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
     (state) => state.user
   );
+
   const { userInfo } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
-
-    const fetchData = async () => {
-      try {
-        const response: any = await getUser({ signal });
-        const dataToPass = {
-          id: userInfo._id,
-          limit: 5,
-          userType: userInfo.role,
-        };
-
-        const appointmentResponse: any = await getLatestAppointments(
-          dataToPass
-        );
-
-        dispatch(saveRecentAppointmentInfo(appointmentResponse.data.data));
-        const { data } = response.data;
-        const payload: userDashboardInfoProps = data;
-        dispatch(saveDashboardInfo(payload));
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Request was aborted due to unmounting.");
-        } else {
-          console.error("Error:", error);
-        }
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      abortController.abort();
-    };
-  }, []);
-
+  const dataToPass = {
+    id: userInfo._id,
+    limit: 5,
+    userType: "user",
+  };
+  const {
+    data: latestAppointmentData,
+    isError,
+    isLoading: latestAppointmentLoading,
+  } = useGetLatestAppointmentsQuery(dataToPass);
+  console.log(latestAppointmentData);
+  dispatch(saveRecentAppointmentInfo(latestAppointmentData?.data.data));
+console.log(recentAppointmentInfo);
   return (
     <div className="w-screen h-screen bg-zinc-50">
       {isLoading ? (
@@ -80,7 +58,7 @@ const Home = () => {
                 <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                   <BsCameraVideo className="w-8 h-8" />
                   <Text>
-                    {userDashboardInfo?.appointments.length}{" "}
+                    {userDashboardInfo?.appointments?.length}{" "}
                     {userDashboardInfo?.appointments?.length! > 1
                       ? "Appointments"
                       : "Appointment"}
@@ -113,8 +91,10 @@ const Home = () => {
                   healthcare history
                 </h3>
 
-                {userDashboardInfo?.healthCareHistory.length === 0 ? (
-                  <Text className="text-center my-5">No healthcare history</Text>
+                {userDashboardInfo?.healthCareHistory?.length === 0 ? (
+                  <Text className="text-center my-5">
+                    No healthcare history
+                  </Text>
                 ) : (
                   <Text>History dey</Text>
                 )}
@@ -135,6 +115,7 @@ const Home = () => {
                       No recent appointments
                     </Text>
                   ) : (
+                  
                     recentAppointmentInfo?.map(
                       (appointment: userAppointmentInfoProps) => {
                         return (

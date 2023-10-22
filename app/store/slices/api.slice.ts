@@ -28,7 +28,6 @@ const axiosBaseQuery = async ({
       headers,
     });
     return { data: response.data };
-    console.log(response.headers);
   } catch (error: any) {
     return {
       error: {
@@ -42,7 +41,7 @@ const axiosBaseQuery = async ({
 // Define the API service
 export const apiSlice = createApi({
   baseQuery: axiosBaseQuery,
-  tagTypes: ["User", "Hospital", "userDashboardInfo"],
+  tagTypes: ["User", "Hospital"],
   endpoints: (builder) => ({}),
 });
 

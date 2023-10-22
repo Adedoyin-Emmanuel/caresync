@@ -136,6 +136,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         method: "POST",
         data: data,
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     logout: builder.mutation({
@@ -143,6 +144,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${AUTH_URL}/logout`,
         method: "POST",
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     verifyEmail: builder.query({
@@ -186,10 +188,11 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     updateUser: builder.mutation({
       query: (data) => ({
-        url: USERS_URL,
+        url: `${USERS_URL}/${data.id}`,
         method: "PUT",
-        data: data,
+        data: data.body,
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     updateHospital: builder.mutation({
@@ -198,6 +201,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         method: "PUT",
         data: data,
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     getAllUsers: builder.query({
@@ -244,11 +248,12 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     //dashboard based endpoints
 
-    getUser: builder.mutation({
+    getUser: builder.query({
       query: () => ({
         url: `${USERS_URL}/me`,
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
 
     getHospital: builder.mutation({
@@ -256,6 +261,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${HOSPITALS_URL}/me`,
         method: "GET",
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     //appointments based endpoints
@@ -264,17 +270,22 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${APPOINTMENTS_URL}/user/${data}`,
         method: "GET",
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
-    getLatestAppointments: builder.mutation({
-      query: (data) => ({
-        url: `${APPOINTMENTS_URL}/latest/${data.id}`,
-        method: "GET",
-        params: {
-          limit: data.limit,
-          userType: data.userType,
-        },
-      }),
+    getLatestAppointments: builder.query({
+      query: (data) => {
+        console.log("Data being sent to the query:", data);
+        return {
+          url: `${APPOINTMENTS_URL}/latest/${data.id}`,
+          method: "GET",
+          params: {
+            userType: data.userType, 
+            limit: data.limit,
+          },
+        };
+      },
+      providesTags: ["User", "Hospital"],
     }),
   }),
 });
@@ -296,11 +307,11 @@ export const {
   useDeleteUserMutation,
   useDeleteHospitalMutation,
 
-  useGetUserMutation,
+  useGetUserQuery,
   useGetHospitalMutation,
 
   useGetUserAppointmentsMutation,
-  useGetLatestAppointmentsMutation,
+  useGetLatestAppointmentsQuery,
 } = userApiCall;
 export const {
   saveDashboardInfo,
