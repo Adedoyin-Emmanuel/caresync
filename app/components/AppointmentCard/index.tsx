@@ -47,7 +47,7 @@ const ApppointmentCard = ({
     <section className="appointment-one bg-gray-100  rounded p-2 md:w-96">
       <h3 className="text-[18px] capitalize font-bold my-2 flex items-center justify-between">
         {title}{" "}
-        <div className="text-[13px] lowercase flex items-center  gap-x-1">
+        <div className="text-[13px] capitalize flex items-center  gap-x-1">
           <LuTimer className="w-5 h-5" />
           {moment(new Date(createdAt)).startOf("seconds").fromNow()}
         </div>

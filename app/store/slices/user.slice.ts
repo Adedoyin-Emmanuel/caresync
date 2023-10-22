@@ -265,12 +265,12 @@ export const userApiCall = apiSlice.injectEndpoints({
     }),
 
     //appointments based endpoints
-    getUserAppointments: builder.mutation({
+    getUserAppointments: builder.query({
       query: (data) => ({
         url: `${APPOINTMENTS_URL}/user/${data}`,
         method: "GET",
       }),
-      invalidatesTags: ["User", "Hospital"],
+      providesTags: ["User", "Hospital"],
     }),
 
     getLatestAppointments: builder.query({
@@ -310,7 +310,7 @@ export const {
   useGetUserQuery,
   useGetHospitalMutation,
 
-  useGetUserAppointmentsMutation,
+  useGetUserAppointmentsQuery,
   useGetLatestAppointmentsQuery,
 } = userApiCall;
 export const {
