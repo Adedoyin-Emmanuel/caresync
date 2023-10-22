@@ -2,12 +2,13 @@
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
+import Link from "next/link";
 import { useState } from "react";
 import { GrLocation } from "react-icons/gr";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 
-const CreateAppointment = ({ params }: { params: { hospitalId: string } }) => {
+const ViewHospitalProfile = ({ params }: { params: { hospitalId: string } }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,10 +27,10 @@ const CreateAppointment = ({ params }: { params: { hospitalId: string } }) => {
       <SidebarLayout>
         <section className="new-appointment w-full">
           <h3 className="font-bold text-2xl capitalize text-accent">
-            Create appointment
+            View Profile
           </h3>
           <Text className="text-sm">
-            create a new appointment with {params.hospitalId}
+            viewing {params.hospitalId} profile
             <span className="text-accent">Mayfair</span>
           </Text>
 
@@ -54,9 +55,14 @@ const CreateAppointment = ({ params }: { params: { hospitalId: string } }) => {
                       <Verified big={true} />
                     </span>
                   </h3>
-                  <section className="submit-appointment bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
-                    create appointment
-                  </section>
+
+                  <Link
+                    href={`/user/appointments/new/${params.hospitalId}/submit`}
+                  >
+                    <section className="submit-appointment bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
+                      create appointment
+                    </section>
+                  </Link>
                 </section>
 
                 <Text noCapitalize className="text-sm">
@@ -92,4 +98,4 @@ const CreateAppointment = ({ params }: { params: { hospitalId: string } }) => {
   );
 };
 
-export default CreateAppointment;
+export default ViewHospitalProfile;

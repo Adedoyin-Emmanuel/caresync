@@ -3,7 +3,6 @@ import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import { useState } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
-import Link from "next/link";
 
 const NewAppointment = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +24,9 @@ const NewAppointment = () => {
           <h3 className="font-bold text-2xl capitalize text-accent">
             New appointment
           </h3>
-          <Text className="text-sm">create a new appointment</Text>
+          <Text className="text-sm">
+            Find an hospital to submit appointment request to
+          </Text>
 
           <section className="hospitals">
             <form className="flex items-center justify-center mt-5">
@@ -69,11 +70,9 @@ const NewAppointment = () => {
                   <BsStarFill className="h-5 w-5 text-yellow-500" />
                   <BsStar className="h-5 w-5  " />
                 </section>
-
               </section>
             </section>
           </section>
-         
         </section>
       </SidebarLayout>
     </div>
