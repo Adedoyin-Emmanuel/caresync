@@ -79,7 +79,10 @@ export interface hospitalProps {
   reviews: [];
   healthCareHistory: healthCareHistoryProps[];
   allTotalAppointments: number;
+  rating: Number
 }
+
+
 
 const initialState = {
   userDashboardInfo: loadFromLocalStorage(
@@ -100,6 +103,7 @@ const initialState = {
   hospitalSearchInfo: loadFromLocalStorage("userHospitalSearchInfo", null) as
     | hospitalProps[]
     | null,
+
 };
 
 const userSlice = createSlice({
