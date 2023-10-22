@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import { BsCameraVideo } from "react-icons/bs";
 
 interface AppointmentButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -12,13 +12,13 @@ const AppointmentButton = ({
   ...others
 }: AppointmentButtonProps): JSX.Element => {
   return (
-    <Link href={"/user/appointments/new"}>
+    <Link href={"/user/appointments/new"} title="New appointment">
       <section className="fixed bottom-20 right-10">
         <section
           className={`w-16 h-16 flex items-center justify-center  bg-accent rounded-full shadow cursor-pointer relative transform-gpu transition-transform duration-200 scale-100 hover:scale-110 ${className}`}
           {...others}
         >
-          <AiOutlinePlus className="h-10 w-10 text-white" />
+          <BsCameraVideo className="h-10 w-10 text-white" />
         </section>
       </section>
     </Link>

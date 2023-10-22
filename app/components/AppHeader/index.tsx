@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { GoBell } from "react-icons/go";
+import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch } from "react-redux";
 
 interface AppHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -142,17 +143,28 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
     },
   ];
 
+  const routeBack = () => {
+    router.back();
+  };
+
   return (
     <div
       className={`${className} flex items-center ${
         showWelcomeMessage ? "justify-between" : "justify-end"
       } p-2 md:p-0`}
     >
-      {showWelcomeMessage && (
+      {showWelcomeMessage ? (
         <section className="user-name">
           <h2 className="font-bold capitalize text-2xl">
             hi, {userInfo?.username} 👋
           </h2>
+        </section>
+      ) : (
+        <section
+          onClick={routeBack}
+          className="block w-full cursor-pointer hover:text-accent duration-100 transition-colors ease-in"
+        >
+          <IoIosArrowBack className="block cursor-pointer w-6 h-6" />
         </section>
       )}
 

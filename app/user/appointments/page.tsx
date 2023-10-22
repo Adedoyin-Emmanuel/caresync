@@ -13,6 +13,7 @@ import {
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import AppointmentButton from "@/app/components/AppointmentButton";
 
 const Appointment = () => {
   const { userAppointmentInfo } = useAppSelector((state) => state.user);
@@ -50,7 +51,6 @@ const Appointment = () => {
                 </span>
               </span>
             </Text>
-
             <section
               className={`appointment-container items-center justify-center mx-auto gap-10 ${
                 totalAppointments !== 0 && "grid"
@@ -78,6 +78,7 @@ const Appointment = () => {
                 )
               )}
             </section>
+            <AppointmentButton/>
           </section>
         </SidebarLayout>
       )}
