@@ -1,7 +1,7 @@
 import { formatDateTime } from "@/app/helpers";
 import {
-  useGetHospitalByIdMutation,
-  useGetUserByIdMutation,
+  useGetHospitalByIdQuery,
+  useGetUserByIdQuery,
 } from "@/app/store/slices/user.slice";
 import moment from "moment";
 import Link from "next/link";
@@ -84,7 +84,6 @@ const AppointmentLabel = ({
 
   const formattedDate = formatDateTime(createdAt);
 
-
   switch (status) {
     case "pending":
       defaultStatus = defaultStatus;
@@ -107,35 +106,16 @@ const AppointmentLabel = ({
       defaultStatus = defaultStatus;
   }
 
-  const [getHospitalById] = useGetHospitalByIdMutation();
-  const [getUserById] = useGetUserByIdMutation();
-
+  const dataRequest =
+    userType == "user"
+      ? useGetUserByIdQuery(attender)
+      : useGetHospitalByIdQuery(attender);
+  const { data } = dataRequest;
   const [attenderName, setAttenderName] = useState();
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
-    const fetchData = async () => {
-      try {
-        const getUser = userType == "user" ? getUserById : getHospitalById;
-        const response: any = await getUser(attender);
-        setAttenderName(response.data.data.username);
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Request was aborted due to unmounting.");
-        } else {
-          console.error("Error:", error);
-        }
-      }
-    };
-
-
-    fetchData();
-
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+    setAttenderName(data?.data.username!);
+  }, [dataRequest]);
 
   return (
     <Link href={href}>

@@ -170,6 +170,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         data: data,
       }),
     }),
+
     registerUser: builder.mutation({
       query: (data) => ({
         url: USERS_URL,
@@ -209,6 +210,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: USERS_URL,
         method: "GET",
       }),
+      providesTags: ["User", "Hospital"],
     }),
 
     getAllHospitals: builder.query({
@@ -216,20 +218,23 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: HOSPITALS_URL,
         method: "GET",
       }),
+      providesTags: ["User", "Hospital"],
     }),
 
-    getUserById: builder.mutation({
+    getUserById: builder.query({
       query: (data) => ({
         url: `${USERS_URL}/${data}`,
         method: "GET",
       }),
+      providesTags: ["User", "Hospital"],
     }),
 
-    getHospitalById: builder.mutation({
+    getHospitalById: builder.query({
       query: (data) => ({
         url: `${HOSPITALS_URL}/${data}`,
         method: "GET",
       }),
+      providesTags: ["User", "Hospital"],
     }),
 
     deleteUser: builder.mutation({
@@ -237,6 +242,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${USERS_URL}/${data.id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     deleteHospital: builder.mutation({
@@ -244,6 +250,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${HOSPITALS_URL}/${data.id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["User", "Hospital"],
     }),
 
     //dashboard based endpoints
@@ -253,15 +260,15 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${USERS_URL}/me`,
         method: "GET",
       }),
-      providesTags: ["User"],
+      providesTags: ["User", "Hospital"],
     }),
 
-    getHospital: builder.mutation({
+    getHospital: builder.query({
       query: () => ({
         url: `${HOSPITALS_URL}/me`,
         method: "GET",
       }),
-      invalidatesTags: ["User", "Hospital"],
+      providesTags: ["User", "Hospital"],
     }),
 
     //appointments based endpoints
@@ -280,7 +287,7 @@ export const userApiCall = apiSlice.injectEndpoints({
           url: `${APPOINTMENTS_URL}/latest/${data.id}`,
           method: "GET",
           params: {
-            userType: data.userType, 
+            userType: data.userType,
             limit: data.limit,
           },
         };
@@ -302,13 +309,13 @@ export const {
   useUpdateHospitalMutation,
   useGetAllUsersQuery,
   useGetAllHospitalsQuery,
-  useGetUserByIdMutation,
-  useGetHospitalByIdMutation,
+  useGetUserByIdQuery,
+  useGetHospitalByIdQuery,
   useDeleteUserMutation,
   useDeleteHospitalMutation,
 
   useGetUserQuery,
-  useGetHospitalMutation,
+  useGetHospitalQuery,
 
   useGetUserAppointmentsQuery,
   useGetLatestAppointmentsQuery,
