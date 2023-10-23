@@ -68,6 +68,7 @@ export interface healthCareHistoryProps {
 }
 
 export interface hospitalProps {
+  _id: string;
   clinicName: string;
   username: string;
   email: string;
@@ -79,7 +80,6 @@ export interface hospitalProps {
   reviews: [];
   healthCareHistory: healthCareHistoryProps[];
   allTotalAppointments: number;
-  rating: Number;
 }
 
 const initialState = {
@@ -142,6 +142,11 @@ const userSlice = createSlice({
         "userHospitalSearchInfo",
         JSON.stringify(action.payload)
       );
+    },
+
+    clearHospitalSearchInfo: (state, action) => {
+      state.hospitalSearchInfo = null;
+      localStorage.removeItem("userHospitalSearchInfo");
     },
 
     resetUser: () => {
@@ -387,5 +392,6 @@ export const {
   saveRecentAppointmentInfo,
   saveHealthCareHistoryInfo,
   saveHospitalSearchInfo,
+  clearHospitalSearchInfo,
 } = userSlice.actions;
 export default userSlice.reducer;

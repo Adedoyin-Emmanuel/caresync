@@ -1,14 +1,17 @@
-import React from "react";
+import { useGetHospitalRatingQuery } from "@/app/store/slices/user.slice";
+import React, { useEffect, useState } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import Text from "../Text";
 import Verified from "../Verified";
+import Link from "next/link";
 
 interface HospitalCardProps {
   className?: string;
   clinicName: string;
   address: string;
   isVerified: boolean;
-  rating: number;
+  _id: string;
+  href: string;
 }
 
 const HospitalCard = ({
@@ -16,11 +19,22 @@ const HospitalCard = ({
   clinicName,
   address,
   isVerified,
-  rating,
+  _id,
+  href
 }: HospitalCardProps) => {
   const stars = Array(5).fill(null);
+  const [rating, setRating] = useState(0);
 
-  // Map the stars based on the rating
+  const { data } = useGetHospitalRatingQuery(_id);
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      setRating(data.data.rating);
+    }
+  }, [data]);
+
+  // map the stars based on the hospital rating
   const starElements = stars.map((_, index) => (
     <React.Fragment key={index}>
       {index < rating ? (
@@ -32,16 +46,18 @@ const HospitalCard = ({
   ));
 
   return (
-    <section
-      className={`hospital bg-gray-100 transition-colors duration-100 ease-in hover:bg-purple-100 p-3 rounded md:w-96 cursor-pointer ${className}`}
-    >
-      <h2 className="font-bold capitalize flex items-center gap-x-1">
-        {clinicName}
-        <span>{isVerified && <Verified />}</span>
-      </h2>
-      <Text className="text-sm">{address}</Text>
-      <section className="rating flex gap-x-1 my-2">{starElements}</section>
-    </section>
+    <Link href={href}>
+      <section
+        className={`hospital bg-gray-100 transition-colors duration-100 ease-in hover:bg-purple-100 p-3 rounded md:w-96 cursor-pointer ${className}`}
+      >
+        <h2 className="font-bold capitalize flex items-center gap-x-1">
+          {clinicName}
+          <span>{isVerified && <Verified />}</span>
+        </h2>
+        <Text className="text-sm">{address}</Text>
+        <section className="rating flex gap-x-1 my-2">{starElements}</section>
+      </section>
+    </Link>
   );
 };
 
