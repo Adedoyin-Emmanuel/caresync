@@ -170,6 +170,7 @@ const userSlice = createSlice({
       localStorage.removeItem("userRecentAppointmentInfo");
       localStorage.removeItem("userHealthCareHistoryInfo");
       localStorage.removeItem("userHospitalSearchInfo");
+      localStorage.removeItem("userHospitalSearchProfileInfo");
     },
   },
 });
@@ -359,7 +360,6 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     getLatestAppointments: builder.query({
       query: (data) => {
-        console.log("Data being sent to the query:", data);
         return {
           url: `${APPOINTMENTS_URL}/latest/${data.id}`,
           method: "GET",
@@ -371,6 +371,16 @@ export const userApiCall = apiSlice.injectEndpoints({
       },
       providesTags: ["User", "Hospital"],
     }),
+
+    createAppointment: builder.mutation({
+      query: (data) => ({
+        url: APPOINTMENTS_URL,
+        method: "POST",
+        data: data,
+      }),
+      invalidatesTags: ['User', 'Hospital']
+    }),
+    
   }),
 });
 
@@ -397,8 +407,10 @@ export const {
   useGetUserQuery,
   useGetHospitalQuery,
 
+
   useGetUserAppointmentsQuery,
   useGetLatestAppointmentsQuery,
+  useCreateAppointmentMutation
 } = userApiCall;
 export const {
   saveDashboardInfo,

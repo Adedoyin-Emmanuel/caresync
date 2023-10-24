@@ -1,5 +1,5 @@
 import { logoutUser } from "@/app/store/slices/auth.slice";
-import { useLogoutMutation } from "@/app/store/slices/user.slice";
+import { resetUser, useLogoutMutation } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -134,6 +134,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
           if (response) {
             toast.success(response.message);
             dispatch(logoutUser());
+            dispatch(resetUser());
             router.push("/auth/login");
           }
         } catch (error: any) {
@@ -208,14 +209,14 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
           </div>
 
           {isProfileDropdownVisible && (
-            <div className="profile-dropdown absolute  top-full w-96 right-0 bg-white z-[100] rounded-md shadow-md p-4">
+            <div className="profile-dropdown absolute  top-full w-60 h-96 right-0 bg-white z-[100] rounded-md shadow-md p-4">
               <h4 className="mb-2 font-bold text-gray-800 capitalize">
                 Profile Menu
               </h4>
               {profileMenuItems.map((item) => (
                 <p
                   key={item.id}
-                  className="text-[12px] md:text-sm p-3 hover:bg-purple-100 rounded capitalize mt-2 cursor-pointer"
+                  className="text-[13px] md:text-sm p-3 hover:bg-purple-100 rounded capitalize mt-2 cursor-pointer"
                   onClick={() => item.onClick()}
                 >
                   {item.text}

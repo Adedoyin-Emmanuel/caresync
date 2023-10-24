@@ -68,7 +68,7 @@ const Profile = () => {
         body: formData,
         id: userDashboardInfo?._id,
       };
-      const response: any = await updateUser(dataToSubmit);
+      const response: any = await updateUser(dataToSubmit).unwrap();
       //dispatch the saveDashboardInfo since the response is also the user object
       if (response.error) {
         console.log(response.error);
