@@ -63,7 +63,7 @@ const Profile = () => {
       {updateUserLoading ? (
         <Loader />
       ) : (
-        <SidebarLayout showWelcomeMesage>
+        <SidebarLayout>
           <section className="appointments my-5">
             <h3 className="font-bold text-2xl capitalize text-accent">
               profile
