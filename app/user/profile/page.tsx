@@ -6,15 +6,10 @@ import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import { updateUserInfo } from "@/app/store/slices/auth.slice";
-import {
-  saveDashboardInfo,
-  useGetUserQuery,
-  userDashboardInfoProps,
-  useUpdateUserMutation,
-} from "@/app/store/slices/user.slice";
+import { useUpdateUserMutation } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
@@ -25,28 +20,9 @@ const Profile = () => {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   if (!userDashboardInfo) router.push("/user/dashboard");
 
-  const { getUser }: any = useGetUserQuery({});
   const [updateUser, { isLoading: updateUserLoading }] =
     useUpdateUserMutation();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
-
-    const fetchData = async () => {
-      const response: any = await getUser({ signal });
-      const { data } = response.data;
-      const payload: userDashboardInfoProps = data;
-      dispatch(saveDashboardInfo(payload));
-    };
-
-    fetchData();
-
-    return () => {
-      abortController.abort();
-    };
-  }, []);
 
   const [formData, setFormData] = useState({
     name: userDashboardInfo?.name,
@@ -62,27 +38,23 @@ const Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+
     try {
       const dataToSubmit = {
         body: formData,
         id: userDashboardInfo?._id,
       };
       const response: any = await updateUser(dataToSubmit).unwrap();
+
       //dispatch the saveDashboardInfo since the response is also the user object
-      if (response.error) {
-        console.log(response.error);
-        throw new Error(response.error.data.message);
-      } else {
-        toast.success(response.data.message);
-        const { data } = response.data;
-        dispatch(saveDashboardInfo(data));
-        dispatch(updateUserInfo(data));
+      toast.success(response.message);
+      if (response?.data) {
+        dispatch(updateUserInfo(response.data));
       }
     } catch (error: any) {
       console.log(error.message);
 
-      toast.error(error?.message);
+      toast.error(error?.data?.message || error.error || error?.data);
     }
   };
 
@@ -91,7 +63,7 @@ const Profile = () => {
       {updateUserLoading ? (
         <Loader />
       ) : (
-        <SidebarLayout>
+        <SidebarLayout showWelcomeMesage>
           <section className="appointments my-5">
             <h3 className="font-bold text-2xl capitalize text-accent">
               profile
@@ -113,7 +85,7 @@ const Profile = () => {
                 </div>
 
                 <form
-                  className="w-11/12 md:w-1/2 xl:w-2/4"
+                  className="w-full p-1 md:w-1/2 xl:w-2/4"
                   onSubmit={(e) => handleSubmit(e)}
                 >
                   <section className="my-4 mb-5">

@@ -378,9 +378,8 @@ export const userApiCall = apiSlice.injectEndpoints({
         method: "POST",
         data: data,
       }),
-      invalidatesTags: ['User', 'Hospital']
+      invalidatesTags: ["User", "Hospital"],
     }),
-    
   }),
 });
 
