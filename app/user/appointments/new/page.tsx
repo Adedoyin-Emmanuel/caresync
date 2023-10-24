@@ -21,6 +21,7 @@ const NewAppointment = () => {
   const { data, isLoading } = useSearchHospitalQuery(formData.hospitalName);
   const [showData, setShowData] = useState<boolean>(false);
   const { hospitalSearchInfo } = useAppSelector((state) => state.user);
+  const [responseLength, setResponseLength] = useState<number>(0);
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
@@ -31,6 +32,7 @@ const NewAppointment = () => {
     dispatch(clearHospitalSearchInfo({}));
     if (data) {
       dispatch(saveHospitalSearchInfo(data.data));
+      setResponseLength(data.data.length);
       setShowData(true);
     }
   }, [formData, data]);
@@ -67,11 +69,15 @@ const NewAppointment = () => {
               )}
             </section>
 
-            <section className="all-hospitals w-full items-center  mx-auto gap-10 grid sm:grid-cols-2 xl:grid-cols-3 my-8">
+            <section
+              className={`all-hospitals w-full items-center  mx-auto gap-10 ${
+                responseLength !== 0 && "grid"
+              } sm:grid-cols-2 xl:grid-cols-3 my-8`}
+            >
               {isLoading ? (
                 <LoaderSmall />
-              ) : hospitalSearchInfo?.length == 0 ? (
-                <Text>No hospitals found</Text>
+              ) : responseLength == 0 ? (
+                <Text className="text-center my-5">No hospitals found</Text>
               ) : (
                 hospitalSearchInfo?.map((hospital) => {
                   return (

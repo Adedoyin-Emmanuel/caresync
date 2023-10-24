@@ -80,6 +80,7 @@ export interface hospitalProps {
   reviews: [];
   healthCareHistory: healthCareHistoryProps[];
   allTotalAppointments: number;
+  bio: string;
 }
 
 const initialState = {
@@ -101,6 +102,10 @@ const initialState = {
   hospitalSearchInfo: loadFromLocalStorage("userHospitalSearchInfo", null) as
     | hospitalProps[]
     | null,
+  hospitalSearchProfileInfo: loadFromLocalStorage(
+    "userHospitalSearchProfileInfo",
+    null
+  ) as hospitalProps | null,
 };
 
 const userSlice = createSlice({
@@ -143,6 +148,16 @@ const userSlice = createSlice({
         JSON.stringify(action.payload)
       );
     },
+
+    saveHospitalSearchProfileInfo: (state, action) => {
+      state.hospitalSearchProfileInfo = action.payload;
+      localStorage.setItem(
+        "userHospitalSearchProfileInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
+    // clear data reducers
 
     clearHospitalSearchInfo: (state, action) => {
       state.hospitalSearchInfo = null;
@@ -393,5 +408,6 @@ export const {
   saveHealthCareHistoryInfo,
   saveHospitalSearchInfo,
   clearHospitalSearchInfo,
+  saveHospitalSearchProfileInfo,
 } = userSlice.actions;
 export default userSlice.reducer;
