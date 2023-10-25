@@ -99,30 +99,42 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
     {
       id: 1,
       text: "view appointments",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/user/appointments"); 
+      },
     },
 
     {
       id: 2,
       text: "healthcare history",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/user/dashboard");
+      },
     },
     {
       id: 3,
       text: "your hospitals",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/user/search");
+
+      },
     },
 
     {
       id: 4,
       text: "view profile",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/user/profile/me");
+
+      },
     },
 
     {
       id: 5,
       text: "settings",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/user/settings");
+      },
     },
 
     {
@@ -319,7 +331,9 @@ export const HospitalAppHeader = ({
     {
       id: 1,
       text: "view appointments",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/hospital/appointments");
+      },
     },
 
     {
@@ -330,19 +344,26 @@ export const HospitalAppHeader = ({
     {
       id: 3,
       text: "your users",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/hospital/search")
+      },
     },
 
     {
       id: 4,
       text: "view profile",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/hospital/profile/me");
+
+      },
     },
 
     {
       id: 5,
       text: "settings",
-      onClick: () => {},
+      onClick: () => {
+        router.push("/hospital/settings");
+      },
     },
 
     {
