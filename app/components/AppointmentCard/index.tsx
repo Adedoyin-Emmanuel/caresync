@@ -10,6 +10,7 @@ import { BsCameraVideo } from "react-icons/bs";
 import { LuTimer } from "react-icons/lu";
 import Button from "../Button";
 import Text from "../Text";
+import { useRouter } from "next/navigation";
 
 export interface AppointmentCardProps {
   className?: string;
@@ -43,8 +44,16 @@ const ApppointmentCard = ({
   const startFormattedTime = formatDateTime(startDate);
   const endFormattedTime = formatDateTime(endDate);
 
+  const router = useRouter();
+  
+  const handleAppointmentClick = () => {
+    router.push(`/user/appointments/${_id}`);
+  }
   return (
-    <section className="appointment-one bg-gray-100  rounded p-2 md:w-96">
+    <section
+      className="appointment-one bg-gray-100  rounded p-3 md:w-96 cursor-pointer"
+      onClick={handleAppointmentClick}
+    >
       <h3 className="text-[18px] capitalize font-bold my-2 flex items-center justify-between">
         {title}{" "}
         <div className="text-[13px] capitalize flex items-center  gap-x-1">
@@ -59,7 +68,7 @@ const ApppointmentCard = ({
 
       <Text className="text-sm my-3 md:my-2">{description}</Text>
       <section className="button-container my-2 mt-3">
-        <Link href={`/appointment/${_id}`}>
+        <Link href={`/appointment/${_id}/start`}>
           {" "}
           <Button>start meeting</Button>
         </Link>
