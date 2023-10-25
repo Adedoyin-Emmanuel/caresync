@@ -1,4 +1,5 @@
 "use client";
+import AppointmentButton from "@/app/components/AppointmentButton";
 import {
   AppointmentCardProps,
   ApppointmentCard,
@@ -13,7 +14,6 @@ import {
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import AppointmentButton from "@/app/components/AppointmentButton";
 
 const Appointment = () => {
   const { userAppointmentInfo } = useAppSelector((state) => state.user);
@@ -44,10 +44,10 @@ const Appointment = () => {
               Your appointment with hospitals{" "}
               <span
                 className="bg-accent  text-center flex items-center justify-center font-bold h-6 w-6
-             text-white rounded-full"
+             text-white rounded-full text-[12px]"
               >
-                <span>
-                  {totalAppointments > 9 ? `${9}+` : totalAppointments}
+                <span className="text-[12px]">
+                  {totalAppointments > 100 ? `${99}+` : totalAppointments}
                 </span>
               </span>
             </Text>
@@ -78,7 +78,7 @@ const Appointment = () => {
                 )
               )}
             </section>
-            <AppointmentButton/>
+            <AppointmentButton />
           </section>
         </SidebarLayout>
       )}
