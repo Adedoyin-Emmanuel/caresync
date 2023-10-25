@@ -1,12 +1,18 @@
 "use client";
 
+import { logoutUser } from "@/app/store/slices/auth.slice";
+import { resetUser, useLogoutMutation } from "@/app/store/slices/user.slice";
+import { AppDispatch } from "@/app/store/store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
+import toast from "react-hot-toast";
 import { BiMessageRoundedDots } from "react-icons/bi";
 import { BsCameraVideo } from "react-icons/bs";
 import { FiLogOut, FiSearch } from "react-icons/fi";
 import { IoAnalytics, IoSettingsOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
 import AppHeader, { HospitalAppHeader } from "../AppHeader";
 import MobileNav from "../MobileNav";
 import Text from "../Text";
@@ -24,7 +30,23 @@ const SidebarLayout = ({
   showWelcomeMesage,
 }: SidebarLayoutProps) => {
   const currentPath = usePathname();
+  const dispatch = useDispatch<AppDispatch>();
+  const [logout] = useLogoutMutation();
+  const router = useRouter();
 
+  const handleLogoutClick = async () => {
+    try {
+      const response = await logout({}).unwrap();
+      if (response) {
+        toast.success(response.message);
+        dispatch(logoutUser());
+        dispatch(resetUser());
+        router.push("/auth/login");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || error.error || error?.data);
+    }
+  };
   return (
     <section className="parent h-screen w-screen flex justify-between">
       <div
@@ -104,7 +126,8 @@ const SidebarLayout = ({
           </Link>
 
           <Link
-            href="logout"
+            href=""
+            onClick={handleLogoutClick}
             className={`dashboard cursor-pointer  ${
               currentPath.includes("logout")
                 ? "text-white bg-accent"
