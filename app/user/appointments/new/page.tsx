@@ -54,7 +54,7 @@ const NewAppointment = () => {
                 type="text"
                 placeholder="Search hospitals"
                 name="hospitalName"
-                className="bg-[#F5F5F5] capitalize p-5 rounded-full w-11/12 lg:w-8/12   outline-none border-2 border-purple-300 border-transparent focus:border-accent hover:border-accent transition-all duration-150 ease-in my-5 text-sm"
+                className="bg-[#F5F5F5] capitalize p-5 rounded-full w-11/12 lg:w-8/12  outline-none border-2 border-purple-300 focus:border-accent hover:border-accent transition-all duration-150 ease-in my-5 text-sm"
                 onChange={handleInputChange}
                 value={formData.hospitalName}
               ></input>
