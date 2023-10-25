@@ -93,7 +93,8 @@ const SidebarLayout = ({
             href="/user/settings"
             className={`dashboard cursor-pointer ${
               currentPath.includes("settings") ||
-              currentPath.includes("profile")
+              currentPath.includes("profile") ||
+              currentPath.includes("profile/me")
                 ? "text-white bg-accent"
                 : "bg-gray-200"
             }  hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}

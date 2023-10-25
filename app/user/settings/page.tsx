@@ -13,6 +13,7 @@ import { BsPenFill, BsPeopleFill } from "react-icons/bs";
 import { FaKey } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { useDispatch } from "react-redux";
+import { BiSolidUser } from "react-icons/bi";
 
 const Settings = () => {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
@@ -32,6 +33,15 @@ const Settings = () => {
     }
   };
 
+  const handleNavigateToProfile = () => {
+    router.push("/user/profile/me");
+  }
+
+  const handleUpdateProfile = () => {
+    router.push("/user/profile");
+  }
+
+
   return (
     <div className="w-screen h-screen bg-zinc-50">
       <SidebarLayout>
@@ -40,8 +50,11 @@ const Settings = () => {
             Settings
           </h3>
           <Text className="text-sm">change your settings</Text>
-          <section className="settings-section">
-            <section className="profile-container  w-full flex items-center justify-center">
+          <section className="settings-section my-8">
+            <section
+              className="profile-container  w-full flex items-center justify-center cursor-pointer"
+              onClick={handleNavigateToProfile}
+            >
               <section className="profile-section w-full p-2 my-5 flex items-center md:justify-center gap-x-5 md:gap-x-20">
                 <div className="avatar cursor-pointer">
                   <div className="w-16 rounded-full">
@@ -72,7 +85,10 @@ const Settings = () => {
             </section>
 
             <section className="action-container w-full flex flex-col items-center md:justify-center">
-              <section className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12">
+              <section
+                className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
+                onClick={handleUpdateProfile}
+              >
                 <FaKey className="h-5 w-5" />
 
                 <Link href="/user/profile" className="details">
@@ -81,6 +97,22 @@ const Settings = () => {
                   </h3>
                   <Text>update your account info</Text>
                 </Link>
+              </section>
+
+              <section
+                className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
+                onClick={handleNavigateToProfile}
+              >
+                <BiSolidUser className="h-5 w-5" />
+
+                <section className="details">
+                  <Link href={"/user/profile/me"}>
+                    <h3 className="account font-bold capitalize text-[18px]">
+                      profile{" "}
+                    </h3>
+                    <Text>view your profile</Text>
+                  </Link>
+                </section>
               </section>
 
               <section className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12">
