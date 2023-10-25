@@ -53,7 +53,6 @@ const Settings = () => {
       ) : (
         <SidebarLayout>
           <section className="appointments my-5">
-         
             <section className="new-appointment w-full">
               <section className="hospital-profile w-full my-5">
                 <section className="profile-header w-full flex flex-col items-center">
@@ -97,7 +96,9 @@ const Settings = () => {
                     <section className="other-details w-full flex flex-col items-start my-5">
                       <section className="location flex items-center justify-center gap-x-2 my-1">
                         <GrLocation className="w-5 h-5" />
-                        <Text className="text-sm">lagos nigeria</Text>
+                        <Text className="text-sm">
+                          {userDashboardInfo?.location}
+                        </Text>
                       </section>
 
                       <section className="location flex items-center justify-center gap-x-2 my-1">

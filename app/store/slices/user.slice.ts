@@ -35,6 +35,7 @@ export interface userDashboardInfoProps {
   healthCareHistory: healthCareHistoryProps[];
   updatedAt: Date;
   createdAt: Date;
+  location?: string;
 }
 
 export interface userAppointmentInfoProps {
@@ -81,6 +82,7 @@ export interface hospitalProps {
   healthCareHistory: healthCareHistoryProps[];
   allTotalAppointments: number;
   bio: string;
+  location?: string;
 }
 
 const initialState = {

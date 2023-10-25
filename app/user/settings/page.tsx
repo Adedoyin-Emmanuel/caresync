@@ -92,10 +92,10 @@ const Settings = () => {
                 <FaKey className="h-5 w-5" />
 
                 <Link href="/user/profile" className="details">
-                  <h3 className="account font-bold capitalize text-[18px]">
+                  <h3 className="account font-bold capitalize text-[16px]">
                     account{" "}
                   </h3>
-                  <Text>update your account info</Text>
+                  <Text className="text-sm">update your account info</Text>
                 </Link>
               </section>
 
@@ -107,10 +107,10 @@ const Settings = () => {
 
                 <section className="details">
                   <Link href={"/user/profile/me"}>
-                    <h3 className="account font-bold capitalize text-[18px]">
+                    <h3 className="account font-bold capitalize text-[16px]">
                       profile{" "}
                     </h3>
-                    <Text>view your profile</Text>
+                    <Text className="text-sm">view your profile</Text>
                   </Link>
                 </section>
               </section>
@@ -119,10 +119,10 @@ const Settings = () => {
                 <BsPeopleFill className="h-5 w-5" />
 
                 <section className="details">
-                  <h3 className="account font-bold capitalize text-[18px]">
+                  <h3 className="account font-bold capitalize text-[16px]">
                     Invite{" "}
                   </h3>
-                  <Text>invite your friends to caresync</Text>
+                  <Text className="text-sm">invite your friends to caresync</Text>
                 </section>
               </section>
 
@@ -133,10 +133,10 @@ const Settings = () => {
                 <FiLogOut className="h-5 w-5" />
 
                 <section className="details">
-                  <h3 className="account font-bold capitalize text-[18px]">
+                  <h3 className="account font-bold capitalize text-[16px]">
                     Logout{" "}
                   </h3>
-                  <Text>log out of your account</Text>
+                  <Text className="text-sm">log out of your account</Text>
                 </section>
               </section>
             </section>

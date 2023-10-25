@@ -5,7 +5,10 @@ import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
-import { updateUserInfo } from "@/app/store/slices/auth.slice";
+import {
+  updateUserInfo,
+} from "@/app/store/slices/auth.slice";
+import { saveDashboardInfo } from "@/app/store/slices/user.slice";
 import { useUpdateUserMutation } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
@@ -29,6 +32,7 @@ const Profile = () => {
     email: userDashboardInfo?.email,
     username: userDashboardInfo?.username,
     bio: userDashboardInfo?.bio,
+    location: userDashboardInfo?.location,
   });
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
@@ -50,6 +54,7 @@ const Profile = () => {
       toast.success(response.message);
       if (response?.data) {
         dispatch(updateUserInfo(response.data));
+        dispatch(saveDashboardInfo(response.data));
       }
     } catch (error: any) {
       console.log(error.message);
@@ -69,7 +74,7 @@ const Profile = () => {
               profile
             </h3>
             <Text className="text-sm">update your profile</Text>
-            <section className="update-profile w-full ">
+            <section className="update-profile w-full my-8">
               <section className="image-section flex flex-col items-center justify-center">
                 <div className="avatar cursor-pointer">
                   <div className="w-24 rounded-full">
@@ -136,6 +141,19 @@ const Profile = () => {
                       value={formData.bio}
                       onChange={handleInputChange}
                     ></textarea>
+                  </section>
+
+                  <section className="my-4 mb-5">
+                    <label htmlFor="bio" className="text-md block my-2">
+                      Location
+                    </label>
+                    <Input
+                      type="text"
+                      name="location"
+                      placeholder="Enter your location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                    />
                   </section>
 
                   <section className="my-4 mb-5 w-full">
