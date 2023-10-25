@@ -108,6 +108,15 @@ const initialState = {
     "userHospitalSearchProfileInfo",
     null
   ) as hospitalProps | null,
+
+  /*
+     @see this relates to when the user clicks a particular appointment from all appointments
+     
+   */
+  userSpecificAppointmentInfo: loadFromLocalStorage(
+    "userSpecificAppointmentInfo",
+    null
+  ) as userAppointment | null,
 };
 
 const userSlice = createSlice({
@@ -155,6 +164,14 @@ const userSlice = createSlice({
       state.hospitalSearchProfileInfo = action.payload;
       localStorage.setItem(
         "userHospitalSearchProfileInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
+    saveUserSpecificAppointmentInfo: (state, action) => {
+      state.userSpecificAppointmentInfo = action.payload;
+      localStorage.setItem(
+        "userSpecificAppointmentInfo",
         JSON.stringify(action.payload)
       );
     },
@@ -360,6 +377,14 @@ export const userApiCall = apiSlice.injectEndpoints({
       providesTags: ["User", "Hospital"],
     }),
 
+    getAppointmentById: builder.query({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/${data}`,
+        method: "GET",
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
     getLatestAppointments: builder.query({
       query: (data) => {
         return {
@@ -408,10 +433,10 @@ export const {
   useGetUserQuery,
   useGetHospitalQuery,
 
-
   useGetUserAppointmentsQuery,
+  useGetAppointmentByIdQuery,
   useGetLatestAppointmentsQuery,
-  useCreateAppointmentMutation
+  useCreateAppointmentMutation,
 } = userApiCall;
 export const {
   saveDashboardInfo,
@@ -422,5 +447,6 @@ export const {
   saveHospitalSearchInfo,
   clearHospitalSearchInfo,
   saveHospitalSearchProfileInfo,
+  saveUserSpecificAppointmentInfo,
 } = userSlice.actions;
 export default userSlice.reducer;
