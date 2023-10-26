@@ -407,6 +407,19 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User", "Hospital"],
     }),
+
+    updateAppointment: builder.mutation({
+      query: (data) => {
+        const { id, ...dataWithoutId } = data;
+
+        return {
+          url: `${APPOINTMENTS_URL}/${id}`,
+          method: "PUT",
+          data: dataWithoutId,
+        };
+      },
+      invalidatesTags: ["User", "Hospital"],
+    }),
   }),
 });
 
@@ -437,6 +450,7 @@ export const {
   useGetAppointmentByIdQuery,
   useGetLatestAppointmentsQuery,
   useCreateAppointmentMutation,
+  useUpdateAppointmentMutation
 } = userApiCall;
 export const {
   saveDashboardInfo,

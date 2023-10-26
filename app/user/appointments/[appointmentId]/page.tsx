@@ -1,18 +1,24 @@
 "use client";
+import { AppointmentStartButton } from "@/app/components/AppointmentButton";
 import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
-import Loader from "@/app/components/Loader";
+import Loader, { LoaderSmall } from "@/app/components/Loader";
 import Modal from "@/app/components/Modal";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
-import { formatDateTime, getCurrentDateTime } from "@/app/helpers";
+import {
+  formatDateTime,
+  formatDateToInputValue,
+  getCurrentDateTime,
+} from "@/app/helpers";
 import {
   hospitalProps,
   saveUserSpecificAppointmentInfo,
   useGetAppointmentByIdQuery,
   useGetHospitalByIdQuery,
+  useUpdateAppointmentMutation,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import moment from "moment";
@@ -25,7 +31,7 @@ import { BsPen } from "react-icons/bs";
 import { GrLocation } from "react-icons/gr";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { LuTimer } from "react-icons/lu";
-import { MdOutlineTitle } from "react-icons/md";
+import { MdOutlineTitle, MdUpdate } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
 import { TbMessage2Bolt } from "react-icons/tb";
 import { useDispatch } from "react-redux";
@@ -42,6 +48,8 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const { data: hospitalData } = useGetHospitalByIdQuery(
     userSpecificAppointmentInfo?.hospitalId
   );
+  const [updateAppointment, { isLoading: updateAppointmentLoading }] =
+    useUpdateAppointmentMutation();
 
   const viewHospitalModalRef = useRef<HTMLDialogElement | any>(null);
   const deleteAppointmentModalRef = useRef<HTMLDialogElement | any>();
@@ -82,8 +90,9 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const [formData, setFormData]: any = useState({
     title: userSpecificAppointmentInfo?.title,
     description: userSpecificAppointmentInfo?.description,
-    startDate: userSpecificAppointmentInfo?.startDate,
-    endDate: userSpecificAppointmentInfo?.endDate,
+    status: userSpecificAppointmentInfo?.status,
+    startDate: formatDateToInputValue(userSpecificAppointmentInfo?.startDate!),
+    endDate: formatDateToInputValue(userSpecificAppointmentInfo?.endDate!),
   });
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
@@ -94,38 +103,52 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const handleSubmitUpdatedAppointment = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const startDate = new Date(formData.startDate!);
-    const endDate = new Date(formData.startDate!);
-    const endTime = new Date(formData.endDate!);
+      const startDate = new Date(formData.startDate!);
+      const endDate = new Date(formData.startDate!);
+      const endTime = new Date(formData.endDate!);
 
-    // Update the end date with the selected end time
-    endDate.setHours(endTime.getHours());
-    endDate.setMinutes(endTime.getMinutes());
+      // Update the end date with the selected end time
+      endDate.setHours(endTime.getHours());
+      endDate.setMinutes(endTime.getMinutes());
 
-    const dataToSubmit = {
-      ...formData,
-      userId: userInfo?._id,
-      hospitalId: hospitalDetails?._id,
-      endDate: endDate.toISOString(),
-    };
+      const dataToSubmit = {
+        ...formData,
+        endDate: endDate.toISOString(),
+      };
 
-    console.log(dataToSubmit);
-
-    /* check if the start date or start time is not less than the end date or time 
+      /* check if the start date or start time is not less than the end date or time 
       For example, I should not be able to set my start time to be 9:40Pm and then set my endTime to 8:30Pm 
       that same day 🤣
     */
 
-    if (
-      startDate > endDate ||
-      (startDate.getTime() === endDate.getTime() && startDate > endTime)
-    ) {
-      toast.error(
-        "End date or time cannot be earlier than the start date or time"
-      );
-      return;
+      if (
+        startDate > endDate ||
+        (startDate.getTime() === endDate.getTime() && startDate > endTime)
+      ) {
+        toast.error(
+          "End date or time cannot be earlier than the start date or time"
+        );
+        return;
+      }
+
+      const legitDataToSubmit = {
+        ...dataToSubmit,
+        id: userSpecificAppointmentInfo?._id,
+      };
+
+      console.log(legitDataToSubmit);
+      const response = await updateAppointment(legitDataToSubmit).unwrap();
+
+      if (response?.data) {
+        toast.success(response.message);
+        router.push("/user/appointments");
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message || error.error || error?.data);
     }
   };
 
@@ -221,6 +244,17 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 <Text className="text-sm">
                   created{" "}
                   {moment(new Date(userSpecificAppointmentInfo?.createdAt!))
+                    .startOf("seconds")
+                    .fromNow()}
+                </Text>
+              </section>
+
+              <section className="flex items-center justify-center gap-x-2 my-1">
+                <MdUpdate className="w-5 h-5" />
+
+                <Text className="text-sm">
+                  updated{" "}
+                  {moment(new Date(userSpecificAppointmentInfo?.updatedAt!))
                     .startOf("seconds")
                     .fromNow()}
                 </Text>
@@ -340,85 +374,91 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
             </dialog>
 
             <Modal ref={updateAppointmentModalRef}>
-              <form
-                className="w-full"
-                onSubmit={(e) => {
-                  handleSubmitUpdatedAppointment(e);
-                }}
-              >
-                <section className="form-header my-5">
-                  <h3 className="font-bold text-2xl capitalize text-accent">
-                    Update appointment
-                  </h3>
-                  <Text className="text-sm">
-                    updating appointment request to{" "}
-                    <span className="text-accent font-bold">
-                      {hospitalDetails?.clinicName}{" "}
-                    </span>
-                  </Text>
-                </section>
-                <section className="my-4 mb-5">
-                  <label htmlFor="name" className="text-md block my-2">
-                    Appointment title
-                  </label>
-                  <Input
-                    type="text"
-                    name="title"
-                    placeholder="Enter appointment title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="text-sm"
-                  />
-                </section>
+              {updateAppointmentLoading ? (
+                <LoaderSmall />
+              ) : (
+                <form
+                  className="w-full"
+                  onSubmit={(e) => {
+                    handleSubmitUpdatedAppointment(e);
+                  }}
+                >
+                  <section className="form-header my-5">
+                    <h3 className="font-bold text-2xl capitalize text-accent">
+                      Update appointment
+                    </h3>
+                    <Text className="text-sm">
+                      updating appointment request to{" "}
+                      <span className="text-accent font-bold">
+                        {hospitalDetails?.clinicName}{" "}
+                      </span>
+                    </Text>
+                  </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="name" className="text-md block my-2">
+                      Appointment title
+                    </label>
+                    <Input
+                      type="text"
+                      name="title"
+                      placeholder="Enter appointment title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      required
+                      className="text-sm"
+                    />
+                  </section>
 
-                <section className="my-4 mb-5">
-                  <label htmlFor="description" className="text-md block my-2">
-                    Appointment description
-                  </label>
-                  <textarea
-                    className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
-                    name="description"
-                    placeholder="Enter appointment description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    rows={3}
-                    required
-                  ></textarea>
-                </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="description" className="text-md block my-2">
+                      Appointment description
+                    </label>
+                    <textarea
+                      className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
+                      name="description"
+                      placeholder="Enter appointment description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      rows={3}
+                      required
+                    ></textarea>
+                  </section>
 
-                <section className="my-4 mb-5">
-                  <label htmlFor="startDate" className="text-md block my-2">
-                    Start date and time
-                  </label>
-                  <Input
-                    type="datetime-local"
-                    name="startDate"
-                    value={formData.startDate}
-                    min={getCurrentDateTime()}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="startDate" className="text-md block my-2">
+                      Start date and time
+                    </label>
+                    <Input
+                      type="datetime-local"
+                      name="startDate"
+                      value={formData.startDate}
+                      min={getCurrentDateTime()}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </section>
 
-                <section className="my-4 mb-5">
-                  <label htmlFor="email" className="text-md block my-2">
-                    End date and time
-                  </label>
-                  <Input
-                    type="datetime-local"
-                    name="endDate"
-                    value={formData.endDate}
-                    min={getCurrentDateTime()}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="email" className="text-md block my-2">
+                      End date and time
+                    </label>
+                    <Input
+                      type="datetime-local"
+                      name="endDate"
+                      value={formData.endDate}
+                      min={getCurrentDateTime()}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </section>
 
-                <section className="my-4 mb-5 w-full">
-                  <Button disabled={isLoading}>update appointment</Button>
-                </section>
-              </form>
+                  <section className="my-4 mb-5 w-full">
+                    <Button disabled={updateAppointmentLoading}>
+                      update appointment
+                    </Button>
+                  </section>
+                </form>
+              )}
             </Modal>
 
             <Modal ref={deleteAppointmentModalRef}>
@@ -455,6 +495,11 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </section>
               </section>
             </Modal>
+
+            <AppointmentStartButton
+              href={`/user/appointments/${params.appointmentId}/start`}
+                />
+                <br/> <br/> <br/>
           </section>
         )}
       </SidebarLayout>
