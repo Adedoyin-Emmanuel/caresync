@@ -2,6 +2,7 @@
 import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import Loader from "@/app/components/Loader";
+import Modal from "@/app/components/Modal";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
@@ -39,7 +40,10 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
     userSpecificAppointmentInfo?.hospitalId
   );
 
-  const modalRef = useRef<HTMLDialogElement | any>(null);
+  const viewHospitalModalRef = useRef<HTMLDialogElement | any>(null);
+  const deleteAppointmentModalRef = useRef<HTMLDialogElement | any>();
+  const cancelAppointmentModalRef = useRef<HTMLDialogElement | any>();
+  const updateAppointmentModalRef = useRef<HTMLDialogElement | any>();
 
   useEffect(() => {
     if (data) {
@@ -52,6 +56,27 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
   const viewAllAppointments = () => {
     router.back();
+  };
+
+  const handleDeleteAppointmentClick = () => {
+    if (deleteAppointmentModalRef && deleteAppointmentModalRef.current) {
+      deleteAppointmentModalRef?.current.showModal();
+      console.log("something");
+    }
+  };
+
+  const handleCancelAppointmentClick = () => {
+    if (cancelAppointmentModalRef && cancelAppointmentModalRef.current) {
+      cancelAppointmentModalRef.current.showModal();
+      console.log("something");
+    }
+  };
+
+  const handleUpdateAppointmentClick = () => {
+    if (updateAppointmentModalRef && updateAppointmentModalRef.current) {
+      updateAppointmentModalRef?.current.showModal();
+      console.log("something");
+    }
   };
 
   return (
@@ -99,21 +124,30 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                   tabIndex={0}
                   className="dropdown-content z-[1] menu p-2 bg-gray-100 rounded w-40"
                 >
-                  <section className="flex items-center gap-x-3 p-2 cursor-pointer hover:bg-accent hover:text-white rounded-md transition-colors duration-100 ease-linear">
+                  <section
+                    className="flex items-center gap-x-3 p-2 cursor-pointer hover:bg-accent hover:text-white rounded-md transition-colors duration-100 ease-linear"
+                    onClick={handleUpdateAppointmentClick}
+                  >
                     <BsPen className="w-4 h-4" />
-                    <div className="">
+                    <div>
                       <Text className="block">update</Text>
                     </div>
                   </section>
-                  <section className="flex items-center gap-x-3 p-2 cursor-pointer hover:bg-yellow-300 hover:text-white rounded-md transition-colors duration-100 ease-linear">
+                  <section
+                    className="flex items-center gap-x-3 p-2 cursor-pointer hover:bg-yellow-300 hover:text-white rounded-md transition-colors duration-100 ease-linear"
+                    onClick={handleCancelAppointmentClick}
+                  >
                     <AiOutlineClose className="w-4 h-4" />
-                    <div className="">
+                    <div>
                       <Text className="block">cancel</Text>
                     </div>
                   </section>
-                  <section className="flex items-center gap-x-3 p-2 cursor-pointer hover:bg-red-400 hover:text-white rounded-md transition-colors duration-100 ease-linear">
+                  <section
+                    className="flex items-center gap-x-3 p-2 cursor-pointer hover:bg-red-400 hover:text-white rounded-md transition-colors duration-100 ease-linear"
+                    onClick={handleDeleteAppointmentClick}
+                  >
                     <AiOutlineDelete className="w-4 h-4" />
-                    <div className="">
+                    <div>
                       <Text className="block">delete</Text>
                     </div>
                   </section>
@@ -177,12 +211,16 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
             <button
               className="w-36 bg-accent p-2 capitalize  text-white rounded text-sm"
-              onClick={() => modalRef?.current.showModal()}
+              onClick={() => viewHospitalModalRef?.current.showModal()}
             >
               hospital profile
             </button>
 
-            <dialog id="profile_modal" className="modal" ref={modalRef}>
+            <dialog
+              id="profile_modal"
+              className="modal"
+              ref={viewHospitalModalRef}
+            >
               <div className="modal-box">
                 <form method="dialog" className="modal-backdrop">
                   <button className="btn btn-sm btn-circle shadow-none border-none outline-none bg-gray-100 hover:bg-red-400 hover:text-white duration-100 transition-colors ease-linear absolute right-2 top-2">
@@ -195,7 +233,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                     <div className="avatar cursor-pointer">
                       <div className="w-24 rounded-full">
                         <img
-                          className=""
                           src={hospitalDetails?.profilePicture}
                           alt="hospital profile image"
                         />
@@ -251,6 +288,10 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </section>
               </div>
             </dialog>
+
+            <Modal ref={updateAppointmentModalRef}>update appointment</Modal>
+            <Modal ref={deleteAppointmentModalRef}>delete appointment</Modal>
+            <Modal ref={cancelAppointmentModalRef}>cancel appointment</Modal>
           </section>
         )}
       </SidebarLayout>
