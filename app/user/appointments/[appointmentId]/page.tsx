@@ -121,7 +121,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
               </div>
             </section>
 
-            <section className="appointment-details  flex flex-col items-start my-5">
+            <section className="appointment-details  flex flex-col items-start my-5 md:w-1/2 xl:w-2/4">
               <h3 className="font-bold text-[17px]  capitalize">details</h3>
 
               <section className="flex items-center justify-center gap-x-2 my-1">
