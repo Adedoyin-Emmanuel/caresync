@@ -49,6 +49,8 @@ const ApppointmentCard = ({
   const handleAppointmentClick = () => {
     router.push(`/user/appointments/${_id}`);
   }
+
+
   return (
     <section
       className="appointment-one bg-gray-100  rounded p-3 md:w-96 cursor-pointer"
@@ -67,10 +69,13 @@ const ApppointmentCard = ({
       </Text>
 
       <Text className="text-sm my-3 md:my-2">{description}</Text>
-      <section className="button-container my-2 mt-3">
-        <Link href={`/appointment/${_id}/start`}>
+
+      <section
+        className="button-container my-2 mt-3"
+      >
+        <Link href={`/user/appointments/${_id}`}>
           {" "}
-          <Button>start meeting</Button>
+          <Button>appointment details</Button>
         </Link>
       </section>
     </section>
