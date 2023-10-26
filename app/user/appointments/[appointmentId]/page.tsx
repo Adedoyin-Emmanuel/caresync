@@ -18,6 +18,7 @@ import { AppDispatch, useAppSelector } from "@/app/store/store";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { BiCalendarWeek } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
@@ -37,6 +38,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [hospitalDetails, setHospitalDetails] = useState<hospitalProps>();
   const { userSpecificAppointmentInfo } = useAppSelector((state) => state.user);
+  const { userInfo } = useAppSelector((state) => state.auth);
   const { data: hospitalData } = useGetHospitalByIdQuery(
     userSpecificAppointmentInfo?.hospitalId
   );
@@ -77,16 +79,54 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
     }
   };
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    startDate: "",
-    endDate: "",
+  const [formData, setFormData]: any = useState({
+    title: userSpecificAppointmentInfo?.title,
+    description: userSpecificAppointmentInfo?.description,
+    startDate: userSpecificAppointmentInfo?.startDate,
+    endDate: userSpecificAppointmentInfo?.endDate,
   });
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmitUpdatedAppointment = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    const startDate = new Date(formData.startDate!);
+    const endDate = new Date(formData.startDate!);
+    const endTime = new Date(formData.endDate!);
+
+    // Update the end date with the selected end time
+    endDate.setHours(endTime.getHours());
+    endDate.setMinutes(endTime.getMinutes());
+
+    const dataToSubmit = {
+      ...formData,
+      userId: userInfo?._id,
+      hospitalId: hospitalDetails?._id,
+      endDate: endDate.toISOString(),
+    };
+
+    console.log(dataToSubmit);
+
+    /* check if the start date or start time is not less than the end date or time 
+      For example, I should not be able to set my start time to be 9:40Pm and then set my endTime to 8:30Pm 
+      that same day 🤣
+    */
+
+    if (
+      startDate > endDate ||
+      (startDate.getTime() === endDate.getTime() && startDate > endTime)
+    ) {
+      toast.error(
+        "End date or time cannot be earlier than the start date or time"
+      );
+      return;
+    }
   };
 
   return (
@@ -300,7 +340,12 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
             </dialog>
 
             <Modal ref={updateAppointmentModalRef}>
-              <form className="w-full">
+              <form
+                className="w-full"
+                onSubmit={(e) => {
+                  handleSubmitUpdatedAppointment(e);
+                }}
+              >
                 <section className="form-header my-5">
                   <h3 className="font-bold text-2xl capitalize text-accent">
                     Update appointment
@@ -387,7 +432,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </p>
 
                 <section className="mt-8 w-full flex items-end justify-end">
-                  <button className="bg-red-500 capitalize p-2 rounded-md text-white text-sm">
+                  <button className="bg-red-400 capitalize p-2 rounded-md text-white text-sm">
                     delete appointment
                   </button>
                 </section>

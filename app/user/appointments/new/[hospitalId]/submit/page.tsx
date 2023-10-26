@@ -36,11 +36,21 @@ const SubmitAppointment = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      const startDate = new Date(formData.startDate);
-      const endDate = new Date(formData.endDate);
+      const startDate = new Date(formData.startDate!);
+      const endDate = new Date(formData.startDate!);
+      const endTime = new Date(formData.endDate!);
 
-      if (startDate >= endDate) {
-        toast.error("End date/time must be after start date/time");
+      // Update the end date with the selected end time
+      endDate.setHours(endTime.getHours());
+      endDate.setMinutes(endTime.getMinutes());
+
+      if (
+        startDate > endDate ||
+        (startDate.getTime() === endDate.getTime() && startDate > endTime)
+      ) {
+        toast.error(
+          "End date or time cannot be earlier than the start date or time"
+        );
         return;
       }
 
@@ -48,6 +58,7 @@ const SubmitAppointment = () => {
         ...formData,
         userId: userInfo?._id,
         hospitalId: hospitalSearchProfileInfo?._id,
+        endDate: endDate.toISOString(),
       };
 
       const response: any = await createAppointment(dataToSubmit).unwrap();
