@@ -420,6 +420,42 @@ export const userApiCall = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["User", "Hospital"],
     }),
+
+    cancelAppointment: builder.mutation({
+      query: (data) => {
+        const { id, ...dataWithoutId } = data;
+
+        return {
+          url: `${APPOINTMENTS_URL}/cancel/${id}`,
+          method: "PUT",
+        };
+      },
+      invalidatesTags: ["User", "Hospital"],
+    }),
+
+    approveAppointment: builder.mutation({
+      query: (data) => {
+        const { id, ...dataWithoutId } = data;
+
+        return {
+          url: `${APPOINTMENTS_URL}/approve/${id}`,
+          method: "PUT",
+        };
+      },
+      invalidatesTags: ["User", "Hospital"],
+    }),
+
+    deleteAppointment: builder.mutation({
+      query: (data) => {
+        const { id, ...dataWithoutId } = data;
+
+        return {
+          url: `${APPOINTMENTS_URL}/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["User", "Hospital"],
+    }),
   }),
 });
 
@@ -450,7 +486,11 @@ export const {
   useGetAppointmentByIdQuery,
   useGetLatestAppointmentsQuery,
   useCreateAppointmentMutation,
-  useUpdateAppointmentMutation
+  useUpdateAppointmentMutation,
+  useCancelAppointmentMutation,
+  useApproveAppointmentMutation,
+  useDeleteAppointmentMutation
+
 } = userApiCall;
 export const {
   saveDashboardInfo,
