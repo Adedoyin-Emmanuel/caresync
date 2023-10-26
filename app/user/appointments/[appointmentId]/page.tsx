@@ -1,12 +1,13 @@
 "use client";
 import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
+import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
 import Modal from "@/app/components/Modal";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
-import { formatDateTime } from "@/app/helpers";
+import { formatDateTime, getCurrentDateTime } from "@/app/helpers";
 import {
   hospitalProps,
   saveUserSpecificAppointmentInfo,
@@ -61,22 +62,31 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const handleDeleteAppointmentClick = () => {
     if (deleteAppointmentModalRef && deleteAppointmentModalRef.current) {
       deleteAppointmentModalRef?.current.showModal();
-      console.log("something");
     }
   };
 
   const handleCancelAppointmentClick = () => {
     if (cancelAppointmentModalRef && cancelAppointmentModalRef.current) {
       cancelAppointmentModalRef.current.showModal();
-      console.log("something");
     }
   };
 
   const handleUpdateAppointmentClick = () => {
     if (updateAppointmentModalRef && updateAppointmentModalRef.current) {
       updateAppointmentModalRef?.current.showModal();
-      console.log("something");
     }
+  };
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   return (
@@ -289,9 +299,117 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
               </div>
             </dialog>
 
-            <Modal ref={updateAppointmentModalRef}>update appointment</Modal>
-            <Modal ref={deleteAppointmentModalRef}>delete appointment</Modal>
-            <Modal ref={cancelAppointmentModalRef}>cancel appointment</Modal>
+            <Modal ref={updateAppointmentModalRef}>
+              <form className="w-full">
+                <section className="form-header my-5">
+                  <h3 className="font-bold text-2xl capitalize text-accent">
+                    Update appointment
+                  </h3>
+                  <Text className="text-sm">
+                    updating appointment request to{" "}
+                    <span className="text-accent font-bold">
+                      {hospitalDetails?.clinicName}{" "}
+                    </span>
+                  </Text>
+                </section>
+                <section className="my-4 mb-5">
+                  <label htmlFor="name" className="text-md block my-2">
+                    Appointment title
+                  </label>
+                  <Input
+                    type="text"
+                    name="title"
+                    placeholder="Enter appointment title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    required
+                    className="text-sm"
+                  />
+                </section>
+
+                <section className="my-4 mb-5">
+                  <label htmlFor="description" className="text-md block my-2">
+                    Appointment description
+                  </label>
+                  <textarea
+                    className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
+                    name="description"
+                    placeholder="Enter appointment description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    rows={3}
+                    required
+                  ></textarea>
+                </section>
+
+                <section className="my-4 mb-5">
+                  <label htmlFor="startDate" className="text-md block my-2">
+                    Start date and time
+                  </label>
+                  <Input
+                    type="datetime-local"
+                    name="startDate"
+                    value={formData.startDate}
+                    min={getCurrentDateTime()}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </section>
+
+                <section className="my-4 mb-5">
+                  <label htmlFor="email" className="text-md block my-2">
+                    End date and time
+                  </label>
+                  <Input
+                    type="datetime-local"
+                    name="endDate"
+                    value={formData.endDate}
+                    min={getCurrentDateTime()}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </section>
+
+                <section className="my-4 mb-5 w-full">
+                  <Button disabled={isLoading}>update appointment</Button>
+                </section>
+              </form>
+            </Modal>
+
+            <Modal ref={deleteAppointmentModalRef}>
+              <section className="cancel">
+                <h3 className="font-bold text-2xl capitalize text-accent">
+                  delete appointment
+                </h3>
+                <p className="my-3">
+                  Are you sure you want to delete this appointment, this an
+                  irreversible process?
+                </p>
+
+                <section className="mt-8 w-full flex items-end justify-end">
+                  <button className="bg-red-500 capitalize p-2 rounded-md text-white text-sm">
+                    delete appointment
+                  </button>
+                </section>
+              </section>
+            </Modal>
+
+            <Modal ref={cancelAppointmentModalRef}>
+              <section className="cancel">
+                <h3 className="font-bold text-2xl capitalize text-accent">
+                  cancel appointment
+                </h3>
+                <p className="my-3">
+                  Are you sure you want to cancel this appointment?
+                </p>
+
+                <section className="mt-8 w-full flex items-end justify-end">
+                  <button className="bg-yellow-400 capitalize p-2 rounded-md text-black text-sm">
+                    cancel appointment
+                  </button>
+                </section>
+              </section>
+            </Modal>
           </section>
         )}
       </SidebarLayout>
