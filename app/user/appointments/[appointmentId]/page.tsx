@@ -4,6 +4,8 @@ import Button from "@/app/components/Button";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
+import Verified from "@/app/components/Verified";
+import { formatDateTime } from "@/app/helpers";
 import {
   hospitalProps,
   saveUserSpecificAppointmentInfo,
@@ -11,10 +13,18 @@ import {
   useGetHospitalByIdQuery,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
+import moment from "moment";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { BiCalendarWeek } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
+import { GrLocation } from "react-icons/gr";
+import { HiOutlineShieldCheck } from "react-icons/hi";
+import { LuTimer } from "react-icons/lu";
+import { MdOutlineTitle } from "react-icons/md";
+import { SlBadge } from "react-icons/sl";
+import { TbMessage2Bolt } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 
 const Appointment = ({ params }: { params: { appointmentId: string } }) => {
@@ -28,6 +38,8 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const { data: hospitalData } = useGetHospitalByIdQuery(
     userSpecificAppointmentInfo?.hospitalId
   );
+
+  const modalRef = useRef<HTMLDialogElement | any>(null);
 
   useEffect(() => {
     if (data) {
@@ -78,7 +90,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
             </section>
 
             <section className="dropdown-container md:w-1/2 xl:w-2/4 flex items-end justify-end p-3">
-              <div className="dropdown dropdown-left transform -translate-y-10">
+              <div className="dropdown dropdown-left transform -translate-y-10 -translate-x-3">
                 <BsPen
                   tabIndex={0}
                   className="text-accent w-6 h-6 cursor-pointer"
@@ -108,6 +120,137 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </ul>
               </div>
             </section>
+
+            <section className="appointment-details  flex flex-col items-start my-5">
+              <h3 className="font-bold text-[17px]  capitalize">details</h3>
+
+              <section className="flex items-center justify-center gap-x-2 my-1">
+                <MdOutlineTitle className="w-5 h-5" />
+                <Text className="text-sm">
+                  {userSpecificAppointmentInfo?.title}
+                </Text>
+              </section>
+
+              <section className="flex items-center justify-center gap-x-2 my-1">
+                <LuTimer className="w-5 h-5" />
+
+                <Text className="text-sm">
+                  created{" "}
+                  {moment(new Date(userSpecificAppointmentInfo?.createdAt!))
+                    .startOf("seconds")
+                    .fromNow()}
+                </Text>
+              </section>
+
+              <section className="flex items-center justify-center gap-x-2 my-1">
+                <TbMessage2Bolt className="w-5 h-5" />
+
+                <Text className="text-sm">
+                  {" "}
+                  {userSpecificAppointmentInfo?.description}
+                </Text>
+              </section>
+
+              <section className="flex items-center justify-center gap-x-2 my-1">
+                <BiCalendarWeek className="w-5 h-5" />
+
+                <Text className="text-sm">
+                  {" "}
+                  {
+                    formatDateTime(userSpecificAppointmentInfo?.startDate!)
+                      .dateMonthYear
+                  }{" "}
+                  (
+                  {
+                    formatDateTime(userSpecificAppointmentInfo?.startDate!)
+                      .hoursAndMinutes
+                  }
+                  {" - "}
+                  {
+                    formatDateTime(userSpecificAppointmentInfo?.endDate!)
+                      .hoursAndMinutes
+                  }
+                  )
+                </Text>
+              </section>
+            </section>
+
+            <button
+              className="w-36 bg-accent p-2 capitalize  text-white rounded text-sm"
+              onClick={() => modalRef?.current.showModal()}
+            >
+              hospital profile
+            </button>
+
+            <dialog id="profile_modal" className="modal" ref={modalRef}>
+              <div className="modal-box">
+                <form method="dialog" className="modal-backdrop">
+                  <button className="btn btn-sm btn-circle shadow-none border-none outline-none bg-gray-100 hover:bg-red-400 hover:text-white duration-100 transition-colors ease-linear absolute right-2 top-2">
+                    ✕
+                  </button>
+                </form>
+
+                <section className="hospital-profile w-full my-5">
+                  <section className="profile-header w-full flex flex-col items-center">
+                    <div className="avatar cursor-pointer">
+                      <div className="w-24 rounded-full">
+                        <img
+                          className=""
+                          src={hospitalDetails?.profilePicture}
+                          alt="hospital profile image"
+                        />
+                      </div>
+                    </div>
+
+                    <section className="profile w-full p-1 md:p-0">
+                      <section className="hospital-name w-full flex items-center justify-between mt-5">
+                        <h3 className="font-bold text-[20px] capitalize flex items-center gap-x-1">
+                          {hospitalDetails?.clinicName}
+                          <span>
+                            {" "}
+                            {hospitalDetails?.isVerified && (
+                              <Verified big={true} />
+                            )}
+                          </span>
+                        </h3>
+                      </section>
+
+                      <Text noCapitalize className="text-sm">
+                        @{hospitalDetails?.username}
+                      </Text>
+
+                      <Text className="text-sm mt-2">
+                        {hospitalDetails?.bio}
+                      </Text>
+
+                      <section className="other-details w-full flex flex-col items-start my-5">
+                        <section className="location flex items-center justify-center gap-x-2 my-1">
+                          <GrLocation className="w-5 h-5" />
+                          <Text className="text-sm">
+                            {hospitalDetails?.location || "lagos nigeria"}
+                          </Text>
+                        </section>
+
+                        <section className="checkups flex items-center justify-center gap-x-2 my-1">
+                          <HiOutlineShieldCheck className="w-5 h-5" />
+                          <Text className="text-sm">
+                            {hospitalDetails?.allTotalAppointments} total
+                            checkups
+                          </Text>
+                        </section>
+
+                        <section className="review flex items-center justify-center gap-x-2 my-1">
+                          <SlBadge className="w-5 h-5" />
+                          <Text className="text-sm">
+                            {hospitalDetails?.reviews.length} reviews
+                          </Text>
+                        </section>
+                      </section>
+                    </section>
+                  </section>
+                </section>
+              </div>
+            </dialog>
           </section>
         )}
       </SidebarLayout>

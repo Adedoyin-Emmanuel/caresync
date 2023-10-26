@@ -30,7 +30,6 @@ const ViewHospitalProfile = ({
   const router = useRouter();
   useEffect(() => {
     if (data) {
-      console.log(data.data);
       dispatch(saveHospitalSearchProfileInfo(data.data));
     }
   }, [data]);
@@ -111,7 +110,7 @@ const ViewHospitalProfile = ({
                       <Text className="text-sm">lagos nigeria</Text>
                     </section>
 
-                    <section className="location flex items-center justify-center gap-x-2 my-1">
+                    <section className="checkups flex items-center justify-center gap-x-2 my-1">
                       <HiOutlineShieldCheck className="w-5 h-5" />
                       <Text className="text-sm">
                         {hospitalSearchProfileInfo?.allTotalAppointments} total
@@ -119,7 +118,7 @@ const ViewHospitalProfile = ({
                       </Text>
                     </section>
 
-                    <section className="location flex items-center justify-center gap-x-2 my-1">
+                    <section className="review flex items-center justify-center gap-x-2 my-1">
                       <SlBadge className="w-5 h-5" />
                       <Text className="text-sm">
                         {hospitalSearchProfileInfo?.reviews.length} reviews
