@@ -22,7 +22,7 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
 
-const Settings = () => {
+const Profile = () => {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   const router = useRouter();
   if (!userDashboardInfo) router.push("/user/dashboard");
@@ -52,10 +52,10 @@ const Settings = () => {
         <Text>An error occured</Text>
       ) : (
         <SidebarLayout>
-          <section className="appointments my-5">
-            <section className="new-appointment w-full">
-              <section className="hospital-profile w-full my-5">
-                <section className="profile-header w-full flex flex-col items-center">
+          <section className=" my-5">
+            <section className="w-full">
+              <section className="w-full my-5">
+                <section className="w-full flex flex-col items-center">
                   <div className="avatar cursor-pointer">
                     <div className="w-24 rounded-full">
                       <img
@@ -67,7 +67,7 @@ const Settings = () => {
                   </div>
 
                   <section className="profile w-full p-1 md:p-0 md:w-1/2 xl:w-2/6">
-                    <section className="hospital-name w-full flex items-center justify-between mt-5">
+                    <section className="w-full flex items-center justify-between mt-5">
                       <h3 className="font-bold text-[20px] capitalize flex items-center gap-x-1">
                         {userDashboardInfo?.name}
                         <span>
@@ -79,7 +79,7 @@ const Settings = () => {
                       </h3>
 
                       <Link href={"/user/profile"}>
-                        <section className="submit-appointment bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
+                        <section className="bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
                           update profile
                         </section>
                       </Link>
@@ -137,4 +137,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Profile;
