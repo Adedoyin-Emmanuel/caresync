@@ -2,12 +2,16 @@
 
 import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";
+import Loader, {LoaderSmall} from "@/app/components/Loader";
 import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
+  saveAppointmentInfo,
   saveDashboardInfo,
-  useGetHospitalMutation,
-  userDashboardInfoProps,
+  saveRecentAppointmentInfo,
+  useGetLatestAppointmentsQuery,
+  useGetHospitalQuery,
+  userAppointmentInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect } from "react";
@@ -15,39 +19,44 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
-import Loader from "@/app/components/Loader";
+import { useRouter } from "next/navigation";
+import { AppointmentLabel } from "@/app/components/AppointmentCard";
 
 const Home = () => {
-  const { userDashboardInfo } = useAppSelector((state) => state.user);
-
-  const [getHospital, { isLoading }] = useGetHospitalMutation();
   const dispatch = useDispatch<AppDispatch>();
+  const { data: hospitalData, isLoading } = useGetHospitalQuery({});
+  const { userInfo } = useAppSelector((state) => state.auth);
+  const router = useRouter();
+  let dataToPass = {
+    id: userInfo?._id,
+    limit: 5,
+    userType: "hospital",
+  };
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
+    if (hospitalData) {
+      dispatch(saveDashboardInfo(hospitalData?.data));
+    }
+  }, [hospitalData]);
 
-    const fetchData = async () => {
-      try {
-        const response: any = await getHospital({ signal });
-        const { data } = response.data;
-        const payload: userDashboardInfoProps = data;
-        dispatch(saveDashboardInfo(payload));
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Request was aborted due to unmounting.");
-        } else {
-          console.error("Error:", error);
-        }
-      }
-    };
+  const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
+    (state) => state.user
+  );
 
-    fetchData();
+  const { data: latestAppointmentData, isLoading: latestAppointmentLoading } =
+    useGetLatestAppointmentsQuery(dataToPass);
 
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+  useEffect(() => {
+    if (latestAppointmentData) {
+      dispatch(saveAppointmentInfo(latestAppointmentData?.data));
+      dispatch(saveRecentAppointmentInfo(latestAppointmentData?.data));
+      console.log(latestAppointmentData?.data);
+    }
+  }, [latestAppointmentData]);
+
+  const handleNewAppointmentClick = () => {
+    router.push("/user/appointments/new");
+  };
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -61,20 +70,30 @@ const Home = () => {
                 <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                   <BsCameraVideo className="w-8 h-8" />
                   <Text>
-                    {userDashboardInfo?.appointments?.length} appointments
+                    {userDashboardInfo?.appointments?.length}{" "}
+                    {userDashboardInfo?.appointments?.length! > 1
+                      ? "Appointments"
+                      : "Appointment"}
                   </Text>
                 </section>
 
                 <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                   <HiOutlineShieldCheck className="w-8 h-8" />
                   <Text>
-                    {userDashboardInfo?.allTotalAppointments} total checkups
+                    {userDashboardInfo?.allTotalAppointments} total{" "}
+                    {userDashboardInfo?.allTotalAppointments! > 1
+                      ? "Checkups"
+                      : "Checkup"}
                   </Text>
                 </section>
-
                 <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                   <SlBadge className="w-8 h-8" />
-                  <Text>{userDashboardInfo?.reviews.length} total reviews</Text>
+                  <Text>
+                    {userDashboardInfo?.reviews?.length} total{" "}
+                    {userDashboardInfo?.reviews?.length! > 1
+                      ? "Reviews"
+                      : "Review"}
+                  </Text>
                 </section>
               </section>
 
@@ -83,16 +102,13 @@ const Home = () => {
                   healthcare history
                 </h3>
 
-                <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                  <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                    <HiOutlineShieldCheck className="w-6 h-6" />
-                  </section>
-
-                  <section className="other-content w-11/12 flex items-center justify-around">
-                    <Text className="text-sm">14/09/2023</Text>
-                    <Text className="text-sm font-bold">@doyin</Text>
-                  </section>
-                </section>
+                {userDashboardInfo?.healthCareHistory?.length === 0 ? (
+                  <Text className="text-center my-5">
+                    No healthcare history
+                  </Text>
+                ) : (
+                  <Text>History dey</Text>
+                )}
               </section>
             </section>
             <section className="second-section w-full xl:w-4/12 mt-16 md:mt-0 grid grid-cols-1 items-center justify-center p-2">
@@ -102,35 +118,36 @@ const Home = () => {
                 </h3>
 
                 <section className="appointments mt-4">
-                  <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                    <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                      <BsCameraVideo className="w-6 h-6" />
-                    </section>
-
-                    <section className="other-content w-11/12 flex items-center justify-around">
-                      <Text className="text-sm">14/09/2023</Text>
-                      <Text className="text-sm font-bold">@doyin</Text>
-                      <section className="status-badge text-black rounded bg-green-300 flex items-center justify-center h-5 w-20">
-                        <Text className="text-[12px] font-bold">success</Text>
-                      </section>
-                    </section>
-                  </section>
-
-                  <section className="appointment bg-gray-100 transition-colors ease-in hover:bg-purple-100 flex items-center justify-between p-4 rounded cursor-pointer my-4">
-                    <section className="icon bg-accent text-white p-3 flex items-center justify-center rounded">
-                      <BsCameraVideo className="w-6 h-6" />
-                    </section>
-
-                    <section className="other-content w-11/12 flex items-center justify-around">
-                      <Text className="text-sm">14/09/2023</Text>
-                      <Text className="text-sm font-bold">@emmysoft</Text>
-                      <section className="status-badge  text-black rounded bg-red-400 flex items-center justify-center h-5 w-20">
-                        <Text className="text-[12px] font-bold">failed</Text>
-                      </section>
-                    </section>
-                  </section>
-                  <section className="new-appointment w-full flex items-end justify-end">
-                    <Button className="bg-accent">view appointments</Button>
+                  {latestAppointmentLoading ? (
+                    <LoaderSmall className="my-2" />
+                  ) : recentAppointmentInfo?.length == 0 ? (
+                    <Text className="text-center my-3">
+                      No recent appointments
+                    </Text>
+                  ) : (
+                    recentAppointmentInfo?.map(
+                      (appointment: userAppointmentInfoProps) => {
+                        return (
+                          <AppointmentLabel
+                            key={appointment._id}
+                            userType="user"
+                            status={appointment.status}
+                            attender={appointment.hospitalId}
+                            _id={appointment._id}
+                            href={`/hospital/appointments/${appointment._id}`}
+                            createdAt={appointment.createdAt}
+                          />
+                        );
+                      }
+                    )
+                  )}
+                  <section className="new-appointment w-full flex items-end justify-end my-2">
+                    <Button
+                      className="bg-accent"
+                      onClick={handleNewAppointmentClick}
+                    >
+                      New appointment
+                    </Button>
                   </section>
                 </section>
               </section>
