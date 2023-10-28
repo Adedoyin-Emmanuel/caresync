@@ -74,6 +74,7 @@ const Appointment = () => {
                         startDate={appointment.startDate}
                         endDate={appointment.endDate}
                         _id={appointment._id}
+                        userType="hospital"
                       />
                     );
                   }

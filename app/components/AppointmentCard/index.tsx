@@ -20,6 +20,7 @@ export interface AppointmentCardProps {
   description: string;
   _id: string;
   createdAt: Date;
+  userType: "user" | "hospital";
 }
 
 interface AppointmentLabelProps {
@@ -40,14 +41,17 @@ const ApppointmentCard = ({
   endDate,
   _id,
   createdAt,
+  userType
 }: AppointmentCardProps) => {
   const startFormattedTime = formatDateTime(startDate);
   const endFormattedTime = formatDateTime(endDate);
 
   const router = useRouter();
+
+  const appointmentLink = `/${userType}/appointments/${_id}`;
   
   const handleAppointmentClick = () => {
-    router.push(`/user/appointments/${_id}`);
+    router.push(appointmentLink);
   }
 
 
@@ -73,7 +77,7 @@ const ApppointmentCard = ({
       <section
         className="button-container my-2 mt-3"
       >
-        <Link href={`/user/appointments/${_id}`}>
+        <Link href={appointmentLink}>
           {" "}
           <Button>appointment details</Button>
         </Link>

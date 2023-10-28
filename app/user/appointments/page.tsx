@@ -22,7 +22,7 @@ const Appointment = () => {
   const { data, isLoading } = useGetUserAppointmentsQuery(userInfo?._id);
   const [totalAppointments, setTotalAppointments] = useState<number>(0);
   const dispatch = useDispatch<AppDispatch>();
-  
+
   useEffect(() => {
     if (data) {
       dispatch(saveAppointmentInfo(data?.data));
@@ -72,6 +72,7 @@ const Appointment = () => {
                         startDate={appointment.startDate}
                         endDate={appointment.endDate}
                         _id={appointment._id}
+                        userType="user"
                       />
                     );
                   }
