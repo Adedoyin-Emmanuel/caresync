@@ -89,7 +89,7 @@ export const UserCard = ({
           <span>{isVerified && <Verified />}</span>
         </h2>
         <Text className="text-sm">{address}</Text>
-        <Text className="my-2 text-sm capitalize"> {bio}</Text>
+        <Text className="my-1 text-sm capitalize"> {bio}</Text>
       </section>
     </Link>
   );

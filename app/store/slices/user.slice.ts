@@ -361,7 +361,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${USERS_URL}/search`,
         method: "GET",
         params: {
-          searchTerm: DataTransfer,
+          searchTerm: data,
         },
       }),
       providesTags: ["User", "Hospital"],
