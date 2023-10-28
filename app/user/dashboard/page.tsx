@@ -20,6 +20,8 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +33,8 @@ const Home = () => {
     userType: "user",
   };
 
+  const router = useRouter();
+
   useEffect(() => {
     if (userData) {
       dispatch(saveDashboardInfo(userData?.data));
@@ -40,6 +44,9 @@ const Home = () => {
   const { userDashboardInfo, recentAppointmentInfo } = useAppSelector(
     (state) => state.user
   );
+
+
+
   const { data: latestAppointmentData, isLoading: latestAppointmentLoading } =
     useGetLatestAppointmentsQuery(dataToPass);
 
@@ -50,6 +57,10 @@ const Home = () => {
       console.log(latestAppointmentData?.data);
     }
   }, [latestAppointmentData]);
+
+  const handleNewAppointmentClick = () => {
+      router.push("/user/appointments/new");
+  }
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -129,7 +140,7 @@ const Home = () => {
                             status={appointment.status}
                             attender={appointment.hospitalId}
                             _id={appointment._id}
-                            href={`/user/dashboard/appointment/${appointment._id}`}
+                            href={`/user/appointments/${appointment._id}`}
                             createdAt={appointment.createdAt}
                           />
                         );
@@ -137,7 +148,12 @@ const Home = () => {
                     )
                   )}
                   <section className="new-appointment w-full flex items-end justify-end my-2">
-                    <Button className="bg-accent">New appointment</Button>
+                    <Button
+                      className="bg-accent"
+                      onClick={handleNewAppointmentClick}
+                    >
+                      New appointment
+                    </Button>
                   </section>
                 </section>
               </section>

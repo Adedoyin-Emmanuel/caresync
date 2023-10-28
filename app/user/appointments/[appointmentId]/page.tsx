@@ -16,6 +16,8 @@ import {
 import {
   hospitalProps,
   saveUserSpecificAppointmentInfo,
+  useCancelAppointmentMutation,
+  useDeleteAppointmentMutation,
   useGetAppointmentByIdQuery,
   useGetHospitalByIdQuery,
   useUpdateAppointmentMutation,
@@ -45,6 +47,15 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const [hospitalDetails, setHospitalDetails] = useState<hospitalProps>();
   const { userSpecificAppointmentInfo } = useAppSelector((state) => state.user);
   const { userInfo } = useAppSelector((state) => state.auth);
+  const [
+    cancelAppointment,
+    { isLoading: cancelAppointmentLoading, isError: cancelAppointmentError },
+  ] = useCancelAppointmentMutation();
+  const [
+    deleteAppointment,
+    { isLoading: deleteAppointmentLoading, isError: deleteAppointmentError },
+  ] = useDeleteAppointmentMutation();
+
   const { data: hospitalData } = useGetHospitalByIdQuery(
     userSpecificAppointmentInfo?.hospitalId
   );
@@ -58,9 +69,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       dispatch(saveUserSpecificAppointmentInfo(data.data));
-      console.log(hospitalData);
       setHospitalDetails(hospitalData?.data);
     }
   }, [data, hospitalData]);
@@ -152,12 +161,45 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
     }
   };
 
+  const handleCancelAppointment = async () => {
+    try {
+      const response: any = await cancelAppointment({
+        id: params.appointmentId,
+      });
+
+      if (response?.data) {
+        toast.success(response.data.message);
+        router.push("/user/appointments");
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message || error.error || error?.data);
+    }
+  };
+
+  const handleDeleteAppointment = async () => {
+    try {
+      const response: any = await deleteAppointment({
+        id: params.appointmentId,
+      });
+
+      if (response?.data) {
+        console.log(response);
+        toast.success(response.data.message);
+        router.push("/user/appointments");
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message || error.error || error?.data);
+    }
+  };
+
   return (
     <div className="w-screen h-screen bg-zinc-50">
       <SidebarLayout>
-        {isLoading ? (
+        {isLoading || cancelAppointmentLoading || deleteAppointmentLoading ? (
           <Loader />
-        ) : isError ? (
+        ) : isError || cancelAppointmentError || deleteAppointmentError ? (
           <section className="w-full flex items-center flex-col ">
             <Text className="my-5">Couldn't get appointment details 😥</Text>
             <section className="my-5">
@@ -174,7 +216,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </span>
               </h3>
             </section>
-
             <section className="appointment-details md:w-1/2 xl:w-2/4 ">
               <AppointmentLabel
                 key={userSpecificAppointmentInfo?.id}
@@ -186,7 +227,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 createdAt={userSpecificAppointmentInfo?.createdAt!}
               />
             </section>
-
             <section className="dropdown-container md:w-1/2 xl:w-2/4 flex items-end justify-end p-3">
               <div className="dropdown dropdown-left transform -translate-y-10 -translate-x-3">
                 <BsPen
@@ -227,7 +267,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </ul>
               </div>
             </section>
-
             <section className="appointment-details  flex flex-col items-start my-5 md:w-1/2 xl:w-2/4">
               <h3 className="font-bold text-[17px]  capitalize">details</h3>
 
@@ -292,14 +331,12 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </Text>
               </section>
             </section>
-
             <button
               className="w-36 bg-accent p-2 capitalize  text-white rounded text-sm"
               onClick={() => viewHospitalModalRef?.current.showModal()}
             >
               hospital profile
             </button>
-
             <dialog
               id="profile_modal"
               className="modal"
@@ -372,7 +409,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </section>
               </div>
             </dialog>
-
             <Modal ref={updateAppointmentModalRef}>
               {updateAppointmentLoading ? (
                 <LoaderSmall />
@@ -460,7 +496,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </form>
               )}
             </Modal>
-
             <Modal ref={deleteAppointmentModalRef}>
               <section className="cancel">
                 <h3 className="font-bold text-2xl capitalize text-accent">
@@ -472,13 +507,15 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </p>
 
                 <section className="mt-8 w-full flex items-end justify-end">
-                  <button className="bg-red-400 capitalize p-2 rounded-md text-white text-sm">
+                  <button
+                    className="bg-red-400 capitalize p-2 rounded-md text-white text-sm"
+                    onClick={handleDeleteAppointment}
+                  >
                     delete appointment
                   </button>
                 </section>
               </section>
             </Modal>
-
             <Modal ref={cancelAppointmentModalRef}>
               <section className="cancel">
                 <h3 className="font-bold text-2xl capitalize text-accent">
@@ -489,17 +526,19 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </p>
 
                 <section className="mt-8 w-full flex items-end justify-end">
-                  <button className="bg-yellow-400 capitalize p-2 rounded-md text-black text-sm">
+                  <button
+                    className="bg-yellow-400 capitalize p-2 rounded-md text-black text-sm"
+                    onClick={handleCancelAppointment}
+                  >
                     cancel appointment
                   </button>
                 </section>
               </section>
             </Modal>
-
             <AppointmentStartButton
               href={`/user/appointments/${params.appointmentId}/start`}
-                />
-                <br/> <br/> <br/>
+            />
+            <br /> <br /> <br />
           </section>
         )}
       </SidebarLayout>
