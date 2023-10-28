@@ -1,6 +1,4 @@
 "use client";
-
-import AppointmentButton from "@/app/components/AppointmentButton";
 import {
   AppointmentCardProps,
   ApppointmentCard,
@@ -81,7 +79,6 @@ const Appointment = () => {
                 )
               )}
             </section>
-            <AppointmentButton />
           </section>
         </HospitalSidebarNav>
       )}
