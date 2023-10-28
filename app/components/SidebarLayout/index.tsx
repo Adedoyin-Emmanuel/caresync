@@ -4,8 +4,7 @@ import { logoutUser } from "@/app/store/slices/auth.slice";
 import { resetUser, useLogoutMutation } from "@/app/store/slices/user.slice";
 import { AppDispatch } from "@/app/store/store";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 import { BiMessageRoundedDots } from "react-icons/bi";
@@ -240,10 +239,11 @@ export const HospitalSidebarNav = ({
           </Link>
 
           <Link
-            href="/hospital/settings"
+            href="/user/settings"
             className={`dashboard cursor-pointer ${
               currentPath.includes("settings") ||
-              currentPath.includes("profile")
+              currentPath.includes("profile") ||
+              currentPath.includes("profile/me")
                 ? "text-white bg-accent"
                 : "bg-gray-200"
             }  hover:bg-accent duration-100 ease-in hover:text-white transition-colors flex items-center gap-x-4 p-5 rounded my-4`}

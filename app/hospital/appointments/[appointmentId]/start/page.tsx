@@ -1,5 +1,5 @@
 "use client";
-import SidebarLayout from "@/app/components/SidebarLayout";
+import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import {
   saveAppointmentInfo,
   useGetUserAppointmentsQuery,
@@ -25,11 +25,11 @@ const StartAppointment = () => {
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      <SidebarLayout>
+      <HospitalSidebarNav>
         <h3 className="font-bold text-2xl  capitalize">
           hello we want to start the appointment{" "}
         </h3>
-      </SidebarLayout>
+      </HospitalSidebarNav>
     </div>
   );
 };

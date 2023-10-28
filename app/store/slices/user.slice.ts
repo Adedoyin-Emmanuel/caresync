@@ -307,9 +307,9 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     updateHospital: builder.mutation({
       query: (data) => ({
-        url: HOSPITALS_URL,
+        url: `${HOSPITALS_URL}/${data.id}`,
         method: "PUT",
-        data: data,
+        data: data.body,
       }),
       invalidatesTags: ["User", "Hospital"],
     }),

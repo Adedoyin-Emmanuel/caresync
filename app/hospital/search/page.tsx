@@ -2,7 +2,7 @@
 
 import { UserCard } from "@/app/components/HospitalCard";
 import { LoaderSmall } from "@/app/components/Loader";
-import SidebarLayout from "@/app/components/SidebarLayout";
+import {HospitalSidebarNav} from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
   clearUserSearchInfo,
@@ -40,7 +40,7 @@ const SearchUsers = () => {
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      <SidebarLayout>
+      <HospitalSidebarNav>
         <section className="my-5">
           <h3 className="font-bold text-2xl capitalize text-accent">
             search users
@@ -95,7 +95,7 @@ const SearchUsers = () => {
             </section>
           </section>
         </section>
-      </SidebarLayout>
+      </HospitalSidebarNav>
     </div>
   );
 };

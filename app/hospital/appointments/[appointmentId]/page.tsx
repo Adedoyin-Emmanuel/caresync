@@ -4,7 +4,7 @@ import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import Loader from "@/app/components/Loader";
 import Modal from "@/app/components/Modal";
-import SidebarLayout from "@/app/components/SidebarLayout";
+import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
 import { formatDateTime } from "@/app/helpers";
@@ -151,7 +151,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      <SidebarLayout>
+      <HospitalSidebarNav>
         {isLoading || cancelAppointmentLoading || deleteAppointmentLoading ? (
           <Loader />
         ) : isError || cancelAppointmentError || deleteAppointmentError ? (
@@ -417,7 +417,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
             <br /> <br /> <br />
           </section>
         )}
-      </SidebarLayout>
+      </HospitalSidebarNav>
     </div>
   );
 };

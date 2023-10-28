@@ -1,7 +1,7 @@
 "use client";
 
 import Loader from "@/app/components/Loader";
-import SidebarLayout from "@/app/components/SidebarLayout";
+import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
 import { logoutUser } from "@/app/store/slices/auth.slice";
@@ -52,7 +52,7 @@ const Profile = () => {
       ) : isError ? (
         <Text>An error occured</Text>
       ) : (
-        <SidebarLayout>
+        <HospitalSidebarNav>
           <section className=" my-5">
             <section className="w-full">
               <section className="w-full my-5">
@@ -132,7 +132,7 @@ const Profile = () => {
               </section>
             </section>
           </section>
-        </SidebarLayout>
+        </HospitalSidebarNav>
       )}
     </div>
   );
