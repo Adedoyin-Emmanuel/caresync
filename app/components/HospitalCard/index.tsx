@@ -1,9 +1,9 @@
 import { useGetHospitalRatingQuery } from "@/app/store/slices/user.slice";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import Text from "../Text";
 import Verified from "../Verified";
-import Link from "next/link";
 
 interface HospitalCardProps {
   className?: string;
@@ -14,13 +14,23 @@ interface HospitalCardProps {
   href: string;
 }
 
+interface UserCardProps {
+  className?: string;
+  name: string;
+  address: string;
+  isVerified: boolean;
+  _id?: string;
+  bio: string;
+  href: string;
+}
+
 const HospitalCard = ({
   className,
   clinicName,
   address,
   isVerified,
   _id,
-  href
+  href,
 }: HospitalCardProps) => {
   const stars = Array(5).fill(null);
   const [rating, setRating] = useState(0);
@@ -29,7 +39,6 @@ const HospitalCard = ({
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setRating(data.data.rating);
     }
   }, [data]);
@@ -56,6 +65,31 @@ const HospitalCard = ({
         </h2>
         <Text className="text-sm">{address}</Text>
         <section className="rating flex gap-x-1 my-2">{starElements}</section>
+      </section>
+    </Link>
+  );
+};
+
+export const UserCard = ({
+  className,
+  name,
+  address,
+  isVerified,
+  _id,
+  href,
+  bio,
+}: UserCardProps) => {
+  return (
+    <Link href={href}>
+      <section
+        className={`hospital bg-gray-100 transition-colors duration-100 ease-in hover:bg-purple-100 p-3 rounded md:w-96 cursor-pointer ${className}`}
+      >
+        <h2 className="font-bold capitalize flex items-center gap-x-1">
+          {name}
+          <span>{isVerified && <Verified />}</span>
+        </h2>
+        <Text className="text-sm">{address}</Text>
+        <Text className="my-2 text-sm capitalize"> {bio}</Text>
       </section>
     </Link>
   );

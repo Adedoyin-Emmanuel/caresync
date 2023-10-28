@@ -109,6 +109,15 @@ const initialState = {
     null
   ) as hospitalProps | null,
 
+  userSearchInfo: loadFromLocalStorage("hospitalUserSearchInfo", null) as
+    | userDashboardInfoProps[]
+    | null,
+
+  userSearchProfileInfo: loadFromLocalStorage(
+    "hospitalUserSearchProfileInfo",
+    null
+  ) as userDashboardInfoProps | null,
+
   /*
      @see this relates to when the user clicks a particular appointment from all appointments
      
@@ -168,6 +177,22 @@ const userSlice = createSlice({
       );
     },
 
+    saveUserSearchInfo: (state, action) => {
+      state.userSearchInfo = action.payload;
+      localStorage.setItem(
+        "hospitalUserSearchInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
+    saveUserSearchProfileInfo: (state, action) => {
+      state.userSearchProfileInfo = action.payload;
+      localStorage.setItem(
+        "hospitalUserSearchProfileInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
     saveUserSpecificAppointmentInfo: (state, action) => {
       state.userSpecificAppointmentInfo = action.payload;
       localStorage.setItem(
@@ -183,6 +208,11 @@ const userSlice = createSlice({
       localStorage.removeItem("userHospitalSearchInfo");
     },
 
+    clearUserSearchInfo: (state, action) => {
+      state.userSearchInfo = null;
+      localStorage.removeItem("hospitalUserSearchInfo");
+    },
+
     resetUser: () => {
       localStorage.removeItem("userDashboardInfo");
       localStorage.removeItem("userAppointmentInfo");
@@ -190,6 +220,8 @@ const userSlice = createSlice({
       localStorage.removeItem("userHealthCareHistoryInfo");
       localStorage.removeItem("userHospitalSearchInfo");
       localStorage.removeItem("userHospitalSearchProfileInfo");
+      localStorage.removeItem("hospitalUserSearchInfo");
+      localStorage.removeItem("hospitalUserSearchProfileInfo");
     },
   },
 });
@@ -323,6 +355,17 @@ export const userApiCall = apiSlice.injectEndpoints({
     }),
 
     //search user
+
+    searchUser: builder.query({
+      query: (data) => ({
+        url: `${USERS_URL}/search`,
+        method: "GET",
+        params: {
+          searchTerm: DataTransfer,
+        },
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
 
     getHospitalRating: builder.query({
       query: (data) => ({
@@ -487,6 +530,8 @@ export const {
   useSearchHospitalQuery,
   useGetHospitalRatingQuery,
 
+  useSearchUserQuery,
+
   useGetUserQuery,
   useGetHospitalQuery,
 
@@ -498,8 +543,7 @@ export const {
   useUpdateAppointmentMutation,
   useCancelAppointmentMutation,
   useApproveAppointmentMutation,
-  useDeleteAppointmentMutation
-
+  useDeleteAppointmentMutation,
 } = userApiCall;
 export const {
   saveDashboardInfo,
@@ -508,8 +552,11 @@ export const {
   saveRecentAppointmentInfo,
   saveHealthCareHistoryInfo,
   saveHospitalSearchInfo,
-  clearHospitalSearchInfo,
   saveHospitalSearchProfileInfo,
   saveUserSpecificAppointmentInfo,
+  saveUserSearchInfo,
+  saveUserSearchProfileInfo,
+  clearHospitalSearchInfo,
+  clearUserSearchInfo,
 } = userSlice.actions;
 export default userSlice.reducer;

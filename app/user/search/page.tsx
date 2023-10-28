@@ -82,7 +82,7 @@ const SearchHospitals = () => {
                   return (
                     <HospitalCard
                       _id={hospital._id}
-                      address={"Lagos 9ja"}
+                      address={hospital.location || "Around the world"}
                       clinicName={hospital.clinicName}
                       isVerified={hospital.isVerified}
                       key={hospital._id}
