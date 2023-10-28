@@ -132,7 +132,7 @@ const Home = () => {
                             key={appointment._id}
                             userType="user"
                             status={appointment.status}
-                            attender={appointment.hospitalId}
+                            attender={appointment.userId!}
                             _id={appointment._id}
                             href={`/hospital/appointments/${appointment._id}`}
                             createdAt={appointment.createdAt}

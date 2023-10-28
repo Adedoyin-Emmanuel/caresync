@@ -377,6 +377,14 @@ export const userApiCall = apiSlice.injectEndpoints({
       providesTags: ["User", "Hospital"],
     }),
 
+    getHospitalAppointments: builder.query({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/hospital/${data}`,
+        method: 'GET'
+      }),
+      providesTags: ["User", "Hospital"]
+    }),
+
     getAppointmentById: builder.query({
       query: (data) => ({
         url: `${APPOINTMENTS_URL}/${data}`,
@@ -483,6 +491,7 @@ export const {
   useGetHospitalQuery,
 
   useGetUserAppointmentsQuery,
+  useGetHospitalAppointmentsQuery,
   useGetAppointmentByIdQuery,
   useGetLatestAppointmentsQuery,
   useCreateAppointmentMutation,
