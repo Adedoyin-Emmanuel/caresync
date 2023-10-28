@@ -100,7 +100,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
       id: 1,
       text: "view appointments",
       onClick: () => {
-        router.push("/user/appointments"); 
+        router.push("/user/appointments");
       },
     },
 
@@ -116,7 +116,6 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
       text: "your hospitals",
       onClick: () => {
         router.push("/user/search");
-
       },
     },
 
@@ -125,7 +124,6 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
       text: "view profile",
       onClick: () => {
         router.push("/user/profile/me");
-
       },
     },
 
@@ -208,6 +206,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
             </div>
           )}
         </section>
+
         <div className="avatar cursor-pointer relative" ref={profileRef}>
           <div className="w-10 rounded-full" onClick={toggleProfileDropdown}>
             <img
@@ -345,7 +344,7 @@ export const HospitalAppHeader = ({
       id: 3,
       text: "your users",
       onClick: () => {
-        router.push("/hospital/search")
+        router.push("/hospital/search");
       },
     },
 
@@ -354,7 +353,6 @@ export const HospitalAppHeader = ({
       text: "view profile",
       onClick: () => {
         router.push("/hospital/profile/me");
-
       },
     },
 
@@ -384,17 +382,28 @@ export const HospitalAppHeader = ({
     },
   ];
 
+  const routeBack = () => {
+    router.back();
+  };
+
   return (
     <div
       className={`${className} flex items-center ${
         showWelcomeMessage ? "justify-between" : "justify-end"
       } p-2 md:p-0`}
     >
-      {showWelcomeMessage && (
+      {showWelcomeMessage ? (
         <section className="user-name">
           <h2 className="font-bold capitalize text-2xl">
             hi, {userInfo?.username} 👋
           </h2>
+        </section>
+      ) : (
+        <section
+          onClick={routeBack}
+          className="block w-full cursor-pointer hover:text-accent duration-100 transition-colors ease-in"
+        >
+          <IoIosArrowBack className="block cursor-pointer w-6 h-6" />
         </section>
       )}
 
@@ -438,14 +447,14 @@ export const HospitalAppHeader = ({
           </div>
 
           {isProfileDropdownVisible && (
-            <div className="profile-dropdown absolute  top-full w-96 right-0 bg-white z-[100] rounded-md shadow-md p-4">
+            <div className="profile-dropdown absolute  top-full w-60 h-96 right-0 bg-white z-[100] rounded-md shadow-md p-4">
               <h4 className="mb-2 font-bold text-gray-800 capitalize">
                 Profile Menu
               </h4>
               {profileMenuItems.map((item) => (
                 <p
                   key={item.id}
-                  className="text-[12px] md:text-sm p-3 hover:bg-purple-100 rounded capitalize mt-2 cursor-pointer"
+                  className="text-[13px] md:text-sm p-3 hover:bg-purple-100 rounded capitalize mt-2 cursor-pointer"
                   onClick={() => item.onClick()}
                 >
                   {item.text}
