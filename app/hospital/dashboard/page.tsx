@@ -1,26 +1,26 @@
 "use client";
 
+import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";
-import Loader, {LoaderSmall} from "@/app/components/Loader";
+import Loader, { LoaderSmall } from "@/app/components/Loader";
 import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
   saveAppointmentInfo,
   saveDashboardInfo,
   saveRecentAppointmentInfo,
-  useGetLatestAppointmentsQuery,
   useGetHospitalQuery,
+  useGetLatestAppointmentsQuery,
   userAppointmentInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import { AppointmentLabel } from "@/app/components/AppointmentCard";
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -54,8 +54,8 @@ const Home = () => {
     }
   }, [latestAppointmentData]);
 
-  const handleNewAppointmentClick = () => {
-    router.push("/user/appointments/new");
+  const handleViewAppointmentClick = () => {
+    router.push("/hospital/appointments/");
   };
 
   return (
@@ -144,9 +144,9 @@ const Home = () => {
                   <section className="new-appointment w-full flex items-end justify-end my-2">
                     <Button
                       className="bg-accent"
-                      onClick={handleNewAppointmentClick}
+                      onClick={handleViewAppointmentClick}
                     >
-                      New appointment
+                      View appointments
                     </Button>
                   </section>
                 </section>

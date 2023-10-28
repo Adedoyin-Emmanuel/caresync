@@ -9,13 +9,13 @@ import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
 import { formatDateTime } from "@/app/helpers";
 import {
-  userDashboardInfoProps,
   saveUserSpecificAppointmentInfo,
+  useApproveAppointmentMutation,
   useCancelAppointmentMutation,
   useDeleteAppointmentMutation,
   useGetAppointmentByIdQuery,
   useGetUserByIdQuery,
-  useUpdateAppointmentMutation,
+  userDashboardInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import moment from "moment";
@@ -50,6 +50,11 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
     deleteAppointment,
     { isLoading: deleteAppointmentLoading, isError: deleteAppointmentError },
   ] = useDeleteAppointmentMutation();
+
+  const [
+    approveAppointment,
+    { isLoading: approveAppointmentLoading, isError: approveAppointmentError },
+  ] = useApproveAppointmentMutation();
 
   const { data: clientData } = useGetUserByIdQuery(
     userSpecificAppointmentInfo?.userId
@@ -89,7 +94,27 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
     }
   };
 
-  const handleApproveAppointment = async () => {};
+  const handleApproveAppointment = async () => {
+    try {
+      const response: any = await approveAppointment({
+        id: params.appointmentId,
+      });
+
+      if (response?.data) {
+        toast.success(response.data.message);
+
+        /* we could decide to route the hospital to the meeting page
+        I guess that makes more sense, I would figure that later*/
+
+        //router.push("/hospital/appointments");
+      } else {
+        toast.error(response.error.data.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message || error.error || error?.data);
+    }
+  };
 
   const handleCancelAppointment = async () => {
     try {
@@ -141,9 +166,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
             <section className="appointment-header my-5">
               <h3 className="font-bold text-[18px]  capitalize">
                 appointment with{" "}
-                <span className="text-accent">
-                  {userDetails?.name}{" "}
-                </span>
+                <span className="text-accent">{userDetails?.name} </span>
               </h3>
             </section>
             <section className="appointment-details md:w-1/2 xl:w-2/4 ">
@@ -267,11 +290,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
             >
               user profile
             </button>
-            <dialog
-              id="profile_modal"
-              className="modal"
-              ref={viewUserModalRef}
-            >
+            <dialog id="profile_modal" className="modal" ref={viewUserModalRef}>
               <div className="modal-box">
                 <form method="dialog" className="modal-backdrop">
                   <button className="btn btn-sm btn-circle shadow-none border-none outline-none bg-gray-100 hover:bg-red-400 hover:text-white duration-100 transition-colors ease-linear absolute right-2 top-2">
@@ -296,9 +315,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                           {userDetails?.name}
                           <span>
                             {" "}
-                            {!userDetails?.isVerified && (
-                              <Verified big={true} />
-                            )}
+                            {userDetails?.isVerified && <Verified big={true} />}
                           </span>
                         </h3>
                       </section>
@@ -307,9 +324,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                         @{userDetails?.username}
                       </Text>
 
-                      <Text className="text-sm mt-2">
-                        {userDetails?.bio}
-                      </Text>
+                      <Text className="text-sm mt-2">{userDetails?.bio}</Text>
 
                       <section className="other-details w-full flex flex-col items-start my-5">
                         <section className="location flex items-center justify-center gap-x-2 my-1">
@@ -322,8 +337,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                         <section className="checkups flex items-center justify-center gap-x-2 my-1">
                           <HiOutlineShieldCheck className="w-5 h-5" />
                           <Text className="text-sm">
-                            {userDetails?.allTotalAppointments} total
-                            checkups
+                            {userDetails?.allTotalAppointments} total checkups
                           </Text>
                         </section>
 

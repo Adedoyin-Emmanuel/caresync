@@ -380,9 +380,9 @@ export const userApiCall = apiSlice.injectEndpoints({
     getHospitalAppointments: builder.query({
       query: (data) => ({
         url: `${APPOINTMENTS_URL}/hospital/${data}`,
-        method: 'GET'
+        method: "GET",
       }),
-      providesTags: ["User", "Hospital"]
+      providesTags: ["User", "Hospital"],
     }),
 
     getAppointmentById: builder.query({
@@ -431,7 +431,7 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     cancelAppointment: builder.mutation({
       query: (data) => {
-        const { id, ...dataWithoutId } = data;
+        const { id } = data;
 
         return {
           url: `${APPOINTMENTS_URL}/cancel/${id}`,
@@ -443,7 +443,7 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     approveAppointment: builder.mutation({
       query: (data) => {
-        const { id, ...dataWithoutId } = data;
+        const { id } = data;
 
         return {
           url: `${APPOINTMENTS_URL}/approve/${id}`,
