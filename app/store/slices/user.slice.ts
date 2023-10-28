@@ -36,6 +36,9 @@ export interface userDashboardInfoProps {
   updatedAt: Date;
   createdAt: Date;
   location?: string;
+
+  //looks weird adding this here, well an hospital is also a type of user soo yeah YGTV
+  clinicName?: string;
 }
 
 export interface userAppointmentInfoProps {
