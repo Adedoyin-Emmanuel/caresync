@@ -140,6 +140,8 @@ const userSlice = createSlice({
       localStorage.setItem("userDashboardInfo", JSON.stringify(action.payload));
     },
 
+
+    // all appointment information this is for not specific for a user or hospital
     saveAppointmentInfo: (state, action) => {
       state.userAppointmentInfo = action.payload;
       localStorage.setItem(
@@ -164,6 +166,7 @@ const userSlice = createSlice({
       );
     },
 
+    //action to dispatch when an hospital search for a user
     saveHospitalSearchInfo: (state, action) => {
       state.hospitalSearchInfo = action.payload;
       localStorage.setItem(
@@ -172,6 +175,7 @@ const userSlice = createSlice({
       );
     },
 
+    //action to dispatch when an hospital search for a user and then wants to view his/her profile
     saveHospitalSearchProfileInfo: (state, action) => {
       state.hospitalSearchProfileInfo = action.payload;
       localStorage.setItem(
@@ -180,6 +184,7 @@ const userSlice = createSlice({
       );
     },
 
+    //action to dispatch when a user searches for an hosptial
     saveUserSearchInfo: (state, action) => {
       state.userSearchInfo = action.payload;
       localStorage.setItem(
@@ -188,6 +193,7 @@ const userSlice = createSlice({
       );
     },
 
+    //action to dispatch when a user searches for an hosptial and then wants to view their profile
     saveUserSearchProfileInfo: (state, action) => {
       state.userSearchProfileInfo = action.payload;
       localStorage.setItem(
@@ -196,6 +202,7 @@ const userSlice = createSlice({
       );
     },
 
+    // this is a specific appointment, like one out of many
     saveUserSpecificAppointmentInfo: (state, action) => {
       state.userSpecificAppointmentInfo = action.payload;
       localStorage.setItem(
