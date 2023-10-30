@@ -67,9 +67,25 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const cancelAppointmentModalRef = useRef<HTMLDialogElement | any>();
   const updateAppointmentModalRef = useRef<HTMLDialogElement | any>();
 
+  const [formData, setFormData]: any = useState({
+    title: userSpecificAppointmentInfo?.title,
+    description: userSpecificAppointmentInfo?.description,
+    status: userSpecificAppointmentInfo?.status,
+    startDate: formatDateToInputValue(userSpecificAppointmentInfo?.startDate!),
+    endDate: formatDateToInputValue(userSpecificAppointmentInfo?.endDate!),
+  });
+
   useEffect(() => {
     if (data) {
       dispatch(saveUserSpecificAppointmentInfo(data.data));
+      const dataToStore = {
+        title: data.data.title,
+        description: data.data.description,
+        status: data.data.status,
+        startDate: formatDateToInputValue(data.data.startDate),
+        endDate: formatDateToInputValue(data.data.endDate),
+      };
+      setFormData(dataToStore);
       setHospitalDetails(hospitalData?.data);
     }
   }, [data, hospitalData]);
@@ -95,14 +111,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
       updateAppointmentModalRef?.current.showModal();
     }
   };
-
-  const [formData, setFormData]: any = useState({
-    title: userSpecificAppointmentInfo?.title,
-    description: userSpecificAppointmentInfo?.description,
-    status: userSpecificAppointmentInfo?.status,
-    startDate: formatDateToInputValue(userSpecificAppointmentInfo?.startDate!),
-    endDate: formatDateToInputValue(userSpecificAppointmentInfo?.endDate!),
-  });
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;

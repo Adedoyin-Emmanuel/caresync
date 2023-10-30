@@ -1,7 +1,9 @@
 import { AnyAction, Dispatch, MiddlewareAPI } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:2800");
+const socket = io("http://localhost:2800", {
+  withCredentials: true,
+});
 
 const socketMiddleware =
   (store: MiddlewareAPI) =>
