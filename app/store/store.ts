@@ -1,9 +1,10 @@
 "use client";
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
+import socketMiddleware from "./middlewares/socket";
 import { apiSlice } from "./slices/api.slice";
-import userReducer from "./slices/user.slice";
 import authReducer from "./slices/auth.slice";
+import userReducer from "./slices/user.slice";
 
 //import other reducerers
 
@@ -14,7 +15,7 @@ const store = configureStore({
     user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(apiSlice.middleware, socketMiddleware),
   devTools: true,
 });
 
