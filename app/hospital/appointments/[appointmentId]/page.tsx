@@ -161,8 +161,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
           <Loader />
         ) : isError ||
           cancelAppointmentError ||
-          deleteAppointmentError ||
-          Object?.keys(userSpecificAppointmentInfo!).length === 0 ? (
+          deleteAppointmentError  ? (
           <section className="w-full flex items-center flex-col ">
             <Text className="my-5">Couldn't get appointment details 😥</Text>
             <section className="my-5">
