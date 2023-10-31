@@ -37,8 +37,7 @@ function handleAppointmentChange(
     console.log(appointmentData);
     store.dispatch(saveUserSpecificAppointmentInfo(appointmentData));
   } else if (changeType === "delete") {
-    console.log("chage type is delete");
-
+  
     // For deletions, remove the appointment
     updatedAppointments = existingAppointments.filter(
       (appointment: userAppointment) => appointment._id !== appointmentData._id

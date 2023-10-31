@@ -36,7 +36,7 @@ const Appointment = () => {
         <Loader />
       ) : (
         <SidebarLayout>
-          <section className="appointments my-5">
+          <section className="appointments my-5 w-full">
             <h3 className="font-bold text-2xl capitalize text-accent">
               Scheduled appointments
             </h3>
@@ -55,8 +55,8 @@ const Appointment = () => {
             </Text>
             
             <section
-              className={`appointment-container items-center justify-center mx-auto gap-10 ${
-                totalAppointments !== 0 && "grid"
+              className={`appointment-container items-center justify-center w-full gap-10 ${
+                totalAppointments !== 0 && "flex flex-col md:grid"
               } sm:grid-cols-2 xl:grid-cols-3 my-8`}
             >
               {totalAppointments == 0 ? (
