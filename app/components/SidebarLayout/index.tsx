@@ -13,7 +13,7 @@ import { FiLogOut, FiSearch } from "react-icons/fi";
 import { IoAnalytics, IoSettingsOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import AppHeader, { HospitalAppHeader } from "../AppHeader";
-import MobileNav from "../MobileNav";
+import MobileNav, { HospitalMobileNav } from "../MobileNav";
 import Text from "../Text";
 import Verified from "../Verified";
 
@@ -278,7 +278,7 @@ export const HospitalSidebarNav = ({
         </section>
       </section>
 
-      <MobileNav />
+      <HospitalMobileNav />
     </section>
   );
 };

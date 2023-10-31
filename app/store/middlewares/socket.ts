@@ -12,7 +12,7 @@ socket.on("newAppointment", (newAppointment) => {
   const existingAppointments = store.getState().user.userAppointmentInfo || [];
   console.log(`Existing appointment is ${existingAppointments}`);
 
-  const updatedAppointment = [...existingAppointments, newAppointment];
+  const updatedAppointment = [newAppointment, ...existingAppointments];
   console.log(`Updated appointment is ${updatedAppointment}`);
 
   store.dispatch(saveAppointmentInfo(updatedAppointment));
