@@ -231,6 +231,7 @@ const userSlice = createSlice({
       localStorage.removeItem("userHospitalSearchInfo");
       localStorage.removeItem("userHospitalSearchProfileInfo");
       localStorage.removeItem("hospitalUserSearchInfo");
+      localStorage.removeItem("userSpecificAppointmentInfo");
       localStorage.removeItem("hospitalUserSearchProfileInfo");
     },
   },

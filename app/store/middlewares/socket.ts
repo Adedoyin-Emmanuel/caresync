@@ -1,11 +1,56 @@
 import { AnyAction, Dispatch, MiddlewareAPI } from "@reduxjs/toolkit";
+import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 import { io } from "socket.io-client";
-import { saveAppointmentInfo } from "../slices/user.slice";
+import {
+  saveAppointmentInfo,
+  saveUserSpecificAppointmentInfo,
+  userAppointment,
+} from "../slices/user.slice";
 import store from "../store";
 
 const socket = io("http://localhost:2800", {
   withCredentials: true,
 });
+
+function handleAppointmentChange(
+  store: ToolkitStore,
+  changeType: string,
+  appointmentData: userAppointment
+) {
+  const existingAppointments = store.getState().user.userAppointmentInfo || [];
+
+  let updatedAppointments = [...existingAppointments];
+
+  if (
+    changeType === "update" ||
+    changeType === "cancel" ||
+    changeType === "approve"
+  ) {
+    // For updates, cancel, or approve, update the corresponding appointment data
+    const indexOfUpdatedAppointment = existingAppointments.findIndex(
+      (appointment: userAppointment) => appointment._id === appointmentData._id
+    );
+
+    if (indexOfUpdatedAppointment !== -1) {
+      updatedAppointments[indexOfUpdatedAppointment] = appointmentData;
+    }
+    console.log(appointmentData);
+    store.dispatch(saveUserSpecificAppointmentInfo(appointmentData));
+  } else if (changeType === "delete") {
+    console.log("chage type is delete");
+
+    // For deletions, remove the appointment
+    updatedAppointments = existingAppointments.filter(
+      (appointment: userAppointment) => appointment._id !== appointmentData._id
+    );
+
+    store.dispatch(saveUserSpecificAppointmentInfo(appointmentData));
+  }
+
+  console.log(updatedAppointments);
+
+  store.dispatch(saveAppointmentInfo(updatedAppointments));
+}
 
 /* listens for a newAppointment event from the server,
 triggers a reducer action that causes an update on the UI 
@@ -20,24 +65,18 @@ socket.on("newAppointment", (newAppointment) => {
 triggers a reducer action that causes an update on the UI 
 */
 socket.on("updateAppointment", (updatedAppointment) => {
-  const existingAppointments = store.getState().user.userAppointmentInfo || [];
-
-  // Find the index of the appointment to update in the existing array
-  const indexOfUpdatedAppointment = existingAppointments.findIndex(appointment => appointment._id === updatedAppointment._id);
-
-  if (indexOfUpdatedAppointment !== -1) {
-    // Create a new array with the updated appointment
-    const updatedAppointments = [
-      ...existingAppointments.slice(0, indexOfUpdatedAppointment), 
-      updatedAppointment,
-      ...existingAppointments.slice(indexOfUpdatedAppointment + 1)
-    ];
-
-    // update the appointment information in the store
-    store.dispatch(saveAppointmentInfo(updatedAppointments));
-  }
+  handleAppointmentChange(store, "update", updatedAppointment);
 });
 
+//cancelAppointment event
+socket.on("cancelAppointment", (canceledAppointment) => {
+  handleAppointmentChange(store, "cancel", canceledAppointment);
+});
+
+//deleteAppointment event
+socket.on("deleteAppointment", (deletedAppointment) => {
+  handleAppointmentChange(store, "delete", deletedAppointment);
+});
 
 const socketMiddleware =
   (store: MiddlewareAPI) =>

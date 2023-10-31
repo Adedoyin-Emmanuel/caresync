@@ -36,7 +36,7 @@ import { useDispatch } from "react-redux";
 
 const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const router = useRouter();
-  const { data, isLoading, isError } = useGetAppointmentByIdQuery(
+  const { data, isLoading, isError, refetch } = useGetAppointmentByIdQuery(
     params.appointmentId
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -67,6 +67,12 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
   useEffect(() => {
     if (data) {
+      const refetchData = async () => {
+        const response = await refetch();
+        return response;
+      };
+
+      refetchData().then((data) => {});
       dispatch(saveUserSpecificAppointmentInfo(data.data));
       setUserDetails(clientData?.data);
     }
@@ -139,7 +145,6 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
       });
 
       if (response?.data) {
-        console.log(response);
         toast.success(response.data.message);
         router.push("/hospital/appointments");
       }
@@ -154,7 +159,10 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
       <HospitalSidebarNav>
         {isLoading || cancelAppointmentLoading || deleteAppointmentLoading ? (
           <Loader />
-        ) : isError || cancelAppointmentError || deleteAppointmentError ? (
+        ) : isError ||
+          cancelAppointmentError ||
+          deleteAppointmentError ||
+          Object?.keys(userSpecificAppointmentInfo!).length === 0 ? (
           <section className="w-full flex items-center flex-col ">
             <Text className="my-5">Couldn't get appointment details 😥</Text>
             <section className="my-5">
