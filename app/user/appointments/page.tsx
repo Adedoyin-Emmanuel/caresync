@@ -47,12 +47,13 @@ const Appointment = () => {
              text-white rounded-full text-[12px]"
               >
                 <span className="text-[12px]">
-                  {data.data.length || totalAppointments > 100
+                  {userAppointmentInfo?.length! > 100
                     ? `${99}+`
-                    : data.data.length || totalAppointments}
+                    : userAppointmentInfo?.length!}
                 </span>
               </span>
-            </Text>g
+            </Text>
+            g
             <section
               className={`appointment-container items-center justify-center mx-auto gap-10 ${
                 totalAppointments !== 0 && "grid"
