@@ -46,7 +46,9 @@ const Appointment = () => {
              text-white rounded-full text-[12px]"
               >
                 <span className="text-[12px]">
-                  {totalAppointments > 100 ? `${99}+` : totalAppointments}
+                  {userAppointmentInfo?.length! > 100
+                    ? `${99}+`
+                    : userAppointmentInfo?.length!}
                 </span>
               </span>
             </Text>
