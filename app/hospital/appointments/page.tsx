@@ -6,10 +6,7 @@ import {
 import Loader from "@/app/components/Loader";
 import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
-import {
-  saveAppointmentInfo,
-  useGetHospitalAppointmentsQuery,
-} from "@/app/store/slices/user.slice";
+import { useGetHospitalAppointmentsQuery } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -54,8 +51,8 @@ const Appointment = () => {
             </Text>
 
             <section
-              className={`appointment-container items-center justify-center mx-auto gap-10 ${
-                userAppointmentInfo?.length !== 0 && "grid"
+              className={`appointment-container items-center justify-center w-full gap-10 ${
+                totalAppointments !== 0 && "flex flex-col md:grid"
               } sm:grid-cols-2 xl:grid-cols-3 my-8`}
             >
               {userAppointmentInfo?.length == 0 ? (

@@ -5,12 +5,12 @@ import {
 } from "@/app/store/slices/user.slice";
 import moment from "moment";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { LuTimer } from "react-icons/lu";
 import Button from "../Button";
 import Text from "../Text";
-import { useRouter } from "next/navigation";
 
 export interface AppointmentCardProps {
   className?: string;
@@ -41,7 +41,7 @@ const ApppointmentCard = ({
   endDate,
   _id,
   createdAt,
-  userType
+  userType,
 }: AppointmentCardProps) => {
   const startFormattedTime = formatDateTime(startDate);
   const endFormattedTime = formatDateTime(endDate);
@@ -49,15 +49,14 @@ const ApppointmentCard = ({
   const router = useRouter();
 
   const appointmentLink = `/${userType}/appointments/${_id}`;
-  
+
   const handleAppointmentClick = () => {
     router.push(appointmentLink);
-  }
-
+  };
 
   return (
     <section
-      className="appointment-one bg-gray-100  rounded p-3 md:w-96 cursor-pointer"
+      className="appointment-one bg-gray-100  rounded p-3 w-full md:w-96 cursor-pointer my-2"
       onClick={handleAppointmentClick}
     >
       <h3 className="text-[18px] capitalize font-bold my-2 flex items-center justify-between">
@@ -74,9 +73,7 @@ const ApppointmentCard = ({
 
       <Text className="text-sm my-3 md:my-2">{description}</Text>
 
-      <section
-        className="button-container my-2 mt-3"
-      >
+      <section className="button-container my-2 mt-3">
         <Link href={appointmentLink}>
           {" "}
           <Button>appointment details</Button>
