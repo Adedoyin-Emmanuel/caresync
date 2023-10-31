@@ -67,12 +67,12 @@ const Settings = () => {
       console.log(data);
       if (data.message) {
         toast.success(data.message);
+      } else {
+        toast.error("An error occured");
       }
     } else if (isError) {
-      toast.error("An error occured");
       console.log(data);
-    } else {
-      toast.error("An error occured, try again!");
+      toast.error("An error occured");
     }
   }, [data, skip]);
 
