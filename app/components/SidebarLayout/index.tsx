@@ -239,7 +239,7 @@ export const HospitalSidebarNav = ({
           </Link>
 
           <Link
-            href="/user/settings"
+            href="/hospital/settings"
             className={`dashboard cursor-pointer ${
               currentPath.includes("settings") ||
               currentPath.includes("profile") ||
@@ -275,6 +275,8 @@ export const HospitalSidebarNav = ({
           <br />
           <br />
           <br />
+          <br />
+          <br/>
         </section>
       </section>
 

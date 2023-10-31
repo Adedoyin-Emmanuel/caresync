@@ -1,19 +1,26 @@
 "use client";
 
+import Modal from "@/app/components/Modal";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
 import { logoutUser } from "@/app/store/slices/auth.slice";
-import { resetUser, useLogoutMutation } from "@/app/store/slices/user.slice";
+import {
+  resetUser,
+  useLogoutMutation,
+  useVerifyEmailQuery,
+} from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { BiSolidUser } from "react-icons/bi";
 import { BsPenFill, BsPeopleFill } from "react-icons/bs";
 import { FaKey } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import { MdVerified } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { BiSolidUser } from "react-icons/bi";
 
 const Settings = () => {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
@@ -21,6 +28,10 @@ const Settings = () => {
   if (!userDashboardInfo) router.push("/user/dashboard");
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
+  const [skip, setSkip] = useState<boolean>(true);
+  const email = userDashboardInfo?.email;
+  const { data, isError } = useVerifyEmailQuery(email, { skip });
+  const verificationRef = useRef<HTMLDialogElement | any>(null);
 
   const handleLogoutClick = async () => {
     const response: any = await logout({});
@@ -35,12 +46,35 @@ const Settings = () => {
 
   const handleNavigateToProfile = () => {
     router.push("/user/profile/me");
-  }
+  };
 
   const handleUpdateProfile = () => {
     router.push("/user/profile");
-  }
+  };
 
+  const handleVerificationModalClick = () => {
+    if (verificationRef && verificationRef.current) {
+      verificationRef?.current.showModal();
+    }
+  };
+
+  const handleSendVerficationMail = async () => {
+    setSkip(false);
+  };
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      if (data.message) {
+        toast.success(data.message);
+      }
+    } else if (isError) {
+      toast.error("An error occured");
+      console.log(data);
+    } else {
+      toast.error("An error occured, try again!");
+    }
+  }, [data, skip]);
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -83,7 +117,27 @@ const Settings = () => {
                 </section>
               </section>
             </section>
+            <Modal ref={verificationRef}>
+              <section className="confirm">
+                <h3 className="font-bold text-2xl capitalize text-accent">
+                  get verified
+                </h3>
+                <p className="my-3">
+                  A verification mail would be sent to your inbox, do well to
+                  check spam if you can't find the mail. Then follow the mail
+                  instructions.
+                </p>
 
+                <section className="mt-8 w-full flex items-end justify-end">
+                  <button
+                    className="bg-accent capitalize p-2 rounded-md text-white text-sm"
+                    onClick={handleSendVerficationMail}
+                  >
+                    send mail
+                  </button>
+                </section>
+              </section>
+            </Modal>
             <section className="action-container w-full flex flex-col items-center md:justify-center">
               <section
                 className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
@@ -98,7 +152,6 @@ const Settings = () => {
                   <Text className="text-sm">update your account info</Text>
                 </Link>
               </section>
-
               <section
                 className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
                 onClick={handleNavigateToProfile}
@@ -114,7 +167,19 @@ const Settings = () => {
                   </Link>
                 </section>
               </section>
+              <section
+                className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
+                onClick={handleVerificationModalClick}
+              >
+                <MdVerified className="h-5 w-5" />
 
+                <section className="details">
+                  <h3 className="account font-bold capitalize text-[16px]">
+                    verify account{" "}
+                  </h3>
+                  <Text className="text-sm">get your account verified</Text>
+                </section>
+              </section>
               <section className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12">
                 <BsPeopleFill className="h-5 w-5" />
 
@@ -122,10 +187,11 @@ const Settings = () => {
                   <h3 className="account font-bold capitalize text-[16px]">
                     Invite{" "}
                   </h3>
-                  <Text className="text-sm">invite your friends to caresync</Text>
+                  <Text className="text-sm">
+                    invite your friends to caresync
+                  </Text>
                 </section>
               </section>
-
               <section
                 className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
                 onClick={handleLogoutClick}

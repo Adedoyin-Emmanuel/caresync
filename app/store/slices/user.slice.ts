@@ -263,11 +263,12 @@ export const userApiCall = apiSlice.injectEndpoints({
     }),
 
     verifyEmail: builder.query({
-      query: (data) => ({
-        url: `${AUTH_URL}/verify-email`,
-        method: "GET",
-        data: data,
-      }),
+      query: (data) => {
+        return {
+          url: `${AUTH_URL}/verify-email?email=${data}`,
+          method: "GET",
+        };
+      },
     }),
 
     confirmEmail: builder.query({
