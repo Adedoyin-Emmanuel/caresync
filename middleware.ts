@@ -10,7 +10,6 @@ export function middleware(request: NextRequest) {
   const isPublicPath =
     path === "/auth/login" ||
     path === "/auth/signup" ||
-    path === "/auth/verifyemail" ||
     path === "/auth/forgotpassword" ||
     path === "/";
 
