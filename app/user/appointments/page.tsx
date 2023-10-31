@@ -25,7 +25,7 @@ const Appointment = () => {
 
   useEffect(() => {
     if (data) {
-      dispatch(saveAppointmentInfo(data?.data));
+      //dispatch(saveAppointmentInfo(data?.data));
       setTotalAppointments(data?.data.length);
     }
   }, [data]);
@@ -53,7 +53,7 @@ const Appointment = () => {
                 </span>
               </span>
             </Text>
-            g
+            
             <section
               className={`appointment-container items-center justify-center mx-auto gap-10 ${
                 totalAppointments !== 0 && "grid"

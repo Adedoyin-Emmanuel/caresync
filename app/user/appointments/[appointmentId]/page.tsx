@@ -40,12 +40,12 @@ import { useDispatch } from "react-redux";
 
 const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const router = useRouter();
-  const { data, isLoading, isError } = useGetAppointmentByIdQuery(
-    params.appointmentId
-  );
+  const { data, isLoading, isError, isSuccess, refetch } =
+    useGetAppointmentByIdQuery(params.appointmentId);
   const dispatch = useDispatch<AppDispatch>();
   const [hospitalDetails, setHospitalDetails] = useState<hospitalProps>();
   const { userSpecificAppointmentInfo } = useAppSelector((state) => state.user);
+
   const { userInfo } = useAppSelector((state) => state.auth);
   const [
     cancelAppointment,
@@ -59,6 +59,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const { data: hospitalData } = useGetHospitalByIdQuery(
     userSpecificAppointmentInfo?.hospitalId
   );
+
   const [updateAppointment, { isLoading: updateAppointmentLoading }] =
     useUpdateAppointmentMutation();
 
@@ -67,17 +68,18 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
   const cancelAppointmentModalRef = useRef<HTMLDialogElement | any>();
   const updateAppointmentModalRef = useRef<HTMLDialogElement | any>();
 
-  const [formData, setFormData]: any = useState({
-    title: userSpecificAppointmentInfo?.title,
-    description: userSpecificAppointmentInfo?.description,
-    status: userSpecificAppointmentInfo?.status,
-    startDate: formatDateToInputValue(userSpecificAppointmentInfo?.startDate!),
-    endDate: formatDateToInputValue(userSpecificAppointmentInfo?.endDate!),
-  });
-
   useEffect(() => {
-    if (data) {
+    if (isSuccess && data) {
+      console.log(data.data);
+
+      const refetchData = async () => {
+        const response = await refetch();
+        return response;
+      };
+
+      refetchData().then((data) => {});
       dispatch(saveUserSpecificAppointmentInfo(data.data));
+
       const dataToStore = {
         title: data.data.title,
         description: data.data.description,
@@ -85,10 +87,19 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
         startDate: formatDateToInputValue(data.data.startDate),
         endDate: formatDateToInputValue(data.data.endDate),
       };
+
       setFormData(dataToStore);
       setHospitalDetails(hospitalData?.data);
     }
   }, [data, hospitalData]);
+
+  const [formData, setFormData]: any = useState({
+    title: userSpecificAppointmentInfo?.title,
+    description: userSpecificAppointmentInfo?.description,
+    status: userSpecificAppointmentInfo?.status,
+    startDate: formatDateToInputValue(userSpecificAppointmentInfo?.startDate!),
+    endDate: formatDateToInputValue(userSpecificAppointmentInfo?.endDate!),
+  });
 
   const viewAllAppointments = () => {
     router.back();
@@ -207,7 +218,10 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
       <SidebarLayout>
         {isLoading || cancelAppointmentLoading || deleteAppointmentLoading ? (
           <Loader />
-        ) : isError || cancelAppointmentError || deleteAppointmentError ? (
+        ) : isError ||
+          cancelAppointmentError ||
+          deleteAppointmentError ||
+          Object?.keys(userSpecificAppointmentInfo!).length === 0 ? (
           <section className="w-full flex items-center flex-col ">
             <Text className="my-5">Couldn't get appointment details 😥</Text>
             <section className="my-5">

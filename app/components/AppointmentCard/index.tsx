@@ -95,8 +95,8 @@ const AppointmentLabel = ({
   userType,
 }: AppointmentLabelProps) => {
   let defaultStatus = (
-    <section className="status-badge text-black rounded bg-yellow-300 flex items-center justify-center h-5 w-20">
-      <Text className="text-[12px] font-bold">pending</Text>
+    <section className="status-badge text-black rounded bg-purple-300 flex items-center justify-center h-5 w-20">
+      <Text className="text-[12px] font-bold">loading</Text>
     </section>
   );
 
@@ -104,7 +104,11 @@ const AppointmentLabel = ({
 
   switch (status) {
     case "pending":
-      defaultStatus = defaultStatus;
+      defaultStatus = (
+        <section className="status-badge text-black rounded bg-yellow-300 flex items-center justify-center h-5 w-20">
+          <Text className="text-[12px] font-bold">pending</Text>
+        </section>
+      );
       break;
     case "success":
       defaultStatus = (

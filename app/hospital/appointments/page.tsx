@@ -24,7 +24,7 @@ const Appointment = () => {
 
   useEffect(() => {
     if (data) {
-      dispatch(saveAppointmentInfo(data?.data));
+      //dispatch(saveAppointmentInfo(data?.data));
       setTotalAppointments(data?.data.length);
     }
   }, [data]);
@@ -55,10 +55,10 @@ const Appointment = () => {
 
             <section
               className={`appointment-container items-center justify-center mx-auto gap-10 ${
-                totalAppointments !== 0 && "grid"
+                userAppointmentInfo?.length !== 0 && "grid"
               } sm:grid-cols-2 xl:grid-cols-3 my-8`}
             >
-              {totalAppointments == 0 ? (
+              {userAppointmentInfo?.length == 0 ? (
                 <div className="w-full mx-auto  p-4">
                   <Text className="text-center">No appointment found!</Text>
                 </div>
