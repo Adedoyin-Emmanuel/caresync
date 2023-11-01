@@ -19,7 +19,7 @@ import {
   GridLayout,
   ParticipantTile,
 } from "@livekit/components-react";
-import Loader from "@/app/components/Loader";
+import Loader, {LoaderSmall} from "@/app/components/Loader";
 import Text from "@/app/components/Text";
 import Button from "@/app/components/Button";
 
@@ -36,7 +36,11 @@ const StartAppointment = () => {
   const { data, isLoading, isError, refetch } = useGetAppointmentByIdQuery(appointmentId);
   const { userDashboardInfo, userSpecificAppointmentInfo, hospitalSearchProfileInfo } = useAppSelector((state) => state.user);
   const {data: hospitalDetails} = useGetHospitalByIdQuery(userSpecificAppointmentInfo?.hospitalId!);
-
+  const [roomToken, setRoomToken] = useState();
+  const [createAppointmentRoom, { isLoading: createAppointmentRoomLoading }] =
+   useCreateAppointmentRoomMutation();
+ 
+  
   useEffect(() => {
     refetch();
     if (data && hospitalDetails) {
@@ -47,21 +51,33 @@ const StartAppointment = () => {
     }
   }, [appointmentId, data, hospitalDetails]);
 
+
+
   const dataToSend = {
     participantName: userDashboardInfo?.name,
     roomName: userSpecificAppointmentInfo?._id,
   };
 
-  const { refetch: refetchToken } = useGetAppointmentTokenQuery(dataToSend, {
+  const { data: tokenData, refetch: refetchToken, isLoading:tokenDataLoading, isError: tokenDataError } = useGetAppointmentTokenQuery(dataToSend, {
     skip,
   });
 
- const [createAppointmentRoom, {isLoading: createAppointmentRoomLoading}] = useCreateAppointmentRoomMutation();
 
- const viewAllAppointments = () => {
-   router.push("/user/appointments")
- };
+  
+  useEffect(() => {
+    if (tokenData) {
+      console.log(tokenData);
+    }
+  }, [skip]);
 
+  
+  const handleJoinRoom = () => {
+    setSkip(false);
+  }
+
+  const viewAllAppointments = () => {
+    router.push("/user/appointments");
+  };
   return (
     <div className="w-screen h-screen bg-zinc-50">
       {isLoading ? (
@@ -75,16 +91,31 @@ const StartAppointment = () => {
         </section>
       ) : (
         <SidebarLayout>
-          <section className="create-room">
-            <h3 className="font-bold text-2xl capitalize my-5">
-              appointment with{" "}
-              <span className="text-accent">{hospitalSearchProfileInfo?.clinicName}</span>
-                </h3>
+          {tokenDataLoading ? (
+            <LoaderSmall />
+          ) : tokenDataError ? (
+            <section className="w-full flex items-center flex-col ">
+              <Text className="my-5">Couldn't join room 😥</Text>
+              <section className="my-5 w-full md:w-1/4 mx-auto">
+                <Button onClick={viewAllAppointments}>All appointments</Button>
+              </section>
+            </section>
+          ) : (
+            <section className="create-room">
+              <h3 className="font-bold text-2xl capitalize my-5">
+                appointment with{" "}
+                <span className="text-accent">
+                  {hospitalSearchProfileInfo?.clinicName}
+                </span>
+              </h3>
 
-                <section className="button-container md:w-80 mx-auto my-5">
-                  <Button>join meeting room</Button>
-                </section>
-          </section>
+              <section className="button-container md:w-80 mx-auto my-5">
+                <Button onClick={handleJoinRoom} disabled={tokenDataLoading}>
+                  join meeting room
+                </Button>
+              </section>
+            </section>
+          )}
           <section className="meeting-area"></section>
         </SidebarLayout>
       )}
