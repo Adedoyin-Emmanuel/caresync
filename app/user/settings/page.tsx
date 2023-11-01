@@ -176,7 +176,7 @@ const Settings = () => {
                   </section>
                 </section>
                 <section
-                  className="account-details my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
+                  className="account-verify my-5 flex items-center transition-colors duration-100 ease-linear hover:bg-purple-100 rounded cursor-pointer gap-x-10 w-full p-2 md:w-6/12"
                   onClick={handleVerificationModalClick}
                 >
                   <MdVerified className="h-5 w-5" />

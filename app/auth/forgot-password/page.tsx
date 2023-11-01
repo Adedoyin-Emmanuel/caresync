@@ -30,7 +30,7 @@ const ForgotPassword = () => {
       const response: any = await forgotPassword(formData);
       if (response.data) {
           toast.success(response.data.message);
-          router.push("/auth/reset-password");
+          
       } else {
         toast.error(response.error.data.message);
       }
