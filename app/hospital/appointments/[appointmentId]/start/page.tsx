@@ -15,6 +15,7 @@ import { LiveKitRoom, VideoConference } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
 const StartAppointment = () => {
@@ -68,13 +69,21 @@ const StartAppointment = () => {
     }
   }, [skip, tokenData]);
 
-  const handleJoinRoom = () => {
-    setSkip(false);
-    setShowButton(false);
-  };
-
   const viewAllAppointments = () => {
     router.push("/hospital/appointments");
+  };
+
+  const handleJoinRoom = () => {
+    if (userSpecificAppointmentInfo?.status === "success") {
+      setSkip(false);
+      setShowButton(false);
+    } else if (userSpecificAppointmentInfo?.status === "failed") {
+      toast.error("Cannot start a failed appointment!");
+      viewAllAppointments();
+    } else {
+      toast.error("Cannot start a pending appointment");
+      viewAllAppointments();
+    }
   };
 
   return (
