@@ -34,14 +34,14 @@ const StartAppointment = () => {
   const [skip, setSkip] = useState<boolean>(true);
 
   const { data, isLoading, isError, refetch } = useGetAppointmentByIdQuery(appointmentId);
-  const { userDashboardInfo, userSpecificAppointmentInfo, hospitalSearchInfo } = useAppSelector((state) => state.user);
+  const { userDashboardInfo, userSpecificAppointmentInfo, hospitalSearchProfileInfo } = useAppSelector((state) => state.user);
   const {data: hospitalDetails} = useGetHospitalByIdQuery(userSpecificAppointmentInfo?.hospitalId!);
 
   useEffect(() => {
     refetch();
-    if (data) {
-      console.log(data.data);
-      console.log(hospitalDetails.data);
+    if (data && hospitalDetails) {
+      console.log(data?.data);
+      console.log(hospitalDetails?.data);
       dispatch(saveUserSpecificAppointmentInfo(data.data));
       dispatch(saveHospitalSearchProfileInfo(hospitalDetails.data));
     }
@@ -76,16 +76,16 @@ const StartAppointment = () => {
       ) : (
         <SidebarLayout>
           <section className="create-room">
-            <h3 className="font-bold text-2xl  capitalize">
-              appointment with {hospitalDetails}
+            <h3 className="font-bold text-2xl capitalize my-5">
+              appointment with{" "}
+              <span className="text-accent">{hospitalSearchProfileInfo?.clinicName}</span>
                 </h3>
-                
 
-                <section className="meeting-area">
-
-
+                <section className="button-container md:w-80 mx-auto my-5">
+                  <Button>join meeting room</Button>
                 </section>
           </section>
+          <section className="meeting-area"></section>
         </SidebarLayout>
       )}
     </div>
