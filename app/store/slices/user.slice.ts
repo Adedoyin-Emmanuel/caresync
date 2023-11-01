@@ -140,7 +140,6 @@ const userSlice = createSlice({
       localStorage.setItem("userDashboardInfo", JSON.stringify(action.payload));
     },
 
-
     // all appointment information this is for not specific for a user or hospital
     saveAppointmentInfo: (state, action) => {
       state.userAppointmentInfo = action.payload;
@@ -271,17 +270,17 @@ export const userApiCall = apiSlice.injectEndpoints({
       },
     }),
 
-    confirmEmail: builder.query({
+    forgotPassword: builder.mutation({
       query: (data) => ({
-        url: `${AUTH_URL}/confirm-email`,
-        method: "GET",
+        url: `${AUTH_URL}/forgot-password`,
+        method: "POST",
         data: data,
       }),
     }),
 
-    forgotPassword: builder.mutation({
+    resetPassword: builder.mutation({
       query: (data) => ({
-        url: `${AUTH_URL}/forgot-password`,
+        url: `${AUTH_URL}/reset-password`,
         method: "POST",
         data: data,
       }),
@@ -525,11 +524,16 @@ export const userApiCall = apiSlice.injectEndpoints({
 export const {
   useLoginMutation,
   useLogoutMutation,
+  
   useVerifyEmailQuery,
-  useConfirmEmailQuery,
   useForgotPasswordMutation,
+  useResetPasswordMutation,
+
+
   useRegisterUserMutation,
   useRegisterHospitalMutation,
+
+
   useUpdateUserMutation,
   useUpdateHospitalMutation,
   useGetAllUsersQuery,

@@ -3,21 +3,15 @@ import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
 import Text from "@/app/components/Text";
-import { loginUser } from "@/app/store/slices/auth.slice";
-import { useLoginMutation } from "@/app/store/slices/user.slice";
-import { AppDispatch } from "@/app/store/store";
-import jwt from "jsonwebtoken";
+import { useForgotPasswordMutation } from "@/app/store/slices/user.slice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import Axios from "@/app/api/axios";
 
-const Login = () => {
+const ForgotPassword = () => {
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
     userType: "user",
   });
 
@@ -26,35 +20,19 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch<AppDispatch>();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await login(formData).unwrap();
-      if (response) {
-        toast.success(response.message);
-        const token = response.data.accessToken;
-        const jwtPayload: any = jwt.decode(token);
-        const tempData = jwtPayload;
-        const { role } = tempData;
-        const { accessToken, ...data } = response.data;
-
-        const userData = { ...data, role };
-
-        dispatch(loginUser(userData));
-
-        //route the user to their respective page
-        if (userData.role === "user") {
-          router.push("/user/dashboard");
-        } else if (userData.role === "hospital") {
-          router.push("/hospital/dashboard");
-        } else {
-          toast.error("Invalid token, please login!");
-          router.push("/auth/login");
-        }
+      //
+      const response: any = await forgotPassword(formData);
+      if (response.data) {
+          toast.success(response.data.message);
+          
+      } else {
+        toast.error(response.error.data.message);
       }
     } catch (error: any) {
       toast.error(error?.data?.message || error.error || error?.data);
@@ -66,12 +44,12 @@ const Login = () => {
       <form
         className="w-11/12 md:w-1/2 xl:w-1/4"
         onSubmit={(e) => {
-          handleLogin(e);
+          handleForgotPassword(e);
         }}
       >
         <section className="header-section my-8">
           <h3 className="text-4xl capitalize font-bold text-secondary">
-            Login
+            forgot password
           </h3>
           <Text>bridging health with technology</Text>
         </section>
@@ -88,23 +66,9 @@ const Login = () => {
             onChange={handleInputChange}
           />
         </section>
-
-        <section className="my-4 mb-5">
-          <label htmlFor="email" className="text-md block my-2">
-            Password
-          </label>
-          <Input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-        </section>
-
         <section className="my-4 mb-5">
           <label htmlFor="signupAs" className="text-md block my-2">
-            Login As
+            User Type
           </label>
           <select
             className="select border-2 border-gray-300 focus:outline-none rounded-md w-full h-16"
@@ -118,23 +82,17 @@ const Login = () => {
         </section>
 
         <section className="my-4 mb-5 w-full">
-          <Button disabled={isLoading}> Login</Button>
+          <Button disabled={isLoading}>send email</Button>
         </section>
 
         <section>
           <Text className="inline">
-            no account?
+            don't have an account?
             <Link
               className="capitalize text-secondary px-1"
               href={"/auth/signup"}
             >
               create account
-            </Link>
-            <Link
-              className="capitalize text-secondary px-1"
-              href={"/auth/forgot-password"}
-            >
-              Forgot Password
             </Link>
           </Text>
         </section>
@@ -143,4 +101,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

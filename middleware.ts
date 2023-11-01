@@ -10,9 +10,9 @@ export function middleware(request: NextRequest) {
   const isPublicPath =
     path === "/auth/login" ||
     path === "/auth/signup" ||
-    path === "/auth/verifyemail" ||
-    path === "/auth/forgotpassword" ||
-    path === "/";
+    path === "/auth/forgot-password" ||
+    path === "/auth/verified" ||
+    path === "/auth/reset-password";
 
   const token = request.cookies.get("refreshToken")?.value || null;
   const tokenData: any = token ? jwt.decode(token) : null;
