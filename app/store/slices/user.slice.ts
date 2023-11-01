@@ -532,21 +532,9 @@ export const userApiCall = apiSlice.injectEndpoints({
       },
     }),
 
-    createAppointmentRoom: builder.mutation({
-      query: (data) => ({
-        url: `${APPOINTMENTS_URL}/room`,
-        method: "POST",
-        data: data,
-      }),
-    }),
 
-    deleteAppointmentRoom: builder.mutation({
-      query: (data) => ({
-        url: `${APPOINTMENTS_URL}/room`,
-        method: "DELETE",
-        data: data,
-      }),
-    }),
+
+ 
   }),
 });
 
@@ -589,8 +577,6 @@ export const {
   useDeleteAppointmentMutation,
 
   useGetAppointmentTokenQuery,
-  useCreateAppointmentRoomMutation,
-  useDeleteAppointmentRoomMutation,
 } = userApiCall;
 export const {
   saveDashboardInfo,
