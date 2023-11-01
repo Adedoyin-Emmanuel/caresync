@@ -16,6 +16,7 @@ import "@livekit/components-styles";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 const StartAppointment = () => {
   const pathName = usePathname();
@@ -67,14 +68,24 @@ const StartAppointment = () => {
     }
   }, [skip, tokenData]);
 
-  const handleJoinRoom = () => {
-    setSkip(false);
-    setShowButton(false);
-  };
-
   const viewAllAppointments = () => {
     router.push("/user/appointments");
   };
+
+  const handleJoinRoom = () => {
+     if (userSpecificAppointmentInfo?.status === "success") {
+       setSkip(false);
+       setShowButton(false);
+     } else if (userSpecificAppointmentInfo?.status === "failed") {
+       toast.error("Cannot start a failed appointment!");
+       viewAllAppointments();
+     } else {
+       toast.error("Cannot start a pending appointment");
+       viewAllAppointments();
+     }
+  };
+
+  
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
