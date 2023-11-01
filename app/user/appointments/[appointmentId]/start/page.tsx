@@ -1,35 +1,67 @@
 "use client";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import {
-  saveAppointmentInfo,
-  useGetUserAppointmentsQuery,
+  useGetAppointmentByIdQuery,
+  useGetAppointmentTokenQuery,
+  useCreateAppointmentMutation,
+  saveUserSpecificAppointmentInfo
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { usePathname, useRouter } from "next/navigation";
+import "@livekit/components-styles";
+import {
+  LiveKitRoom,
+  VideoConference,
+  GridLayout,
+  ParticipantTile,
+} from "@livekit/components-react";
+import Loader from "@/app/components/Loader";
+import Text from "@/app/components/Text";
+import Button from "@/app/components/Button";
 
 const StartAppointment = () => {
-  const { userAppointmentInfo } = useAppSelector((state) => state.user);
-  const { userInfo } = useAppSelector((state) => state.auth);
+  const pathName = usePathname();
+  const router = useRouter();
+  const serverUrl = "wss://caresync-y6vac96e.livekit.cloud";
+  const urlParts = pathName.split("/");
+  let appointmentId = urlParts[3];
 
-  const { data, isLoading } = useGetUserAppointmentsQuery(userInfo?._id);
-  const [totalAppointments, setTotalAppointments] = useState<number>(0);
   const dispatch = useDispatch<AppDispatch>();
 
+  const { data, isLoading, isError, refetch } = useGetAppointmentByIdQuery(appointmentId);
+
   useEffect(() => {
+    refetch();
     if (data) {
-      dispatch(saveAppointmentInfo(data?.data));
-      setTotalAppointments(data?.data.length);
+      console.log(data.data);
+      dispatch(saveUserSpecificAppointmentInfo(data.data));
     }
-  }, [data]);
+  }, [appointmentId, data]);
+
+ const viewAllAppointments = () => {
+   router.push("/user/appointments")
+ };
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      <SidebarLayout>
-        <h3 className="font-bold text-2xl  capitalize">
-          hello we want to start the appointment{" "}
-        </h3>
-      </SidebarLayout>
+      {isLoading ? (
+        <Loader />
+      ) : isError ? (
+        <section className="w-full flex items-center flex-col ">
+          <Text className="my-5">Couldn't get appointment details 😥</Text>
+          <section className="my-5">
+            <Button onClick={viewAllAppointments}>All appointments</Button>
+          </section>
+        </section>
+      ) : (
+        <SidebarLayout>
+          <h3 className="font-bold text-2xl  capitalize">
+            appointment id is {appointmentId}
+          </h3>
+        </SidebarLayout>
+      )}
     </div>
   );
 };
