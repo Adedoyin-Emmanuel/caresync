@@ -520,14 +520,16 @@ export const userApiCall = apiSlice.injectEndpoints({
     }),
 
     getAppointmentToken: builder.query({
-      query: (data) => ({
-        url: `${APPOINTMENTS_URL}/generate-token`,
-        method: "GET",
-        params: {
-          participantName: data.name,
-          roomName: data.roomName,
-        },
-      }),
+      query: (data) => {
+        return {
+          url: `${APPOINTMENTS_URL}/generate-token`,
+          method: "GET",
+          params: {
+            participantName: data.participantName,
+            roomName: data.roomName,
+          },
+        };
+      },
     }),
 
     createAppointmentRoom: builder.mutation({
@@ -538,13 +540,12 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
     }),
 
-
     deleteAppointmentRoom: builder.mutation({
       query: (data) => ({
         url: `${APPOINTMENTS_URL}/room`,
-        method: 'DELETE',
-        data: data
-      })
+        method: "DELETE",
+        data: data,
+      }),
     }),
   }),
 });
@@ -587,10 +588,9 @@ export const {
   useApproveAppointmentMutation,
   useDeleteAppointmentMutation,
 
-
   useGetAppointmentTokenQuery,
   useCreateAppointmentRoomMutation,
-  useDeleteAppointmentRoomMutation
+  useDeleteAppointmentRoomMutation,
 } = userApiCall;
 export const {
   saveDashboardInfo,
