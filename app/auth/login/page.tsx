@@ -123,12 +123,18 @@ const Login = () => {
 
         <section>
           <Text className="inline">
-            don't have an account?
+            no account?
             <Link
               className="capitalize text-secondary px-1"
               href={"/auth/signup"}
             >
               create account
+            </Link>
+            <Link
+              className="capitalize text-secondary px-1"
+              href={"/auth/forgot-password"}
+            >
+              Forgot Password
             </Link>
           </Text>
         </section>

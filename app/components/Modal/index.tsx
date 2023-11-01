@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useRef,
+} from "react";
 
 interface ModalProps {
   className?: string;
@@ -7,6 +12,7 @@ interface ModalProps {
 
 export interface ModalRef {
   showModal: () => void;
+  closeModal: () => void;
 }
 
 const Modal = forwardRef<ModalRef, ModalProps>(
@@ -17,21 +23,26 @@ const Modal = forwardRef<ModalRef, ModalProps>(
       setIsOpen(true);
     };
 
-    useImperativeHandle(ref, () => ({
-      showModal,
-    }));
-
     const closeModal = () => {
       setIsOpen(false);
     };
 
+    useImperativeHandle(ref, () => ({
+      showModal,
+      closeModal,
+    }));
+
     return (
-      <dialog id="profile_modal" className={`modal ${className}`} open={isOpen}>
+      <dialog
+        id={`modal_${ref}`}
+        className={`modal ${className}`}
+        open={isOpen}
+      >
         <div className="modal-box">
           <form method="dialog" className="modal-backdrop">
             <button
               onClick={closeModal}
-              className="btn btn-sm btn-circle shadow-none border-none outline-none bg-gray-100 hover:bg-red-400 hover:text-white duration-100 transition-colors ease-linear absolute right-2 top-2"
+              className="btn btn-sm btn-circle shadow-none border-none outline-none bg-gray-100 hover:bg-red-400 hover-text-white duration-100 transition-colors ease-linear absolute right-2 top-2"
             >
               ✕
             </button>

@@ -211,10 +211,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
           <div className="w-10 rounded-full" onClick={toggleProfileDropdown}>
             <img
               className=""
-              src={
-                userInfo?.profilePicture ||
-                `https://api.dicebear.com/7.x/micah/svg?seed=${userInfo?.username}}`
-              }
+              src={userInfo?.profilePicture}
               alt="user profile image"
             />
           </div>
@@ -438,11 +435,8 @@ export const HospitalAppHeader = ({
           <div className="w-10 rounded-full" onClick={toggleProfileDropdown}>
             <img
               className=""
-              src={
-                userInfo?.profilePicture ||
-                `https://api.dicebear.com/7.x/micah/svg?seed=${userInfo.username}}`
-              }
-              alt="user profile image"
+              src={userInfo?.profilePicture}
+              alt="hospital profile image"
             />
           </div>
 
