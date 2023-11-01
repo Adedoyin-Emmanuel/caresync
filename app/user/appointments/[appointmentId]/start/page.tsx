@@ -3,8 +3,10 @@ import SidebarLayout from "@/app/components/SidebarLayout";
 import {
   useGetAppointmentByIdQuery,
   useGetAppointmentTokenQuery,
-  useCreateAppointmentMutation,
-  saveUserSpecificAppointmentInfo
+  useCreateAppointmentRoomMutation,
+  saveUserSpecificAppointmentInfo,
+  useGetHospitalByIdQuery,
+  saveHospitalSearchProfileInfo,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect, useState } from "react";
@@ -29,16 +31,32 @@ const StartAppointment = () => {
   let appointmentId = urlParts[3];
 
   const dispatch = useDispatch<AppDispatch>();
+  const [skip, setSkip] = useState<boolean>(true);
 
   const { data, isLoading, isError, refetch } = useGetAppointmentByIdQuery(appointmentId);
+  const { userDashboardInfo, userSpecificAppointmentInfo, hospitalSearchInfo } = useAppSelector((state) => state.user);
+  const {data: hospitalDetails} = useGetHospitalByIdQuery(userSpecificAppointmentInfo?.hospitalId!);
 
   useEffect(() => {
     refetch();
     if (data) {
       console.log(data.data);
+      console.log(hospitalDetails.data);
       dispatch(saveUserSpecificAppointmentInfo(data.data));
+      dispatch(saveHospitalSearchProfileInfo(hospitalDetails.data));
     }
-  }, [appointmentId, data]);
+  }, [appointmentId, data, hospitalDetails]);
+
+  const dataToSend = {
+    participantName: userDashboardInfo?.name,
+    roomName: userSpecificAppointmentInfo?._id,
+  };
+
+  const { refetch: refetchToken } = useGetAppointmentTokenQuery(dataToSend, {
+    skip,
+  });
+
+ const [createAppointmentRoom, {isLoading: createAppointmentRoomLoading}] = useCreateAppointmentRoomMutation();
 
  const viewAllAppointments = () => {
    router.push("/user/appointments")
@@ -57,9 +75,17 @@ const StartAppointment = () => {
         </section>
       ) : (
         <SidebarLayout>
-          <h3 className="font-bold text-2xl  capitalize">
-            appointment id is {appointmentId}
-          </h3>
+          <section className="create-room">
+            <h3 className="font-bold text-2xl  capitalize">
+              appointment with {hospitalDetails}
+                </h3>
+                
+
+                <section className="meeting-area">
+
+
+                </section>
+          </section>
         </SidebarLayout>
       )}
     </div>
