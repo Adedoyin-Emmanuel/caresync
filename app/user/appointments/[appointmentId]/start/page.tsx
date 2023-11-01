@@ -58,6 +58,9 @@ const StartAppointment = () => {
     roomName: userSpecificAppointmentInfo?._id,
   };
 
+
+  console.log(dataToSend);
+
   const { data: tokenData, refetch: refetchToken, isLoading:tokenDataLoading, isError: tokenDataError } = useGetAppointmentTokenQuery(dataToSend, {
     skip,
   });
@@ -85,7 +88,7 @@ const StartAppointment = () => {
       ) : isError ? (
         <section className="w-full flex items-center flex-col ">
           <Text className="my-5">Couldn't get appointment details 😥</Text>
-          <section className="my-5">
+          <section className="my-5 w-full md:w-1/4 mx-auto">
             <Button onClick={viewAllAppointments}>All appointments</Button>
           </section>
         </section>

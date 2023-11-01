@@ -524,7 +524,7 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${APPOINTMENTS_URL}/generate-token`,
         method: "GET",
         params: {
-          participantName: data.name,
+          participantName: data.participantName,
           roomName: data.roomName,
         },
       }),
@@ -538,13 +538,12 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
     }),
 
-
     deleteAppointmentRoom: builder.mutation({
       query: (data) => ({
         url: `${APPOINTMENTS_URL}/room`,
-        method: 'DELETE',
-        data: data
-      })
+        method: "DELETE",
+        data: data,
+      }),
     }),
   }),
 });
