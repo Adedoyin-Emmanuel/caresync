@@ -518,21 +518,47 @@ export const userApiCall = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["User", "Hospital"],
     }),
+
+    getAppointmentToken: builder.query({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/generate-token`,
+        method: "GET",
+        params: {
+          participantName: data.name,
+          roomName: data.roomName,
+        },
+      }),
+    }),
+
+    createAppointmentRoom: builder.mutation({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/room`,
+        method: "POST",
+        data: data,
+      }),
+    }),
+
+
+    deleteAppointmentRoom: builder.mutation({
+      query: (data) => ({
+        url: `${APPOINTMENTS_URL}/room`,
+        method: 'DELETE',
+        data: data
+      })
+    }),
   }),
 });
 
 export const {
   useLoginMutation,
   useLogoutMutation,
-  
+
   useVerifyEmailQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,
 
-
   useRegisterUserMutation,
   useRegisterHospitalMutation,
-
 
   useUpdateUserMutation,
   useUpdateHospitalMutation,
@@ -560,6 +586,11 @@ export const {
   useCancelAppointmentMutation,
   useApproveAppointmentMutation,
   useDeleteAppointmentMutation,
+
+
+  useGetAppointmentTokenQuery,
+  useCreateAppointmentRoomMutation,
+  useDeleteAppointmentRoomMutation
 } = userApiCall;
 export const {
   saveDashboardInfo,
