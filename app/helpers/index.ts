@@ -82,3 +82,13 @@ export function formatDateToInputValue(isoDateString: Date) {
 
   return formattedDate;
 }
+
+
+
+export function isAppointmentValid(startDate: Date, endDate: Date): boolean {
+  const currentTimestamp: number = Date.now();
+  return (
+    startDate.getTime() <= currentTimestamp &&
+    currentTimestamp <= endDate.getTime()
+  );
+}

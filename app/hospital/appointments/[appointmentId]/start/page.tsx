@@ -17,6 +17,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { isAppointmentValid } from "@/app/helpers";
+
 
 const StartAppointment = () => {
   const pathName = usePathname();
@@ -75,8 +77,19 @@ const StartAppointment = () => {
 
   const handleJoinRoom = () => {
     if (userSpecificAppointmentInfo?.status === "success") {
-      setSkip(false);
-      setShowButton(false);
+      // check if appointment is valid
+      if (
+        isAppointmentValid(
+          userSpecificAppointmentInfo?.startDate!,
+          userSpecificAppointmentInfo?.endDate!
+        )
+      ) {
+        setSkip(false);
+        setShowButton(false);
+      } else {
+        toast.error("Appointment expired!");
+        viewAllAppointments();
+      }
     } else if (userSpecificAppointmentInfo?.status === "failed") {
       toast.error("Cannot start a failed appointment!");
       viewAllAppointments();
