@@ -108,11 +108,12 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
       if (response?.data) {
         toast.success(response.data.message);
+        approveAppointmentModalRef?.current.closeModal();
+        router.push("/hospital/appointments");
 
         /* we could decide to route the hospital to the meeting page
         I guess that makes more sense, I would figure that later*/
 
-        //router.push("/hospital/appointments");
       } else {
         toast.error(response.error.data.message);
       }
