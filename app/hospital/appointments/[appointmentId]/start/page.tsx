@@ -17,7 +17,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { isAppointmentValid } from "@/app/helpers";
+import { isValidAppointment } from "@/app/helpers";
 
 
 const StartAppointment = () => {
@@ -79,7 +79,7 @@ const StartAppointment = () => {
     if (userSpecificAppointmentInfo?.status === "success") {
       // check if appointment is valid
       if (
-        isAppointmentValid(
+        isValidAppointment(
           userSpecificAppointmentInfo?.startDate!,
           userSpecificAppointmentInfo?.endDate!
         )
@@ -87,7 +87,7 @@ const StartAppointment = () => {
         setSkip(false);
         setShowButton(false);
       } else {
-        toast.error("Appointment expired!");
+        toast.error("Appointment is not valid!");
         viewAllAppointments();
       }
     } else if (userSpecificAppointmentInfo?.status === "failed") {

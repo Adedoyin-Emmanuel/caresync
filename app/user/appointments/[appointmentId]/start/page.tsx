@@ -87,6 +87,7 @@ const StartAppointment = () => {
         setShowButton(false);
       } else {
         toast.error("Appointment is not valid!");
+        viewAllAppointments();
       }
     } else if (userSpecificAppointmentInfo?.status === "failed") {
       toast.error("Cannot start a failed appointment!");
