@@ -148,7 +148,7 @@ const AppointmentLabel = ({
         <section className="other-content w-11/12 flex items-center justify-around">
           <Text className="text-sm">{formattedDate.formattedDate}</Text>
           <Text className="text-sm font-bold" noCapitalize={true}>
-            @{attenderName.length > 12 ? attenderName.substring(0, 12) + "..." : attenderName }
+            @{attenderName?.length > 12 ? attenderName?.substring(0, 12) + "..." : attenderName }
           </Text>
           <section className="status-badge text-black rounded bg-green-300 flex items-center justify-center h-5 w-20">
             {defaultStatus}
