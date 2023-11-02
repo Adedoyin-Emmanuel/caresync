@@ -77,6 +77,11 @@ socket.on("deleteAppointment", (deletedAppointment) => {
   handleAppointmentChange(store, "delete", deletedAppointment);
 });
 
+
+socket.on("approveAppointment", (approvedAppointment) =>{
+  handleAppointmentChange(store, "approve", approvedAppointment);
+});
+
 const socketMiddleware =
   (store: MiddlewareAPI) =>
   (next: Dispatch<AnyAction>) =>
