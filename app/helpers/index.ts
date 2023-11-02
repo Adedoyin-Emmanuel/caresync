@@ -1,3 +1,5 @@
+import { AnyMxRecord } from "dns";
+
 export function formatDateTime(dateTimeString: Date) {
   const date = new Date(dateTimeString);
 
@@ -83,12 +85,29 @@ export function formatDateToInputValue(isoDateString: Date) {
   return formattedDate;
 }
 
+export function toJavaScriptDate(mongodbTimestamp: any) {
+  // Parse the MongoDB timestamp into a JavaScript Date object.
+  const date = new Date(mongodbTimestamp);
+
+  return date;
+}
+
+export function isValidAppointment(startDate:any, endDate:any) {
+  // Convert the MongoDB timestamps to JavaScript Date objects.
+  const startDateJs = toJavaScriptDate(startDate);
+  const endDateJs = toJavaScriptDate(endDate);
+  
 
 
-export function isAppointmentValid(startDate: Date, endDate: Date): boolean {
-  const currentTimestamp: number = Date.now();
-  return (
-    startDate.getTime() <= currentTimestamp &&
-    currentTimestamp <= endDate.getTime()
-  );
+  if (startDateJs > endDateJs) {
+    return false;
+  }
+
+  // Check if the start date and end date are in the future.
+  const now = new Date();
+  if (startDateJs < now || endDateJs < now) {
+    return false;
+  }
+
+  return true;
 }

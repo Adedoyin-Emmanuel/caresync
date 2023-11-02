@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Button from "@/app/components/Button";
 import Loader, { LoaderSmall } from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
-import { isAppointmentValid } from "@/app/helpers";
+import { isValidAppointment } from "@/app/helpers";
 import {
   saveHospitalSearchProfileInfo,
   saveUserSpecificAppointmentInfo,
@@ -77,16 +78,15 @@ const StartAppointment = () => {
     if (userSpecificAppointmentInfo?.status === "success") {
       // check if appointment is valid
       if (
-        isAppointmentValid(
-          userSpecificAppointmentInfo?.startDate!,
-          userSpecificAppointmentInfo?.endDate!
+        isValidAppointment(
+          userSpecificAppointmentInfo?.startDate,
+          userSpecificAppointmentInfo?.endDate
         )
       ) {
         setSkip(false);
         setShowButton(false);
       } else {
-        toast.error("Appointment expired!");
-        viewAllAppointments();
+        toast.error("Appointment is not valid!");
       }
     } else if (userSpecificAppointmentInfo?.status === "failed") {
       toast.error("Cannot start a failed appointment!");
