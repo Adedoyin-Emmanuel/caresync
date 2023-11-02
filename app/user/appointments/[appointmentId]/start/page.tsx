@@ -3,6 +3,7 @@ import Button from "@/app/components/Button";
 import Loader, { LoaderSmall } from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
+import { isAppointmentValid } from "@/app/helpers";
 import {
   saveHospitalSearchProfileInfo,
   saveUserSpecificAppointmentInfo,
@@ -15,8 +16,8 @@ import { LiveKitRoom, VideoConference } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const StartAppointment = () => {
   const pathName = usePathname();
@@ -73,19 +74,28 @@ const StartAppointment = () => {
   };
 
   const handleJoinRoom = () => {
-     if (userSpecificAppointmentInfo?.status === "success") {
-       setSkip(false);
-       setShowButton(false);
-     } else if (userSpecificAppointmentInfo?.status === "failed") {
-       toast.error("Cannot start a failed appointment!");
-       viewAllAppointments();
-     } else {
-       toast.error("Cannot start a pending appointment");
-       viewAllAppointments();
-     }
+    if (userSpecificAppointmentInfo?.status === "success") {
+      // check if appointment is valid
+      if (
+        isAppointmentValid(
+          userSpecificAppointmentInfo?.startDate!,
+          userSpecificAppointmentInfo?.endDate!
+        )
+      ) {
+        setSkip(false);
+        setShowButton(false);
+      } else {
+        toast.error("Appointment expired!");
+        viewAllAppointments();
+      }
+    } else if (userSpecificAppointmentInfo?.status === "failed") {
+      toast.error("Cannot start a failed appointment!");
+      viewAllAppointments();
+    } else {
+      toast.error("Cannot start a pending appointment");
+      viewAllAppointments();
+    }
   };
-
-  
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
