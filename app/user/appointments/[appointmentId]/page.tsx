@@ -237,11 +237,11 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 </span>
               </h3>
             </section>
-            <section className="appointment-details md:w-1/2 xl:w-2/4 ">
+            <section className="appointment-details xl:w-2/4">
               <AppointmentLabel
                 key={userSpecificAppointmentInfo?.id}
                 userType="hospital"
-                status={userSpecificAppointmentInfo?.status!}
+                status={userSpecificAppointmentInfo?.status!} 
                 attender={userSpecificAppointmentInfo?.hospitalId!}
                 _id={userSpecificAppointmentInfo?._id!}
                 href={``}
