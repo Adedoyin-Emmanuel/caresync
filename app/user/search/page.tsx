@@ -21,10 +21,12 @@ const SearchHospitals = () => {
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setSkip(false);
   };
-
+  
+  const [skip, setSkip] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading } = useSearchHospitalQuery(formData.hospitalName);
+  const { data, isLoading } = useSearchHospitalQuery(formData.hospitalName, {skip});
   const [showData, setShowData] = useState<boolean>(false);
   const { hospitalSearchInfo } = useAppSelector((state) => state.user);
   const [responseLength, setResponseLength] = useState<number>(0);

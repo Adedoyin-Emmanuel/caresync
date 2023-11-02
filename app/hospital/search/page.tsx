@@ -2,7 +2,7 @@
 
 import { UserCard } from "@/app/components/HospitalCard";
 import { LoaderSmall } from "@/app/components/Loader";
-import {HospitalSidebarNav} from "@/app/components/SidebarLayout";
+import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import {
   clearUserSearchInfo,
@@ -21,10 +21,13 @@ const SearchUsers = () => {
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setShowData(true);
+
   };
 
+  const [skip, setSkip] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading } = useSearchUserQuery(formData.userName);
+  const { data, isLoading } = useSearchUserQuery(formData.userName, {skip});
   const [showData, setShowData] = useState<boolean>(false);
   const { userSearchInfo } = useAppSelector((state) => state.user);
   const [responseLength, setResponseLength] = useState<number>(0);
