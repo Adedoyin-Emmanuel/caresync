@@ -166,7 +166,7 @@ const AppHeader = ({ className, showWelcomeMessage }: AppHeaderProps) => {
     >
       {showWelcomeMessage ? (
         <section className="user-name">
-          <h2 className="font-bold capitalize text-2xl">
+          <h2 className="font-bold capitalize text-[18px] md:text-[20px]">
             hi, {userInfo?.username} 👋
           </h2>
         </section>
@@ -391,7 +391,7 @@ export const HospitalAppHeader = ({
     >
       {showWelcomeMessage ? (
         <section className="user-name">
-          <h2 className="font-bold capitalize text-2xl">
+          <h2 className="font-bold capitalize text-[18px] md:text-[20px]">
             hi, {userInfo?.username} 👋
           </h2>
         </section>

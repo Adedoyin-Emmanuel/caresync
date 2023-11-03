@@ -148,6 +148,7 @@ const SidebarLayout = ({
           <br />
           <br />
           <br />
+          <br /> <br /> <br />
         </section>
       </section>
 
@@ -276,7 +277,7 @@ export const HospitalSidebarNav = ({
           <br />
           <br />
           <br />
-          <br/>
+          <br />
         </section>
       </section>
 

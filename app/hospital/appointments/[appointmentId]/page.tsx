@@ -108,11 +108,12 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
 
       if (response?.data) {
         toast.success(response.data.message);
+        approveAppointmentModalRef?.current.closeModal();
+        router.push("/hospital/appointments");
 
         /* we could decide to route the hospital to the meeting page
         I guess that makes more sense, I would figure that later*/
 
-        //router.push("/hospital/appointments");
       } else {
         toast.error(response.error.data.message);
       }
@@ -176,7 +177,7 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 <span className="text-accent">{userDetails?.name} </span>
               </h3>
             </section>
-            <section className="appointment-details md:w-1/2 xl:w-2/4 ">
+            <section className="appointment-details xl:w-2/4">
               <AppointmentLabel
                 key={userSpecificAppointmentInfo?.id}
                 userType="user"
