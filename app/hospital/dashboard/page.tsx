@@ -21,6 +21,8 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
+import DashboardCard from "@/app/components/DashboardCard/DashboardCard";
+
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -50,7 +52,6 @@ const Home = () => {
     if (latestAppointmentData) {
       dispatch(saveAppointmentInfo(latestAppointmentData?.data));
       dispatch(saveRecentAppointmentInfo(latestAppointmentData?.data));
-      console.log(latestAppointmentData?.data);
     }
   }, [latestAppointmentData]);
 
@@ -65,7 +66,11 @@ const Home = () => {
       ) : (
         <HospitalSidebarNav showWelcomeMesage={true}>
           <section className="general-container w-full items-start flex flex-col xl:flex-row gap-x-5">
-            <section className="first-section w-full xl:w-8/12 flex flex-col items-center justify-center">
+            <section className="w-full p-1 flex md:hidden items-center justify-center">
+              <DashboardCard appointments={100} className="mt-5" />
+            </section>
+
+            <section className="first-section w-full xl:w-8/12 hidden md:flex flex-col items-center justify-center ">
               <section className="stats-container grid p-1 lg:grid-cols-3 gap-10 w-full">
                 <section className="bg-gray-100 h-28 w-52 rounded my-5 flex items-center flex-col justify-around cursor-pointer hover:bg-accent hover:text-white transition-colors duration-100 ease-in">
                   <BsCameraVideo className="w-8 h-8" />
@@ -98,7 +103,7 @@ const Home = () => {
               </section>
 
               <section className="health-care-history w-full my-5 p-2">
-                <h3 className="font-bold capitalize text-2xl">
+                <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
                   healthcare history
                 </h3>
 
@@ -111,9 +116,24 @@ const Home = () => {
                 )}
               </section>
             </section>
+
+            <section className="health-care-history w-full md:hidden my-5 p-2">
+              <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
+                healthcare history
+              </h3>
+
+              {userDashboardInfo?.healthCareHistory?.length === 0 ? (
+                <Text className="text-center my-5 text-sm">
+                  No healthcare history
+                </Text>
+              ) : (
+                <Text>History dey</Text>
+              )}
+            </section>
+
             <section className="second-section w-full xl:w-4/12 mt-16 md:mt-0 grid grid-cols-1 items-center justify-center p-2">
               <section className="user-appointments">
-                <h3 className="font-bold capitalize text-2xl">
+                <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
                   recent appointments
                 </h3>
 
@@ -141,7 +161,7 @@ const Home = () => {
                       }
                     )
                   )}
-                  <section className="new-appointment w-full flex items-end justify-end my-2">
+                  <section className="new-appointment w-full flex items-end justify-end my-5">
                     <Button
                       className="bg-accent"
                       onClick={handleViewAppointmentClick}

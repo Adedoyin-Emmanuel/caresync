@@ -14,7 +14,6 @@ interface MobileNavProps {
 const MobileNav = ({ className, children, ...others }: MobileNavProps) => {
   const currentPath = usePathname();
   return (
-    
     <section
       className={`w-screen flex items-center justify-between fixed bottom-0 left-0 md:hidden  bg-gray-100 h-20 z-10 p-2 ${className}`}
       {...others}
@@ -24,11 +23,13 @@ const MobileNav = ({ className, children, ...others }: MobileNavProps) => {
       <Link
         href={"/user/dashboard"}
         className={`${
-          currentPath.includes("dashboard") && "text-secondary"
+          currentPath.includes("dashboard") || currentPath.includes("search")
+            ? "text-secondary"
+            : ""
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <IoAnalytics className="h-6 w-6" />
-        <Text className="text-[13px]">Dashboard</Text>
+        <IoAnalytics className="h-5 w-5" />
+        <Text className="text-[12px]">Dashboard</Text>
       </Link>
 
       <Link
@@ -37,8 +38,8 @@ const MobileNav = ({ className, children, ...others }: MobileNavProps) => {
           currentPath.includes("appointments") && "text-secondary"
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <BsCameraVideo className="h-6 w-6" />
-        <Text className="text-[13px]">Appointments</Text>
+        <BsCameraVideo className="h-5 w-5" />
+        <Text className="text-[12px]">Appointments</Text>
       </Link>
 
       <Link
@@ -47,26 +48,32 @@ const MobileNav = ({ className, children, ...others }: MobileNavProps) => {
           currentPath.includes("messages") && "text-secondary"
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <BiMessageRoundedDots className="h-6 w-6" />
-        <Text className="text-[13px]">Messages</Text>
+        <BiMessageRoundedDots className="h-5 w-5" />
+        <Text className="text-[12px]">Messages</Text>
       </Link>
 
       <Link
         href={"/user/settings"}
         className={`${
-          currentPath.includes("settings") && "text-secondary"
+          currentPath.includes("settings") ||
+          currentPath.includes("profile") ||
+          currentPath.includes("profile/me")
+            ? "text-secondary"
+            : ""
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <IoSettingsOutline className="h-6 w-6" />
-        <Text className="text-[13px]">Settings</Text>
+        <IoSettingsOutline className="h-5 w-5" />
+        <Text className="text-[12px]">Settings</Text>
       </Link>
     </section>
   );
 };
 
-
-
-export const HospitalMobileNav = ({ className, children, ...others }: MobileNavProps) => {
+export const HospitalMobileNav = ({
+  className,
+  children,
+  ...others
+}: MobileNavProps) => {
   const currentPath = usePathname();
   return (
     <section
@@ -78,11 +85,13 @@ export const HospitalMobileNav = ({ className, children, ...others }: MobileNavP
       <Link
         href={"/hospital/dashboard"}
         className={`${
-          currentPath.includes("dashboard") && "text-secondary"
+          currentPath.includes("dashboard") || currentPath.includes("search")
+            ? "text-secondary"
+            : ""
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <IoAnalytics className="h-6 w-6" />
-        <Text className="text-[13px]">Dashboard</Text>
+        <IoAnalytics className="h-5 w-5" />
+        <Text className="text-[12px]">Dashboard</Text>
       </Link>
 
       <Link
@@ -91,8 +100,8 @@ export const HospitalMobileNav = ({ className, children, ...others }: MobileNavP
           currentPath.includes("appointments") && "text-secondary"
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <BsCameraVideo className="h-6 w-6" />
-        <Text className="text-[13px]">Appointments</Text>
+        <BsCameraVideo className="h-5 w-5" />
+        <Text className="text-[12px]">Appointments</Text>
       </Link>
 
       <Link
@@ -101,22 +110,25 @@ export const HospitalMobileNav = ({ className, children, ...others }: MobileNavP
           currentPath.includes("messages") && "text-secondary"
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <BiMessageRoundedDots className="h-6 w-6" />
-        <Text className="text-[13px]">Messages</Text>
+        <BiMessageRoundedDots className="h-5 w-5" />
+        <Text className="text-[12px]">Messages</Text>
       </Link>
 
       <Link
         href={"/hospital/settings"}
         className={`${
-          currentPath.includes("settings") && "text-secondary"
+          currentPath.includes("settings") ||
+          currentPath.includes("profile") ||
+          currentPath.includes("profile/me")
+            ? "text-secondary"
+            : ""
         } transition-colors hover:text-secondary duration-100 ease-in flex flex-col items-center justify-center gap-y-2`}
       >
-        <IoSettingsOutline className="h-6 w-6" />
-        <Text className="text-[13px]">Settings</Text>
+        <IoSettingsOutline className="h-5 w-5" />
+        <Text className="text-[12px]">Settings</Text>
       </Link>
     </section>
   );
 };
-
 
 export default MobileNav;

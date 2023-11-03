@@ -55,7 +55,6 @@ const Home = () => {
     if (latestAppointmentData) {
       dispatch(saveAppointmentInfo(latestAppointmentData?.data));
       dispatch(saveRecentAppointmentInfo(latestAppointmentData?.data));
-      console.log(latestAppointmentData?.data);
     }
   }, [latestAppointmentData]);
 
@@ -128,7 +127,7 @@ const Home = () => {
               </h3>
 
               {userDashboardInfo?.healthCareHistory?.length === 0 ? (
-                <Text className="text-center my-5">No healthcare history</Text>
+                <Text className="text-center my-5 text-sm">No healthcare history</Text>
               ) : (
                 <Text>History dey</Text>
               )}
