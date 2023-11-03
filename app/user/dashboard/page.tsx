@@ -22,6 +22,7 @@ import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
+import { DashboardQuickActions } from "@/app/components/DashboardQuickActions/DashboardQuickActions";
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -68,6 +69,10 @@ const Home = () => {
           <section className="general-container w-full mx-auto items-start flex flex-col xl:flex-row gap-x-5">
             <section className="w-full p-1 flex md:hidden items-center justify-center">
               <DashboardCard appointments={100} className="mt-5" />
+            </section>
+
+            <section className="w-full p-1 flex md:hidden items-center justify-center">
+              <DashboardQuickActions />
             </section>
 
             <section className="first-section w-full xl:w-8/12 hidden md:flex flex-col items-center justify-center ">

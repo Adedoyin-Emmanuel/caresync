@@ -8,12 +8,14 @@ interface DashboardQuickActionsProps {
   className?: string;
 }
 
-export const DashboardQuickActions = ({ className }: DashboardQuickActionsProps) => {
+export const DashboardQuickActions = ({
+  className,
+}: DashboardQuickActionsProps) => {
   return (
     <section
-      className={`rounded-lg bg-slate-50 p-4 md:hidden flex flex-col justify-center gap-y-3 ${className}`}
+      className={`rounded-lg bg-slate-50 w-full p-4  md:hidden flex flex-col justify-center gap-y-3  mt-10  ${className}`}
     >
-      <h4 className="font-bold text-[18px] md:text-[20px] capitalize">quick actions</h4>
+      <h4 className="font-bold text-[16px] capitalize my-2">quick actions</h4>
 
       <section className="action-buttons flex w-full justify-around">
         <Link
@@ -50,17 +52,14 @@ export const DashboardQuickActions = ({ className }: DashboardQuickActionsProps)
   );
 };
 
-
-
-
-export const HospitalDashboardQuickActions = ({ className }: DashboardQuickActionsProps) => {
+export const HospitalDashboardQuickActions = ({
+  className,
+}: DashboardQuickActionsProps) => {
   return (
     <section
       className={`rounded-lg bg-slate-50 w-full p-4  md:hidden flex flex-col justify-center gap-y-3  mt-10  ${className}`}
     >
-      <h4 className="font-bold text-[16px] capitalize my-2">
-        quick actions
-      </h4>
+      <h4 className="font-bold text-[16px] capitalize my-2">quick actions</h4>
       <section className="action-buttons flex w-full justify-around">
         <Link
           href={"/hospital/messages"}
@@ -95,5 +94,3 @@ export const HospitalDashboardQuickActions = ({ className }: DashboardQuickActio
     </section>
   );
 };
-
-
