@@ -3,6 +3,7 @@
 import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";
+import DashboardCard from "@/app/components/DashboardCard/DashboardCard";
 import Loader, { LoaderSmall } from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
@@ -15,14 +16,12 @@ import {
   userAppointmentInfoProps,
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import DashboardCard from "@/app/components/DashboardCard/DashboardCard";
-
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,8 +45,6 @@ const Home = () => {
     (state) => state.user
   );
 
-
-
   const { data: latestAppointmentData, isLoading: latestAppointmentLoading } =
     useGetLatestAppointmentsQuery(dataToPass);
 
@@ -59,8 +56,8 @@ const Home = () => {
   }, [latestAppointmentData]);
 
   const handleNewAppointmentClick = () => {
-      router.push("/user/appointments/new");
-  }
+    router.push("/user/appointments/new");
+  };
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -121,18 +118,6 @@ const Home = () => {
               </section>
             </section>
 
-            <section className="health-care-history w-full md:hidden my-5 p-2">
-              <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
-                healthcare history
-              </h3>
-
-              {userDashboardInfo?.healthCareHistory?.length === 0 ? (
-                <Text className="text-center my-5 text-sm">No healthcare history</Text>
-              ) : (
-                <Text>History dey</Text>
-              )}
-            </section>
-
             <section className="second-section w-full xl:w-4/12 mt-16 md:mt-0 grid grid-cols-1 items-center justify-center p-2">
               <section className="user-appointments">
                 <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
@@ -173,6 +158,20 @@ const Home = () => {
                   </section>
                 </section>
               </section>
+            </section>
+
+            <section className="health-care-history w-full md:hidden my-5 p-2">
+              <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
+                healthcare history
+              </h3>
+
+              {userDashboardInfo?.healthCareHistory?.length === 0 ? (
+                <Text className="text-center my-5 text-sm">
+                  No healthcare history
+                </Text>
+              ) : (
+                <Text>History dey</Text>
+              )}
             </section>
             <ChatBotButton />
           </section>
