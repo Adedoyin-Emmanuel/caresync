@@ -37,9 +37,9 @@ Axios.interceptors.response.use(
       ) {
         console.log(error.response.data.message);
         //just in case the client still routes the user to a protected route, we've to route them back
-        if (typeof window !== "undefined") {
-          window.location.href = "/auth/login";
-        }
+        // if (typeof window !== "undefined") {
+        //   window.location.href = "/auth/login";
+        // }
         return;
       } else {
         await refreshAccessToken();
