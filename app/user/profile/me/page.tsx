@@ -4,9 +4,7 @@ import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
-import { logoutUser } from "@/app/store/slices/auth.slice";
 import {
-  resetUser,
   useGetUserQuery,
   useLogoutMutation,
 } from "@/app/store/slices/user.slice";
@@ -22,23 +20,14 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
 
-const Profile = () => {
+export default function Me () {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
-  const router = useRouter();
-  if (!userDashboardInfo) router.push("/user/dashboard");
+  //const router = useRouter();
+  // if (!userDashboardInfo) router.push("/user/dashboard");
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
 
-  const handleLogoutClick = async () => {
-    const response: any = await logout({});
-
-    if (response) {
-      toast.success(response.data.message);
-      router.push("/auth/login");
-      dispatch(resetUser());
-      dispatch(logoutUser());
-    }
-  };
+ 
 
   const { data, isLoading, isError } = useGetUserQuery({});
 
@@ -137,4 +126,3 @@ const Profile = () => {
   );
 };
 
-export default Profile;

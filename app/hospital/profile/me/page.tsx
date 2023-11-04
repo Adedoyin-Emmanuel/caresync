@@ -1,19 +1,13 @@
 "use client";
-
 import Loader from "@/app/components/Loader";
 import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import Verified from "@/app/components/Verified";
-import { logoutUser } from "@/app/store/slices/auth.slice";
 import {
-  resetUser,
   useGetHospitalByIdQuery,
-  useLogoutMutation,
 } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+//import { useRouter } from "next/navigation";
 
 import moment from "moment";
 import Link from "next/link";
@@ -22,26 +16,13 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
 
-const Profile = () => {
+export default function Me () {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   const { userInfo } = useAppSelector((state) => state.auth);
-  const { data, isLoading, isError } = useGetHospitalByIdQuery(userInfo?._id);
+  const { isLoading, isError } = useGetHospitalByIdQuery(userInfo?._id);
 
-  const router = useRouter();
-  if (!userDashboardInfo) router.push("/hospital/dashboard");
-  const [logout] = useLogoutMutation();
-  const dispatch = useDispatch();
-
-  const handleLogoutClick = async () => {
-    const response: any = await logout({});
-
-    if (response) {
-      toast.success(response.data.message);
-      router.push("/auth/login");
-      dispatch(resetUser());
-      dispatch(logoutUser());
-    }
-  };
+  // const router = useRouter();
+  // if (!userDashboardInfo) router.push("/hospital/dashboard");
 
   const dateCreated: any = userDashboardInfo && userDashboardInfo?.createdAt;
 
@@ -138,4 +119,3 @@ const Profile = () => {
   );
 };
 
-export default Profile;
