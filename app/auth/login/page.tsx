@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import Axios from "@/app/api/axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({

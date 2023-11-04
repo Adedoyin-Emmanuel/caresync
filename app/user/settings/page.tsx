@@ -27,7 +27,7 @@ import Loader from "@/app/components/Loader";
 const Settings = () => {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   const router = useRouter();
-  if (!userDashboardInfo) router.push("/user/dashboard");
+ // if (!userDashboardInfo) router.push("/user/dashboard");
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
   const [skip, setSkip] = useState<boolean>(true);

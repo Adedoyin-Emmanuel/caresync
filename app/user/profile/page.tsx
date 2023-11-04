@@ -11,17 +11,19 @@ import {
 import { saveDashboardInfo } from "@/app/store/slices/user.slice";
 import { useUpdateUserMutation } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 
-const Profile = () => {
-  const router = useRouter();
+
+
+export default function Profile () {
+ // const router = useRouter();
 
   const { userDashboardInfo } = useAppSelector((state) => state.user);
-  if (!userDashboardInfo) router.push("/user/dashboard");
+  //if (!userDashboardInfo) router.push("/user/dashboard");
 
   const [updateUser, { isLoading: updateUserLoading }] =
     useUpdateUserMutation();
@@ -169,4 +171,3 @@ const Profile = () => {
   );
 };
 
-export default Profile;

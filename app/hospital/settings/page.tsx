@@ -25,10 +25,10 @@ import Loader from "@/app/components/Loader";
 
 
 
-const Settings = () => {
+export default function Settings () {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   const router = useRouter();
-  if (!userDashboardInfo) router.push("/hospital/dashboard");
+  // if (!userDashboardInfo) router.push("/hospital/dashboard");
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
   const [skip, setSkip] = useState<boolean>(true);
@@ -234,4 +234,3 @@ const Settings = () => {
   );
 };
 
-export default Settings;
