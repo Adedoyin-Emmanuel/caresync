@@ -9,12 +9,14 @@ const AUTH_URL = "/auth";
 const APPOINTMENTS_URL = "/appointment";
 
 const loadFromLocalStorage = (key: string, defaultValue: any) => {
-  const storedData = localStorage.getItem(key);
-  if (storedData) {
-    try {
-      return JSON.parse(storedData);
-    } catch (error) {
-      console.error("Error parsing data from localStorage:", error);
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem(key);
+    if (storedData) {
+      try {
+        return JSON.parse(storedData);
+      } catch (error) {
+        console.error("Error parsing data from localStorage:", error);
+      }
     }
   }
   return defaultValue;
@@ -89,46 +91,41 @@ export interface hospitalProps {
 }
 
 const initialState = {
-  userDashboardInfo: loadFromLocalStorage(
-    "userDashboardInfo",
-    null
-  ) as userDashboardInfoProps | null,
-  userAppointmentInfo: loadFromLocalStorage("userAppointmentInfo", null) as
-    | userAppointmentInfoProps[]
-    | null,
-  recentAppointmentInfo: loadFromLocalStorage(
-    "userRecentAppointmentInfo",
-    null
-  ) as userAppointment[] | null,
-  healthCareHistoryInfo: loadFromLocalStorage(
-    "userHealthCareHistoryInfo",
-    null
-  ) as healthCareHistoryProps[] | null,
-  hospitalSearchInfo: loadFromLocalStorage("userHospitalSearchInfo", null) as
-    | hospitalProps[]
-    | null,
-  hospitalSearchProfileInfo: loadFromLocalStorage(
-    "userHospitalSearchProfileInfo",
-    null
-  ) as hospitalProps | null,
+  userDashboardInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userDashboardInfo", null) as userDashboardInfoProps | null
+    : null,
 
-  userSearchInfo: loadFromLocalStorage("hospitalUserSearchInfo", null) as
-    | userDashboardInfoProps[]
-    | null,
+  userAppointmentInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userAppointmentInfo", null) as userAppointmentInfoProps[] | null
+    : null,
 
-  userSearchProfileInfo: loadFromLocalStorage(
-    "hospitalUserSearchProfileInfo",
-    null
-  ) as userDashboardInfoProps | null,
+  recentAppointmentInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userRecentAppointmentInfo", null) as userAppointment[] | null
+    : null,
 
-  /*
-     @see this relates to when the user clicks a particular appointment from all appointments
-     
-   */
-  userSpecificAppointmentInfo: loadFromLocalStorage(
-    "userSpecificAppointmentInfo",
-    null
-  ) as userAppointment | null,
+  healthCareHistoryInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userHealthCareHistoryInfo", null) as healthCareHistoryProps[] | null
+    : null,
+
+  hospitalSearchInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userHospitalSearchInfo", null) as hospitalProps[] | null
+    : null,
+
+  hospitalSearchProfileInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userHospitalSearchProfileInfo", null) as hospitalProps | null
+    : null,
+
+  userSearchInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("hospitalUserSearchInfo", null) as userDashboardInfoProps[] | null
+    : null,
+
+  userSearchProfileInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("hospitalUserSearchProfileInfo", null) as userDashboardInfoProps | null
+    : null,
+
+  userSpecificAppointmentInfo: typeof window !== 'undefined'
+    ? loadFromLocalStorage("userSpecificAppointmentInfo", null) as userAppointment | null
+    : null,
 };
 
 const userSlice = createSlice({
