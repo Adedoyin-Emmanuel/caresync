@@ -55,4 +55,6 @@ const Modal = forwardRef<ModalRef, ModalProps>(
   }
 );
 
+Modal.displayName = "Modal";
+
 export default Modal;
