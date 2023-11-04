@@ -1,5 +1,4 @@
 "use client";
-
 import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
 import ChatBotButton from "@/app/components/ChatBotButton";

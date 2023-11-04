@@ -9,12 +9,14 @@ const AUTH_URL = "/auth";
 const APPOINTMENTS_URL = "/appointment";
 
 const loadFromLocalStorage = (key: string, defaultValue: any) => {
-  const storedData = localStorage.getItem(key);
-  if (storedData) {
-    try {
-      return JSON.parse(storedData);
-    } catch (error) {
-      console.error("Error parsing data from localStorage:", error);
+  if (typeof window !== "undefined") {
+    const storedData = localStorage.getItem(key);
+    if (storedData) {
+      try {
+        return JSON.parse(storedData);
+      } catch (error) {
+        console.error("Error parsing data from localStorage:", error);
+      }
     }
   }
   return defaultValue;
