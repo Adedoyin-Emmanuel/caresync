@@ -128,6 +128,16 @@ const initialState = {
   userSpecificAppointmentInfo: typeof window !== 'undefined'
     ? loadFromLocalStorage("userSpecificAppointmentInfo", null) as userAppointment | null
     : null,
+
+  onlineUsers: typeof window !== 'undefined'
+  ? loadFromLocalStorage("onlineUsers", null) as userDashboardInfoProps[] | null
+  : null,
+
+
+  onlineHospitals: typeof window !== 'undefined'
+  ? loadFromLocalStorage("onlineHospitals", null) as hospitalProps[] | null
+  : null
+
 };
 
 const userSlice = createSlice({
@@ -209,6 +219,22 @@ const userSlice = createSlice({
       );
     },
 
+
+    //this is specific to an hospital
+
+    saveOnlineHospitalsInfo: (state, action)=>{
+      state.onlineHospitals = action.payload;
+      localStorage.setItem("onlineHospitals", JSON.stringify(action.payload));
+    },
+
+
+    //this is specific to a user
+
+    saveOnlineUsersInfo: (state, action)=>{
+      state.onlineUsers = action.payload;
+      localStorage.setItem("onlineUsers", JSON.stringify(action.payload));
+    },
+
     // clear data reducers
 
     clearHospitalSearchInfo: (state, action) => {
@@ -231,6 +257,9 @@ const userSlice = createSlice({
       localStorage.removeItem("hospitalUserSearchInfo");
       localStorage.removeItem("userSpecificAppointmentInfo");
       localStorage.removeItem("hospitalUserSearchProfileInfo");
+      localStorage.removeItem("onlineHospitals");
+      localStorage.removeItem("onlineUsers");
+
     },
   },
 });

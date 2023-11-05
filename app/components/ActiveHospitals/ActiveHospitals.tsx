@@ -2,11 +2,12 @@
 "use client"
 import React from "react";
 
-interface IndexProps {
-    
+interface ActiveHospitalsProps {
+    className?: string;
+    hospitalId: string;
 }
 
-const Index = ()=> {
+const ActiveHospitals = ({className, hospitalId}: ActiveHospitalsProps)=> {
 
     return (
         <div>
@@ -15,5 +16,5 @@ const Index = ()=> {
     );  
 }
 
-export default Index;
+export default ActiveHospitals;
     

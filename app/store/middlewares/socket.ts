@@ -62,7 +62,7 @@ socket.on("newAppointment", (newAppointment) => {
 });
 
 /* listens for an updateAppointment event from the server,
-triggers a reducer action that causes an update on the UI 
+triggers a reducer acdtion that causes an update on the UI 
 */
 socket.on("updateAppointment", (updatedAppointment) => {
   handleAppointmentChange(store, "update", updatedAppointment);
