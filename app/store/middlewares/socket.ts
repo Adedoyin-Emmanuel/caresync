@@ -2,12 +2,15 @@ import { AnyAction, Dispatch, MiddlewareAPI } from "@reduxjs/toolkit";
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 import { io } from "socket.io-client";
 import {
+  resetUser,
   saveAppointmentInfo,
+  saveOnlineHospitalsInfo,
+  saveOnlineUsersInfo,
   saveUserSpecificAppointmentInfo,
   userAppointment,
-  resetUser
 } from "../slices/user.slice";
 import store from "../store";
+import { loginUser, logoutUser } from "../slices/auth.slice";
 
 const socket = io("http://localhost:2800", {
   withCredentials: true,
@@ -88,14 +91,28 @@ socket.on("approveAppointment", (approvedAppointment) =>{
 
 //Chat events
 
-socket.on("userLogin", (data) =>{
-  console.log(data);
+socket.on("userLogin", (userData) =>{
+  console.log(userData);
 });
 
 
 socket.on("userLogout", (data) =>{
-  console.log(data);
+  store.dispatch(logoutUser());
+  store.dispatch(resetUser());
 });
+
+
+socket.on("onlineUsers", (onlineUsers)=>{
+  console.log(onlineUsers);
+  store.dispatch(saveOnlineUsersInfo(onlineUsers));
+});
+
+socket.on("onlineHospitals", (onlineHospitals)=>{
+  console.log(onlineHospitals);
+  store.dispatch(saveOnlineHospitalsInfo(onlineHospitals));
+});
+
+
 
 
 
