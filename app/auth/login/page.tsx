@@ -42,7 +42,7 @@ const Login = () => {
         const { accessToken, ...data } = response.data;
 
         const userData = { ...data, role };
-
+        
         dispatch(loginUser(userData));
 
         //route the user to their respective page

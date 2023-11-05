@@ -38,6 +38,7 @@ export interface userDashboardInfoProps {
   updatedAt: Date;
   createdAt: Date;
   location?: string;
+  online?: boolean;
 
   //looks weird adding this here, well an hospital is also a type of user soo yeah YGTV
   clinicName?: string;
@@ -88,6 +89,7 @@ export interface hospitalProps {
   allTotalAppointments: number;
   bio: string;
   location?: string;
+  online?: boolean;
 }
 
 const initialState = {
