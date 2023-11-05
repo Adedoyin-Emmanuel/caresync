@@ -5,6 +5,7 @@ import {
   saveAppointmentInfo,
   saveUserSpecificAppointmentInfo,
   userAppointment,
+  resetUser
 } from "../slices/user.slice";
 import store from "../store";
 
@@ -81,6 +82,24 @@ socket.on("deleteAppointment", (deletedAppointment) => {
 socket.on("approveAppointment", (approvedAppointment) =>{
   handleAppointmentChange(store, "approve", approvedAppointment);
 });
+
+
+
+
+//Chat events
+
+socket.on("userLogin", (data) =>{
+  console.log(data);
+});
+
+
+socket.on("userLogout", (data) =>{
+  console.log(data);
+});
+
+
+
+
 
 const socketMiddleware =
   (store: MiddlewareAPI) =>
