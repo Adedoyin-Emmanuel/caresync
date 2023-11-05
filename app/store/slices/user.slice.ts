@@ -562,6 +562,29 @@ export const userApiCall = apiSlice.injectEndpoints({
 
 
 
+    // user and hospital chat endpoints
+
+    getOnlineUsers: builder.query({
+      query: (data)=> ({
+        url: `${USERS_URL}/online`,
+        method: "GET",
+      }),
+
+      providesTags: ["User", "Hospital"],
+    }),
+
+
+
+    getOnlineHospitals: builder.query({
+      query: (data)=> ({
+        url: `${HOSPITALS_URL}/online`,
+        method: "GET",
+      }),
+
+      providesTags: ["User", "Hospital"],
+    }),
+
+
  
   }),
 });
@@ -605,7 +628,12 @@ export const {
   useDeleteAppointmentMutation,
 
   useGetAppointmentTokenQuery,
+
+  useGetOnlineUsersQuery,
+  useGetOnlineHospitalsQuery
 } = userApiCall;
+
+
 export const {
   saveDashboardInfo,
   resetUser,
@@ -619,5 +647,8 @@ export const {
   saveUserSearchProfileInfo,
   clearHospitalSearchInfo,
   clearUserSearchInfo,
+
+  saveOnlineUsersInfo,
+  saveOnlineHospitalsInfo,
 } = userSlice.actions;
 export default userSlice.reducer;
