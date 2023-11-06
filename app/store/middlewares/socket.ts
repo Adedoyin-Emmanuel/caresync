@@ -10,7 +10,7 @@ import {
   userAppointment,
 } from "../slices/user.slice";
 import store from "../store";
-import { loginUser, logoutUser } from "../slices/auth.slice";
+import { logoutUser } from "../slices/auth.slice";
 
 const socket = io("http://localhost:2800", {
   withCredentials: true,
@@ -59,9 +59,13 @@ function handleAppointmentChange(
 triggers a reducer action that causes an update on the UI 
 */
 socket.on("newAppointment", (newAppointment) => {
-  const existingAppointments = store.getState().user.userAppointmentInfo || [];
-  const updatedAppointment = [newAppointment, ...existingAppointments];
-  store.dispatch(saveAppointmentInfo(updatedAppointment));
+  const hospitalId = store.getState().auth.userInfo?._id;
+  
+  if(newAppointment.hospitalId === hospitalId || newAppointment.userId === hospitalId){
+    const existingAppointments = store.getState().user.userAppointmentInfo || [];
+    const updatedAppointment = [newAppointment, ...existingAppointments];
+    store.dispatch(saveAppointmentInfo(updatedAppointment));
+  }
 });
 
 /* listens for an updateAppointment event from the server,
