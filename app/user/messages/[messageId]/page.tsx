@@ -6,8 +6,8 @@ const Messages = () => {
   return (
     <div className="w-screen h-screen bg-zinc-50">
       <SidebarLayout>
-        <section className="appointments my-5">
-          <section className="messages-section my-5">
+        <section className="my-5">
+          <section className="messages-section my-5 w-full lg:w-1/2 lg:mx-auto">
             <section className="user-details flex items-center w-full gap-x-5 p-1">
               <div className="avatar online">
                 <div className="w-12 rounded-full">
@@ -35,13 +35,21 @@ const Messages = () => {
                     What's up chief? Am good.
                   </div>
                 </div>
-              </div>
-              <div className="p-4">
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className="w-full border border-gray-300 p-2 rounded-md"
-                />
+
+            
+
+                <div className="mb-4 receiver">
+                  <div className="max-w-[70%] bg-slate-100 p-4 rounded-md text-sm">
+                 I dey my bro. How far with the project? Your babe nko?
+                  </div>
+                </div>
+                <div className="my-10 md:p-2 w-full ">
+                  <input
+                    type="text"
+                    placeholder="Type a message..."
+                    className="w-full border border-gray-300 p-4 rounded-[30px]"
+                  />
+                </div>
               </div>
             </section>
           </section>
