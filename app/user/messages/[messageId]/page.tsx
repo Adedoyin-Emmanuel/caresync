@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/app/components/Button";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
@@ -48,7 +50,7 @@ const Messages = () => {
               <section className="user-details flex items-center w-full gap-x-5 p-1">
                 <div className="avatar online">
                   <div className="w-12 rounded-full">
-                    <img src="https://api.dicebear.com/7.x/micah/svg?seed=bloom" />
+                    <img src={fetchedHospitalData?.profilePicture} alt="hospital profile image" />
                   </div>
                 </div>
 
