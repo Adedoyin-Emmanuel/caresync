@@ -7,6 +7,7 @@ const USERS_URL = "/user";
 const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 const APPOINTMENTS_URL = "/appointment";
+const ROOM_URL = "/room";
 
 const loadFromLocalStorage = (key: string, defaultValue: any) => {
   if (typeof window !== "undefined") {
@@ -585,6 +586,22 @@ export const userApiCall = apiSlice.injectEndpoints({
     }),
 
 
+
+
+    //room and chat endpoints
+
+    getRoomToken: builder.query({
+      query: (data) => ({
+        url: `${ROOM_URL}/get-token`,
+        params: {
+          userId: data.userId,
+          hospitalId: data.hospitalId
+        }
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
+
  
   }),
 });
@@ -630,7 +647,11 @@ export const {
   useGetAppointmentTokenQuery,
 
   useGetOnlineUsersQuery,
-  useGetOnlineHospitalsQuery
+  useGetOnlineHospitalsQuery,
+
+
+
+  useGetRoomTokenQuery
 } = userApiCall;
 
 
