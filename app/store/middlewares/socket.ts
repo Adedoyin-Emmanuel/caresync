@@ -14,6 +14,7 @@ import { logoutUser } from "../slices/auth.slice";
 
 const socket = io("http://localhost:2800", {
   withCredentials: true,
+  query: store.getState().user.userDashboardInfo!,
 });
 
 function handleAppointmentChange(
