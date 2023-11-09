@@ -93,52 +93,104 @@ export interface hospitalProps {
   online?: boolean;
 }
 
+
+export interface currentTypingMessaageProps{
+  message: string;
+  sender: string;
+  receiver: string;
+}
+
 const initialState = {
-  userDashboardInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userDashboardInfo", null) as userDashboardInfoProps | null
-    : null,
+  userDashboardInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage(
+          "userDashboardInfo",
+          null
+        ) as userDashboardInfoProps | null)
+      : null,
 
-  userAppointmentInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userAppointmentInfo", null) as userAppointmentInfoProps[] | null
-    : null,
+  userAppointmentInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("userAppointmentInfo", null) as
+          | userAppointmentInfoProps[]
+          | null)
+      : null,
 
-  recentAppointmentInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userRecentAppointmentInfo", null) as userAppointment[] | null
-    : null,
+  recentAppointmentInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("userRecentAppointmentInfo", null) as
+          | userAppointment[]
+          | null)
+      : null,
 
-  healthCareHistoryInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userHealthCareHistoryInfo", null) as healthCareHistoryProps[] | null
-    : null,
+  healthCareHistoryInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("userHealthCareHistoryInfo", null) as
+          | healthCareHistoryProps[]
+          | null)
+      : null,
 
-  hospitalSearchInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userHospitalSearchInfo", null) as hospitalProps[] | null
-    : null,
+  hospitalSearchInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("userHospitalSearchInfo", null) as
+          | hospitalProps[]
+          | null)
+      : null,
 
-  hospitalSearchProfileInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userHospitalSearchProfileInfo", null) as hospitalProps | null
-    : null,
+  hospitalSearchProfileInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage(
+          "userHospitalSearchProfileInfo",
+          null
+        ) as hospitalProps | null)
+      : null,
 
-  userSearchInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("hospitalUserSearchInfo", null) as userDashboardInfoProps[] | null
-    : null,
+  userSearchInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("hospitalUserSearchInfo", null) as
+          | userDashboardInfoProps[]
+          | null)
+      : null,
 
-  userSearchProfileInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("hospitalUserSearchProfileInfo", null) as userDashboardInfoProps | null
-    : null,
+  userSearchProfileInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage(
+          "hospitalUserSearchProfileInfo",
+          null
+        ) as userDashboardInfoProps | null)
+      : null,
 
-  userSpecificAppointmentInfo: typeof window !== 'undefined'
-    ? loadFromLocalStorage("userSpecificAppointmentInfo", null) as userAppointment | null
-    : null,
+  userSpecificAppointmentInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage(
+          "userSpecificAppointmentInfo",
+          null
+        ) as userAppointment | null)
+      : null,
 
-  onlineUsers: typeof window !== 'undefined'
-  ? loadFromLocalStorage("onlineUsers", null) as userDashboardInfoProps[] | null
-  : null,
+  onlineUsers:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("onlineUsers", null) as
+          | userDashboardInfoProps[]
+          | null)
+      : null,
 
+  onlineHospitals:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("onlineHospitals", null) as
+          | hospitalProps[]
+          | null)
+      : null,
 
-  onlineHospitals: typeof window !== 'undefined'
-  ? loadFromLocalStorage("onlineHospitals", null) as hospitalProps[] | null
-  : null
+  roomToken:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("roomToken", null) as string | null)
+      : null,
 
+  currentTypingMessage:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("currentTypingMessage", null) as currentTypingMessaageProps | null)
+      : null,
 };
 
 const userSlice = createSlice({
@@ -220,22 +272,36 @@ const userSlice = createSlice({
       );
     },
 
-
     //this is specific to an hospital
 
-    saveOnlineHospitalsInfo: (state, action)=>{
+    saveOnlineHospitalsInfo: (state, action) => {
       state.onlineHospitals = action.payload;
       localStorage.setItem("onlineHospitals", JSON.stringify(action.payload));
     },
 
-
     //this is specific to a user
 
-    saveOnlineUsersInfo: (state, action)=>{
+    saveOnlineUsersInfo: (state, action) => {
       state.onlineUsers = action.payload;
       localStorage.setItem("onlineUsers", JSON.stringify(action.payload));
     },
 
+    // this is for the user and the hospital
+
+    saveRoomToken: (state, action) => {
+      state.roomToken = action.payload;
+      localStorage.setItem("roomToken", JSON.stringify(action.payload));
+    },
+
+    // this is for the user and the hospital
+
+    saveCurrentTypingMessage: (state, action) => {
+      state.currentTypingMessage = action.payload;
+      localStorage.setItem(
+        "currentTypingMessage",
+        JSON.stringify(action.payload)
+      );
+    },
     // clear data reducers
 
     clearHospitalSearchInfo: (state, action) => {
@@ -260,7 +326,8 @@ const userSlice = createSlice({
       localStorage.removeItem("hospitalUserSearchProfileInfo");
       localStorage.removeItem("onlineHospitals");
       localStorage.removeItem("onlineUsers");
-
+      localStorage.removeItem("roomToken");
+      localStorage.removeItem("currentTypingMessage");
     },
   },
 });
@@ -561,12 +628,10 @@ export const userApiCall = apiSlice.injectEndpoints({
       },
     }),
 
-
-
     // user and hospital chat endpoints
 
     getOnlineUsers: builder.query({
-      query: (data)=> ({
+      query: (data) => ({
         url: `${USERS_URL}/online`,
         method: "GET",
       }),
@@ -574,19 +639,14 @@ export const userApiCall = apiSlice.injectEndpoints({
       providesTags: ["User", "Hospital"],
     }),
 
-
-
     getOnlineHospitals: builder.query({
-      query: (data)=> ({
+      query: (data) => ({
         url: `${HOSPITALS_URL}/online`,
         method: "GET",
       }),
 
       providesTags: ["User", "Hospital"],
     }),
-
-
-
 
     //room and chat endpoints
 
@@ -595,14 +655,11 @@ export const userApiCall = apiSlice.injectEndpoints({
         url: `${ROOM_URL}/get-token`,
         params: {
           userId: data.userId,
-          hospitalId: data.hospitalId
-        }
+          hospitalId: data.hospitalId,
+        },
       }),
       providesTags: ["User", "Hospital"],
     }),
-
-
- 
   }),
 });
 
@@ -649,11 +706,8 @@ export const {
   useGetOnlineUsersQuery,
   useGetOnlineHospitalsQuery,
 
-
-
-  useGetRoomTokenQuery
+  useGetRoomTokenQuery,
 } = userApiCall;
-
 
 export const {
   saveDashboardInfo,
@@ -671,5 +725,8 @@ export const {
 
   saveOnlineUsersInfo,
   saveOnlineHospitalsInfo,
+
+  saveRoomToken,
+  saveCurrentTypingMessage,
 } = userSlice.actions;
 export default userSlice.reducer;
