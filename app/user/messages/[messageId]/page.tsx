@@ -8,11 +8,16 @@ import {
   useGetHospitalByIdQuery,
   hospitalProps,
   useGetRoomTokenQuery,
+  saveRoomToken,
+  saveCurrentTypingMessage,
 } from "@/app/store/slices/user.slice";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loader from "@/app/components/Loader";
 import { useAppSelector } from "@/app/store/store";
 import { socket } from "@/app/store/middlewares/socket";
+import NetworkStatus from "@/app/components/NetworkStatus/NetworkStatus";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/store/store";
 
 const Messages = () => {
   const searchParams = useSearchParams();
@@ -25,24 +30,30 @@ const Messages = () => {
   } = useGetHospitalByIdQuery(hospitalId);
   const [fetchedHospitalData, setFetchedHospitalData] =
     useState<hospitalProps>();
-  const [roomIdToken, setRoomIdToken] = useState<string>();
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   const { data: roomIdData, isLoading: roomIdLoading } = useGetRoomTokenQuery({
     userId: userDashboardInfo?._id,
     hospitalId: hospitalId,
   });
 
-  const [messages, setMessages] = useState<string[]>([]);
+  const { roomToken, currentTypingMessage } = useAppSelector(
+    (state) => state.user
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (hospitalData) {
       setFetchedHospitalData(hospitalData?.data);
     }
     if (roomIdData) {
-      setRoomIdToken(roomIdData?.data?.roomId);
+      console.log(roomIdData.data.roomId);
+      dispatch(saveRoomToken(roomIdData.data.roomId));
 
+      console.log(roomToken);
       //Join the chat
-      socket.emit("joinRoom", roomIdToken);
+
+      socket.emit("joinRoom", roomToken);
 
       socket.on("chatHistory", (data) => {
         //get the chat history
@@ -51,12 +62,39 @@ const Messages = () => {
     }
   }, [hospitalData, roomIdData]);
 
+  const [messages, setMessages] = useState<string[]>([]);
+  const [typedMessage, setTypedMessage] = useState<string>("");
+  const [formData, setFormData] = useState({
+    typedMessage: "",
+  });
 
+  const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    const data = {
+      roomId: roomToken,
+      sender: userDashboardInfo?._id,
+      receiver: hospitalId,
+    };
+    socket.emit("typing", data);
+
+    let typingTimer: any;
+
+    socket.on("responseTyping", (data) => {
+      console.log(data.message);
+      dispatch(saveCurrentTypingMessage(data));
+      clearTimeout(typingTimer);
+
+      typingTimer = setTimeout(() => {
+        dispatch(saveCurrentTypingMessage(""));
+      }, 2000);
+    });
+  };
 
   const viewOnlineHospitals = () => {
     router.back();
   };
-
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -73,23 +111,29 @@ const Messages = () => {
         <SidebarLayout>
           <section className="my-5">
             <section className="messages-section my-5 w-full lg:w-1/2 lg:mx-auto">
-              <section className="user-details flex items-center w-full gap-x-5 p-1">
-                <div className="avatar online">
-                  <div className="w-12 rounded-full">
-                    <img
-                      src={fetchedHospitalData?.profilePicture}
-                      alt="hospital profile image"
-                    />
+              <section className="user-details flex items-center w-full justify-between p-1">
+                <section className="first-section flex items-center gap-x-5">
+                  <div className="avatar online">
+                    <div className="w-12 rounded-full">
+                      <img
+                        src={fetchedHospitalData?.profilePicture}
+                        alt="hospital profile image"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <Text className="font-semibold">
-                  {fetchedHospitalData?.clinicName}
-                </Text>
+                  <Text className="font-semibold">
+                    {fetchedHospitalData?.clinicName}
+                  </Text>
+                </section>
+
+                <section className="second-section px-4">
+                  <NetworkStatus />
+                </section>
               </section>
               <section className="status-tab w-full items-center justify-center my-5">
-                <Text className="text-red-500 text-sm text-center">
-                  no internet connection
+                <Text className="text-[13px] text-center text-accent font-bold">
+                  {currentTypingMessage?.message}
                 </Text>
               </section>
               <section className="h-screen w-full flex flex-col">
@@ -112,12 +156,15 @@ const Messages = () => {
                     </div>
                   </div>
 
-                  <form className="w-full flex flex-col items-center justify-end">
+                  <form className="w-full flex flex-col items-center justify-end p-1">
                     <div className="relative w-full ">
                       <textarea
                         placeholder="Type a message..."
                         rows={1}
                         spellCheck="false"
+                        name="typedMessage"
+                        value={formData.typedMessage}
+                        onChange={handleInputChange}
                         className="w-full outline-none border-2 border-purple-300 focus:border-accent hover:border-accent transition-all duration-150 ease-in p-4 rounded-[30px] block"
                       />
                       <button
