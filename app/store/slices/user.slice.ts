@@ -99,6 +99,8 @@ export interface currentTypingMessaageProps{
   sender: string;
   receiver: string;
   _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const initialState = {

@@ -19,7 +19,7 @@ import { socket } from "@/app/store/middlewares/socket";
 import NetworkStatus from "@/app/components/NetworkStatus/NetworkStatus";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/store/store";
-import { currentTime } from "@/app/helpers";
+import { currentTime, currentMongoTime } from "@/app/helpers";
 
 const Messages = () => {
   const searchParams = useSearchParams();
@@ -58,6 +58,9 @@ const Messages = () => {
       socket.on("chatHistory", (data) => {
         //get the chat history
         console.log(data);
+
+        //set the messages
+        setMessages(data);
       });
     }
   }, [hospitalData, roomIdData]);
@@ -109,14 +112,22 @@ const Messages = () => {
     //send the message
     socket.emit("sendMessage", data);
 
-    //listen for new message
-    socket.on("newMessage", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-      socket.off("newMessage");
-    });
-
     setFormData({ typedMessage: "" });
   };
+
+  //listen for new message
+  useEffect(() => {
+    const handleNewMessage = (data: any) => {
+      console.log(data);
+      setMessages((prevMessages) => [...prevMessages, data]);
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
 
   useEffect(() => {
     // Scroll to the bottom when messages change
@@ -148,7 +159,7 @@ const Messages = () => {
         <SidebarLayout>
           <section className="my-5">
             <section className="messages-section my-5 w-full lg:w-1/2 lg:mx-auto">
-              <section className="user-details flex contacurrentitems-center w-full justify-between p-1">
+              <section className="user-details flex items-center w-full justify-between p-1">
                 <section className="first-section flex items-center gap-x-5">
                   <div className="avatar online">
                     <div className="w-12 rounded-full">
@@ -175,34 +186,42 @@ const Messages = () => {
               </section>
               <section className="h-screen w-full flex flex-col">
                 <div className="flex-grow">
-                  {messages.map((message, index) => (
-                    <div
-                      key={index}
-                      className={`mb-4 ${
-                        message?.sender === userDashboardInfo?._id
-                          ? "sender"
-                          : "receiver"
-                      }`}
-                      ref={messageInputRef}
-                    >
+                  {messages.length == 0 ? (
+                    <Text>
+                      You've no messages with {fetchedHospitalData?.clinicName}{" "}
+                    </Text>
+                  ) : (
+                    messages.map((message, index) => (
                       <div
-                        className={`max-w-[70%] ${
+                        key={index}
+                        className={`mb-4 ${
                           message?.sender === userDashboardInfo?._id
-                            ? "bg-purple-200"
-                            : "bg-slate-100"
-                        } p-2 rounded-md ml-${
-                          message?.sender === userDashboardInfo?._id
-                            ? "auto"
-                            : "0"
-                        } break-words`}
+                            ? "sender"
+                            : "receiver"
+                        }`}
+                        ref={messageInputRef}
                       >
-                        {message?.message}
-                        <Text className="block text-[12px] text-right p-0 m-0">
-                          {currentTime()}
-                        </Text>
+                        <div
+                          className={`max-w-[70%] ${
+                            message?.sender === userDashboardInfo?._id
+                              ? "bg-purple-200"
+                              : "bg-slate-100"
+                          } p-2 rounded-md ml-${
+                            message?.sender === userDashboardInfo?._id
+                              ? "auto"
+                              : "0"
+                          } break-words`}
+                        >
+                          {message?.message}
+                          <Text className="block text-[12px] text-right p-0 m-0">
+                            {message?.createdAt
+                              ? currentMongoTime(message?.createdAt!)
+                              : currentTime()}
+                          </Text>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
 
                   <div className="breaker my-5"></div>
 
@@ -238,7 +257,6 @@ const Messages = () => {
                       </button>
                     </div>
                   </form>
-                  <br />
                   <br />
                   <br />
                   <br />
