@@ -1,6 +1,7 @@
 import Button from "@/app/components/Button";
 import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
+import ActiveUsers from "@/app/components/ActiveUsers/ActiveUsers";
 
 const Messages = () => {
   return (
@@ -16,33 +17,7 @@ const Messages = () => {
             <section className="search-users"></section>
 
             <section className="message-area">
-              <section className="active-users flex items-center justify-center">
-                <section className="hospital w-full flex items-center justify-around md:justify-start md:gap-x-5 p-2 gap-x-4">
-                  <div className="avatar cursor-pointer online">
-                    <div className="w-14 rounded-full">
-                      <img src="https://api.dicebear.com/7.x/micah/svg?seed=mayfair" />
-                    </div>
-                  </div>
-
-                  <div className="avatar cursor-pointer online">
-                    <div className="w-14 rounded-full">
-                      <img src="https://api.dicebear.com/7.x/micah/svg?seed=bloom" />
-                    </div>
-                  </div>
-
-                  <div className="avatar cursor-pointer offline">
-                    <div className="w-14 rounded-full">
-                      <img src="https://api.dicebear.com/7.x/micah/svg?seed=jefis" />
-                    </div>
-                  </div>
-
-                  <div className="avatar cursor-pointer online">
-                    <div className="w-14 rounded-full">
-                      <img src="https://api.dicebear.com/7.x/micah/svg?seed=trinity" />
-                    </div>
-                  </div>
-                </section>
-              </section>
+              <ActiveUsers />
               <section className="all-messages my-5">
                 <section className="message-one flex items-center gap-x-3 my-4 cursor-pointer hover:bg-purple-100 transition-colors duration-100 ease-in p-2">
                   <div className="avatar online">
