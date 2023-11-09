@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/app/components/Loader";
 import { useAppSelector } from "@/app/store/store";
 import { socket } from "@/app/store/middlewares/socket";
+import NetworkStatus from "@/app/components/NetworkStatus/NetworkStatus";
 
 const Messages = () => {
   const searchParams = useSearchParams();
@@ -51,12 +52,9 @@ const Messages = () => {
     }
   }, [hospitalData, roomIdData]);
 
-
-
   const viewOnlineHospitals = () => {
     router.back();
   };
-
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -74,22 +72,28 @@ const Messages = () => {
           <section className="my-5">
             <section className="messages-section my-5 w-full lg:w-1/2 lg:mx-auto">
               <section className="user-details flex items-center w-full gap-x-5 p-1">
-                <div className="avatar online">
-                  <div className="w-12 rounded-full">
-                    <img
-                      src={fetchedHospitalData?.profilePicture}
-                      alt="hospital profile image"
-                    />
+                <section className="first-section">
+                  <div className="avatar online">
+                    <div className="w-12 rounded-full">
+                      <img
+                        src={fetchedHospitalData?.profilePicture}
+                        alt="hospital profile image"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <Text className="font-semibold">
-                  {fetchedHospitalData?.clinicName}
-                </Text>
+                  <Text className="font-semibold">
+                    {fetchedHospitalData?.clinicName}
+                  </Text>
+                </section>
+
+                <section className="second-section">
+                  <NetworkStatus />
+                </section>
               </section>
               <section className="status-tab w-full items-center justify-center my-5">
                 <Text className="text-red-500 text-sm text-center">
-                  no internet connection
+                  Emmysoft is typing
                 </Text>
               </section>
               <section className="h-screen w-full flex flex-col">
