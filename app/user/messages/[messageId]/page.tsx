@@ -10,17 +10,20 @@ import {
   useGetRoomTokenQuery,
   saveRoomToken,
   saveCurrentTypingMessage,
+  currentTypingMessaageProps,
 } from "@/app/store/slices/user.slice";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Loader from "@/app/components/Loader";
 import { useAppSelector } from "@/app/store/store";
 import { socket } from "@/app/store/middlewares/socket";
 import NetworkStatus from "@/app/components/NetworkStatus/NetworkStatus";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/store/store";
+import { currentTime } from "@/app/helpers";
 
 const Messages = () => {
   const searchParams = useSearchParams();
+  const messageInputRef = useRef<HTMLDivElement | any>(null);
   const router = useRouter();
   const hospitalId = searchParams.get("hospitalId");
   const {
@@ -47,12 +50,9 @@ const Messages = () => {
       setFetchedHospitalData(hospitalData?.data);
     }
     if (roomIdData) {
-      console.log(roomIdData.data.roomId);
       dispatch(saveRoomToken(roomIdData.data.roomId));
 
-      console.log(roomToken);
       //Join the chat
-
       socket.emit("joinRoom", roomToken);
 
       socket.on("chatHistory", (data) => {
@@ -62,8 +62,7 @@ const Messages = () => {
     }
   }, [hospitalData, roomIdData]);
 
-  const [messages, setMessages] = useState<string[]>([]);
-  const [typedMessage, setTypedMessage] = useState<string>("");
+  const [messages, setMessages] = useState<currentTypingMessaageProps[]>([]);
   const [formData, setFormData] = useState({
     typedMessage: "",
   });
@@ -82,7 +81,6 @@ const Messages = () => {
     let typingTimer: any;
 
     socket.on("responseTyping", (data) => {
-      console.log(data.message);
       dispatch(saveCurrentTypingMessage(data));
       clearTimeout(typingTimer);
 
@@ -94,6 +92,45 @@ const Messages = () => {
 
   const viewOnlineHospitals = () => {
     router.back();
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | any) => {
+    e.preventDefault();
+
+    const data = {
+      roomId: roomToken,
+      sender: userDashboardInfo?._id,
+      receiver: hospitalId,
+      message: formData.typedMessage,
+    };
+
+    if (formData.typedMessage == "") return;
+
+    //send the message
+    socket.emit("sendMessage", data);
+
+    //listen for new message
+    socket.on("newMessage", (data) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+      socket.off("newMessage");
+    });
+
+    setFormData({ typedMessage: "" });
+  };
+
+  useEffect(() => {
+    // Scroll to the bottom when messages change
+    const containerRef = messageInputRef.current;
+    if (containerRef) {
+      containerRef.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  const handleKeyPress = (event: React.KeyboardEvent | any) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      // Submit the form when Enter is pressed (without Shift key)
+      handleSubmit(event);
+    }
   };
 
   return (
@@ -111,7 +148,7 @@ const Messages = () => {
         <SidebarLayout>
           <section className="my-5">
             <section className="messages-section my-5 w-full lg:w-1/2 lg:mx-auto">
-              <section className="user-details flex items-center w-full justify-between p-1">
+              <section className="user-details flex contacurrentitems-center w-full justify-between p-1">
                 <section className="first-section flex items-center gap-x-5">
                   <div className="avatar online">
                     <div className="w-12 rounded-full">
@@ -137,26 +174,42 @@ const Messages = () => {
                 </Text>
               </section>
               <section className="h-screen w-full flex flex-col">
-                <div className="flex-grow overflow-y-auto">
-                  <div className="mb-4 receiver">
-                    <div className="max-w-[70%] bg-slate-100 p-4 rounded-md text-sm">
-                      Hi, emmanuel. How are you doing today?
+                <div className="flex-grow">
+                  {messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`mb-4 ${
+                        message?.sender === userDashboardInfo?._id
+                          ? "sender"
+                          : "receiver"
+                      }`}
+                      ref={messageInputRef}
+                    >
+                      <div
+                        className={`max-w-[70%] ${
+                          message?.sender === userDashboardInfo?._id
+                            ? "bg-purple-200"
+                            : "bg-slate-100"
+                        } p-2 rounded-md ml-${
+                          message?.sender === userDashboardInfo?._id
+                            ? "auto"
+                            : "0"
+                        } break-words`}
+                      >
+                        {message?.message}
+                        <Text className="block text-[12px] text-right p-0 m-0">
+                          {currentTime()}
+                        </Text>
+                      </div>
                     </div>
-                  </div>
+                  ))}
 
-                  <div className="mb-4 sender">
-                    <div className="max-w-[70%] bg-purple-200  p-4 rounded-md ml-auto text-sm">
-                      What's up chief? Am good.
-                    </div>
-                  </div>
+                  <div className="breaker my-5"></div>
 
-                  <div className="mb-4 receiver">
-                    <div className="max-w-[70%] bg-slate-100 p-4 rounded-md text-sm">
-                      I dey my bro. How far with the project? Your babe nko?
-                    </div>
-                  </div>
-
-                  <form className="w-full flex flex-col items-center justify-end p-1">
+                  <form
+                    className="w-full my-8 flex flex-col items-center justify-center p-1 mb-10"
+                    onSubmit={handleSubmit}
+                  >
                     <div className="relative w-full ">
                       <textarea
                         placeholder="Type a message..."
@@ -165,12 +218,11 @@ const Messages = () => {
                         name="typedMessage"
                         value={formData.typedMessage}
                         onChange={handleInputChange}
+                        tabIndex={0}
+                        onKeyDown={handleKeyPress}
                         className="w-full outline-none border-2 border-purple-300 focus:border-accent hover:border-accent transition-all duration-150 ease-in p-4 rounded-[30px] block"
                       />
-                      <button
-                        type="submit"
-                        className="absolute top-1/2 right-3 transform -translate-y-1/2 px-5 rounded-full"
-                      >
+                      <button className="absolute top-1/2 right-3 transform -translate-y-1/2 px-5 rounded-full">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -186,6 +238,10 @@ const Messages = () => {
                       </button>
                     </div>
                   </form>
+                  <br />
+                  <br />
+                  <br />
+                  <br />
                 </div>
               </section>
             </section>

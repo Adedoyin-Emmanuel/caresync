@@ -47,12 +47,9 @@ const Messages = () => {
       setFetchedUserData(userData?.data);
     }
     if (roomIdData) {
-      console.log(roomIdData.data.roomId);
       dispatch(saveRoomToken(roomIdData.data.roomId));
 
-      console.log(roomToken);
       //Join the chat
-
       socket.emit("joinRoom", roomToken);
 
       socket.on("chatHistory", (data) => {
@@ -92,6 +89,35 @@ const Messages = () => {
     });
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement> | any) => {
+    e.preventDefault();
+
+    const data = {
+      roomId: roomToken,
+      sender: userDashboardInfo?._id,
+      receiver: userId,
+      message: formData.typedMessage,
+    };
+
+    if (formData.typedMessage == "") return;
+
+    //send the message
+    socket.emit("sendMessage", data);
+
+    //listen for new message
+    socket.on("newMessage", (data) => {
+       setMessages((prevMessages) => [...prevMessages, data]);
+    });
+    setFormData({ typedMessage: "" });
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent | any) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      // Submit the form when Enter is pressed (without Shift key)
+      handleSubmit(event);
+    }
+  };
+
   const viewOnlineHospitals = () => {
     router.back();
   };
@@ -122,9 +148,7 @@ const Messages = () => {
                     </div>
                   </div>
 
-                  <Text className="font-semibold">
-                    {fetchedUserData?.name}
-                  </Text>
+                  <Text className="font-semibold">{fetchedUserData?.name}</Text>
                 </section>
 
                 <section className="second-section px-4">
@@ -156,7 +180,10 @@ const Messages = () => {
                     </div>
                   </div>
 
-                  <form className="w-full flex flex-col items-center justify-end p-1">
+                  <form
+                    className="w-full flex flex-col items-center justify-end p-1"
+                    onSubmit={handleSubmit}
+                  >
                     <div className="relative w-full ">
                       <textarea
                         placeholder="Type a message..."
@@ -165,6 +192,8 @@ const Messages = () => {
                         name="typedMessage"
                         value={formData.typedMessage}
                         onChange={handleInputChange}
+                        onKeyDown={handleKeyPress}
+                        tabIndex={0}
                         className="w-full outline-none border-2 border-purple-300 focus:border-accent hover:border-accent transition-all duration-150 ease-in p-4 rounded-[30px] block"
                       />
                       <button

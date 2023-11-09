@@ -54,6 +54,16 @@ export function formatDateTime(dateTimeString: Date) {
   };
 }
 
+export function currentTime() {
+  const date = new Date();
+   const ampm = date.getHours() >= 12 ? "pm" : "am";
+
+   const hours = date.getHours() % 12 || 12;
+  const minutes = date.getMinutes();
+  
+  return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+}
+
 
 
 export function getCurrentDateTime() {
