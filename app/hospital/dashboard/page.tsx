@@ -16,7 +16,7 @@ import {
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
@@ -29,6 +29,8 @@ const Home = () => {
   const { data: hospitalData, isLoading } = useGetHospitalQuery({});
   const { userInfo } = useAppSelector((state) => state.auth);
   const router = useRouter();
+  const healthCareHistoryRef = useRef<HTMLDivElement | any>(null);
+
   let dataToPass = {
     id: userInfo?._id,
     limit: 5,
@@ -67,7 +69,12 @@ const Home = () => {
         <HospitalSidebarNav showWelcomeMesage={true}>
           <section className="general-container w-full items-start flex flex-col xl:flex-row gap-x-5">
             <section className="w-full p-1 flex md:hidden items-center justify-center">
-              <DashboardCard appointments={100} className="mt-5" />
+              <DashboardCard
+                appointments={userDashboardInfo?.appointments?.length!}
+                className="mt-5"
+                healthcareHistoryRef={healthCareHistoryRef}
+                userType="hospital"
+              />
             </section>
 
             <section className="w-full p-1 flex md:hidden items-center justify-center">
@@ -161,9 +168,8 @@ const Home = () => {
                   </section>
                 </section>
               </section>
-              </section>
-              
-              
+            </section>
+
             <section className="health-care-history w-full md:hidden my-5 p-1">
               <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
                 healthcare history
