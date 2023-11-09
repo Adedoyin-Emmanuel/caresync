@@ -15,7 +15,7 @@ import { logoutUser } from "../slices/auth.slice";
 const user:any = JSON.parse(localStorage.getItem("userDashboardInfo")!);
 
 
-const socket = io("http://localhost:2800", {
+export const socket = io("http://localhost:2800", {
   withCredentials: true,
   query: user,
 });

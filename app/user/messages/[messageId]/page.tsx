@@ -4,9 +4,15 @@ import Button from "@/app/components/Button";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useGetHospitalByIdQuery, hospitalProps } from "@/app/store/slices/user.slice";
+import {
+  useGetHospitalByIdQuery,
+  hospitalProps,
+  useGetRoomTokenQuery,
+} from "@/app/store/slices/user.slice";
 import { useEffect, useState } from "react";
 import Loader from "@/app/components/Loader";
+import { useAppSelector } from "@/app/store/store";
+import { socket } from "@/app/store/middlewares/socket";
 
 const Messages = () => {
   const searchParams = useSearchParams();
@@ -17,24 +23,44 @@ const Messages = () => {
     isLoading: hospitalDataLoading,
     isError,
   } = useGetHospitalByIdQuery(hospitalId);
-  const [fetchedHospitalData, setFetchedHospitalData] = useState<hospitalProps>();
+  const [fetchedHospitalData, setFetchedHospitalData] =
+    useState<hospitalProps>();
+  const [roomIdToken, setRoomIdToken] = useState<string>();
+  const { userDashboardInfo } = useAppSelector((state) => state.user);
+  const { data: roomIdData, isLoading: roomIdLoading } = useGetRoomTokenQuery({
+    userId: userDashboardInfo?._id,
+    hospitalId: hospitalId,
+  });
 
-
+  const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
     if (hospitalData) {
       setFetchedHospitalData(hospitalData?.data);
     }
-  }, [hospitalData]);
+    if (roomIdData) {
+      setRoomIdToken(roomIdData?.data?.roomId);
+
+      //Join the chat
+      socket.emit("joinRoom", roomIdToken);
+
+      socket.on("chatHistory", (data) => {
+        //get the chat history
+        console.log(data);
+      });
+    }
+  }, [hospitalData, roomIdData]);
 
 
 
   const viewOnlineHospitals = () => {
     router.back();
   };
+
+
   return (
     <div className="w-screen h-screen bg-zinc-50">
-      {hospitalDataLoading ? (
+      {hospitalDataLoading || roomIdLoading ? (
         <Loader />
       ) : isError ? (
         <section className="w-full flex items-center flex-col ">
@@ -50,13 +76,18 @@ const Messages = () => {
               <section className="user-details flex items-center w-full gap-x-5 p-1">
                 <div className="avatar online">
                   <div className="w-12 rounded-full">
-                    <img src={fetchedHospitalData?.profilePicture} alt="hospital profile image" />
+                    <img
+                      src={fetchedHospitalData?.profilePicture}
+                      alt="hospital profile image"
+                    />
                   </div>
                 </div>
 
-                    <Text className="font-semibold">{fetchedHospitalData?.clinicName}</Text>
+                <Text className="font-semibold">
+                  {fetchedHospitalData?.clinicName}
+                </Text>
               </section>
-              <section className="network-tab w-full items-center justify-center my-5">
+              <section className="status-tab w-full items-center justify-center my-5">
                 <Text className="text-red-500 text-sm text-center">
                   no internet connection
                 </Text>
@@ -82,7 +113,7 @@ const Messages = () => {
                   </div>
 
                   <form className="w-full flex flex-col items-center justify-end">
-                    <div className="relative w-full max-w-md">
+                    <div className="relative w-full ">
                       <textarea
                         placeholder="Type a message..."
                         rows={1}
