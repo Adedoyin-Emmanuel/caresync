@@ -12,7 +12,7 @@ import {
 import store from "../store";
 import { logoutUser } from "../slices/auth.slice";
 
-const user:any = JSON.parse(localStorage.getItem("userDashboardInfo")!);
+const user:any = typeof window !== "undefined" && JSON.parse(localStorage.getItem("userDashboardInfo")!);
 
 
 export const socket = io("http://localhost:2800", {
