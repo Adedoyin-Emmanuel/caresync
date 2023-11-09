@@ -57,7 +57,6 @@ const Messages = () => {
 
       socket.on("chatHistory", (data) => {
         //get the chat history
-        console.log(data);
 
         //set the messages
         setMessages(data);
@@ -118,7 +117,6 @@ const Messages = () => {
   //listen for new message
   useEffect(() => {
     const handleNewMessage = (data: any) => {
-      console.log(data);
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
@@ -187,7 +185,7 @@ const Messages = () => {
               <section className="h-screen w-full flex flex-col">
                 <div className="flex-grow">
                   {messages.length == 0 ? (
-                    <Text>
+                    <Text className="font-bold text-center text-sm text-accent">
                       You've no messages with {fetchedHospitalData?.clinicName}{" "}
                     </Text>
                   ) : (

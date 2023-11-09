@@ -19,7 +19,7 @@ import { socket } from "@/app/store/middlewares/socket";
 import NetworkStatus from "@/app/components/NetworkStatus/NetworkStatus";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/store/store";
-import { currentTime } from "@/app/helpers";
+import { currentTime, currentMongoTime } from "@/app/helpers";
 
 const Messages = () => {
   const searchParams = useSearchParams();
@@ -57,7 +57,9 @@ const Messages = () => {
 
       socket.on("chatHistory", (data) => {
         //get the chat history
-        console.log(data);
+
+        //set the messages
+        setMessages(data);
       });
     }
   }, [userData, roomIdData]);
@@ -111,7 +113,6 @@ const Messages = () => {
   //listen for new message
   useEffect(() => {
     const handleNewMessage = (data: any) => {
-      console.log(data);
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
@@ -181,34 +182,42 @@ const Messages = () => {
               </section>
               <section className="h-screen w-full flex flex-col">
                 <div className="flex-grow">
-                  {messages.map((message, index) => (
-                    <div
-                      key={index}
-                      className={`mb-4 ${
-                        message?.sender === userDashboardInfo?._id
-                          ? "sender"
-                          : "receiver"
-                      }`}
-                      ref={messageInputRef}
-                    >
+                  {messages.length == 0 ? (
+                    <Text className="font-bold text-center text-sm text-accent">
+                      You've no messages with {fetchedUserData?.name}{" "}
+                    </Text>
+                  ) : (
+                    messages.map((message, index) => (
                       <div
-                        className={`max-w-[70%] ${
+                        key={index}
+                        className={`mb-4 ${
                           message?.sender === userDashboardInfo?._id
-                            ? "bg-purple-200"
-                            : "bg-slate-100"
-                        } p-2 rounded-md ml-${
-                          message?.sender === userDashboardInfo?._id
-                            ? "auto"
-                            : "0"
-                        } break-words`}
+                            ? "sender"
+                            : "receiver"
+                        }`}
+                        ref={messageInputRef}
                       >
-                        {message?.message}
-                        <Text className="block text-[12px] text-right p-0 m-0">
-                          {currentTime()}
-                        </Text>
+                        <div
+                          className={`max-w-[70%] ${
+                            message?.sender === userDashboardInfo?._id
+                              ? "bg-purple-200"
+                              : "bg-slate-100"
+                          } p-2 rounded-md ml-${
+                            message?.sender === userDashboardInfo?._id
+                              ? "auto"
+                              : "0"
+                          } break-words`}
+                        >
+                          {message?.message}
+                          <Text className="block text-[12px] text-right p-0 m-0">
+                            {message?.createdAt
+                              ? currentMongoTime(message?.createdAt!)
+                              : currentTime()}
+                          </Text>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                   <div className="breaker my-5"></div>
                   <form
                     className="w-full my-8 flex flex-col items-center justify-center p-1 mb-10"
