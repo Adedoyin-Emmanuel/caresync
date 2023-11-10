@@ -88,7 +88,7 @@ const SearchHospitals = () => {
                       clinicName={hospital.clinicName}
                       isVerified={hospital.isVerified}
                       key={hospital._id}
-                      href={`/user/appointments/new/${hospital._id}`}
+                      href={`/user/search/${hospital._id}`}
                     />
                   );
                 })

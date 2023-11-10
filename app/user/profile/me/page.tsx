@@ -86,7 +86,7 @@ export default function Me () {
                       <section className="location flex items-center justify-center gap-x-2 my-1">
                         <GrLocation className="w-5 h-5" />
                         <Text className="text-sm">
-                          {userDashboardInfo?.location}
+                          {userDashboardInfo?.location || "Lagos 9ja"}
                         </Text>
                       </section>
 

@@ -8,6 +8,7 @@ const HOSPITALS_URL = "/hospital";
 const AUTH_URL = "/auth";
 const APPOINTMENTS_URL = "/appointment";
 const ROOM_URL = "/room";
+const REVIEW_URL = "/review";
 
 const loadFromLocalStorage = (key: string, defaultValue: any) => {
   if (typeof window !== "undefined") {
@@ -91,6 +92,8 @@ export interface hospitalProps {
   bio: string;
   location?: string;
   online?: boolean;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 
@@ -663,6 +666,18 @@ export const userApiCall = apiSlice.injectEndpoints({
       }),
       providesTags: ["User", "Hospital"],
     }),
+
+
+    // review endpoints
+
+    createReview: builder.mutation({
+      query: (data) => ({
+        url: REVIEW_URL,
+        method: "POST",
+        data: data,
+      }),
+      invalidatesTags: ["User", "Hospital"],
+    }),
   }),
 });
 
@@ -710,6 +725,8 @@ export const {
   useGetOnlineHospitalsQuery,
 
   useGetRoomTokenQuery,
+
+  useCreateReviewMutation
 } = userApiCall;
 
 export const {

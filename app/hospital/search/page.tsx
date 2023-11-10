@@ -21,13 +21,12 @@ const SearchUsers = () => {
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setShowData(true);
-
+    setSkip(false);
   };
 
   const [skip, setSkip] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading } = useSearchUserQuery(formData.userName, {skip});
+  const { data, isLoading } = useSearchUserQuery(formData.userName, { skip });
   const [showData, setShowData] = useState<boolean>(false);
   const { userSearchInfo } = useAppSelector((state) => state.user);
   const [responseLength, setResponseLength] = useState<number>(0);

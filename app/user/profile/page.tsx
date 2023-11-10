@@ -5,9 +5,7 @@ import Input from "@/app/components/Input";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
-import {
-  updateUserInfo,
-} from "@/app/store/slices/auth.slice";
+import { updateUserInfo } from "@/app/store/slices/auth.slice";
 import { saveDashboardInfo } from "@/app/store/slices/user.slice";
 import { useUpdateUserMutation } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
@@ -17,10 +15,8 @@ import toast from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 
-
-
-export default function Profile () {
- // const router = useRouter();
+export default function Profile() {
+  // const router = useRouter();
 
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   //if (!userDashboardInfo) router.push("/user/dashboard");
@@ -169,5 +165,4 @@ export default function Profile () {
       )}
     </div>
   );
-};
-
+}
