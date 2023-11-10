@@ -18,11 +18,14 @@ import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import AppointmentButton from "@/app/components/AppointmentButton";
 
-const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
+const HospitalProfile = ({ params }: { params: { hospitalId: string } }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading, isError } = useGetHospitalByIdQuery(params.hospitalId);
-  const {  hospitalSearchProfileInfo } = useAppSelector((state) => state.user);
+  const { data, isLoading, isError } = useGetHospitalByIdQuery(
+    params.hospitalId
+  );
+  const { hospitalSearchProfileInfo } = useAppSelector((state) => state.user);
 
   const router = useRouter();
 
@@ -32,7 +35,7 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
     }
   }, [data]);
 
-  const handleSearchUsers = () => {
+  const handleSearchHospitals = () => {
     router.back();
   };
 
@@ -42,9 +45,9 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
         <Loader />
       ) : isError ? (
         <section className="w-full flex items-center flex-col ">
-          <Text className="my-5">Couldn't get user details 😥</Text>
+          <Text className="my-5">Couldn't get hospital details 😥</Text>
           <section className="my-5">
-            <Button onClick={handleSearchUsers}>Search Users</Button>
+            <Button onClick={handleSearchHospitals}>Search Hospitals</Button>
           </section>
         </section>
       ) : (
@@ -58,7 +61,7 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
                       <img
                         className=""
                         src={hospitalSearchProfileInfo?.profilePicture}
-                        alt="user profile image"
+                        alt="hospital profile image"
                       />
                     </div>
                   </div>
@@ -75,7 +78,9 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
                         </span>
                       </h3>
 
-                      <Link href={`/user/search/${params.hospitalId}/review?hId=${hospitalSearchProfileInfo?._id}`}>
+                      <Link
+                        href={`/user/search/${params.hospitalId}/review?hId=${hospitalSearchProfileInfo?._id}`}
+                      >
                         <section className="bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
                           review hospital
                         </section>
@@ -101,8 +106,8 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
                       <section className="flex items-center justify-center gap-x-2 my-1">
                         <HiOutlineShieldCheck className="w-5 h-5" />
                         <Text className="text-sm">
-                          {hospitalSearchProfileInfo?.allTotalAppointments} total
-                          checkups
+                          {hospitalSearchProfileInfo?.allTotalAppointments}{" "}
+                          total checkups
                         </Text>
                       </section>
 
@@ -117,16 +122,21 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
                         <MdDateRange className="w-5 h-5" />
                         <Text className="text-sm">
                           joined{" "}
-                          {moment(new Date(hospitalSearchProfileInfo?.createdAt!))
+                          {moment(
+                            new Date(hospitalSearchProfileInfo?.createdAt!)
+                          )
                             .startOf("days")
                             .fromNow()}{" "}
                         </Text>
                       </section>
+
+                     
                     </section>
                   </section>
                 </section>
               </section>
-            </section>
+                </section>
+                <AppointmentButton/>
           </section>
         </SidebarLayout>
       )}
@@ -134,4 +144,4 @@ const UserProfile = ({ params }: { params: { hospitalId: string } }) => {
   );
 };
 
-export default UserProfile;
+export default HospitalProfile;

@@ -2,7 +2,6 @@
 
 import { AppointmentLabel } from "@/app/components/AppointmentCard";
 import Button from "@/app/components/Button";
-import ChatBotButton from "@/app/components/ChatBotButton";
 import Loader, { LoaderSmall } from "@/app/components/Loader";
 import { HospitalSidebarNav } from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
@@ -184,7 +183,6 @@ const Home = () => {
               )}
             </section>
 
-            <ChatBotButton />
           </section>
         </HospitalSidebarNav>
       )}

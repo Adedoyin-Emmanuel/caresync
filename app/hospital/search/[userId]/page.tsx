@@ -17,7 +17,6 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
-import Link from "next/link";
 
 
 const UserProfile = ({ params }: { params: { userId: string } }) => {
@@ -76,13 +75,13 @@ const UserProfile = ({ params }: { params: { userId: string } }) => {
                         </span>
                       </h3>
 
-                      <Link
+                      {/* <Link
                         href={`/hospital/search/${params.userId}/review?hId=${userSearchProfileInfo?._id}`}
                       >
                         <section className="bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
                           review user
                         </section>
-                      </Link>
+                      </Link> */}
                     </section>
 
                     <Text noCapitalize className="text-sm">
