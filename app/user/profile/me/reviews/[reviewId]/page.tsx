@@ -6,7 +6,6 @@ import SidebarLayout from "@/app/components/SidebarLayout";
 import { SlBadge } from "react-icons/sl";
 import Text from "@/app/components/Text";
 import { BsPen } from "react-icons/bs";
-import { ImCheckmark } from "react-icons/im";
 import {  AiOutlineDelete } from "react-icons/ai";
 import { LuTimer } from "react-icons/lu";
 import { MdUpdate } from "react-icons/md";
