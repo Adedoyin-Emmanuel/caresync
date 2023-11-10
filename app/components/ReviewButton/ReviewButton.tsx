@@ -1,3 +1,4 @@
+import Review from "@/app/hospital/search/[userId]/review/page";
 import Link from "next/link";
 import React from "react";
 import { SlBadge } from "react-icons/sl";
@@ -8,7 +9,7 @@ interface ReviewButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   href: string;
 }
 
-export const AppointmentStartButton = ({
+const ReviewButton = ({
   className,
   href,
   ...others
@@ -26,3 +27,5 @@ export const AppointmentStartButton = ({
     </Link>
   );
 };
+
+export default ReviewButton;
