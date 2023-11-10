@@ -91,6 +91,8 @@ export interface hospitalProps {
   bio: string;
   location?: string;
   online?: boolean;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 
