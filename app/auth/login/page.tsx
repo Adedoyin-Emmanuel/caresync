@@ -44,6 +44,7 @@ const Login = () => {
         const userData = { ...data, role };
         
         dispatch(loginUser(userData));
+        console.log(role);
 
         //route the user to their respective page
         if (userData.role === "user") {
