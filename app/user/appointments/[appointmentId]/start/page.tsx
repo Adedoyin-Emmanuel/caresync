@@ -19,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 const StartAppointment = () => {
   const pathName = usePathname();
@@ -134,9 +135,16 @@ const StartAppointment = () => {
                   showButton ? "block" : "hidden"
                 }`}
               >
-                <Button onClick={handleJoinRoom} disabled={tokenDataLoading}>
+                <Button onClick={handleJoinRoom} disabled={tokenDataLoading} className="my-5">
                   join meeting room
                 </Button>
+
+                        <Link
+                          className="my-5"
+                  href={`/user/search/${userSpecificAppointmentInfo?.hospitalId!}/review?hId=${userSpecificAppointmentInfo?.hospitalId!}`}
+                >
+                  <Button>Review Hospital</Button>
+                </Link>
               </section>
             </section>
           )}
