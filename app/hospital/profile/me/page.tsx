@@ -7,7 +7,6 @@ import {
   useGetHospitalByIdQuery,
 } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
-//import { useRouter } from "next/navigation";
 
 import moment from "moment";
 import Link from "next/link";
@@ -15,14 +14,13 @@ import { GrLocation } from "react-icons/gr";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
+import ReviewButton from "@/app/components/ReviewButton/ReviewButton";
 
 export default function Me () {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
   const { userInfo } = useAppSelector((state) => state.auth);
   const { isLoading, isError } = useGetHospitalByIdQuery(userInfo?._id);
 
-  // const router = useRouter();
-  // if (!userDashboardInfo) router.push("/hospital/dashboard");
 
   const dateCreated: any = userDashboardInfo && userDashboardInfo?.createdAt;
 
@@ -112,7 +110,8 @@ export default function Me () {
                 </section>
               </section>
             </section>
-          </section>
+              </section>
+              <ReviewButton href="/hospital/profile/me/reviews"/>
         </HospitalSidebarNav>
       )}
     </div>

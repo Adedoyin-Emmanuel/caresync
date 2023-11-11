@@ -177,7 +177,8 @@ const Appointment = ({ params }: { params: { appointmentId: string } }) => {
                 <span className="text-accent">{userDetails?.name} </span>
               </h3>
             </section>
-            <section className="appointment-details xl:w-2/4">
+                <section className="appointment-details xl:w-2/4">
+                  
               <AppointmentLabel
                 key={userSpecificAppointmentInfo?.id}
                 userType="user"

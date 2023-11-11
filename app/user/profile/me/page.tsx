@@ -19,11 +19,10 @@ import { GrLocation } from "react-icons/gr";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { MdDateRange } from "react-icons/md";
 import { SlBadge } from "react-icons/sl";
+import ReviewButton from "@/app/components/ReviewButton/ReviewButton";
 
 export default function Me () {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
-  //const router = useRouter();
-  // if (!userDashboardInfo) router.push("/user/dashboard");
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
 
@@ -120,6 +119,7 @@ export default function Me () {
               </section>
             </section>
           </section>
+          <ReviewButton href="/user/profile/me/reviews" />
         </SidebarLayout>
       )}
     </div>

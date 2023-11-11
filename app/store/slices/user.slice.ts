@@ -96,14 +96,23 @@ export interface hospitalProps {
   createdAt: Date;
 }
 
-
-export interface currentTypingMessaageProps{
+export interface currentTypingMessaageProps {
   message: string;
   sender: string;
   receiver: string;
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface reviewProps {
+  _id: string;
+  rating: number;
+  message: string;
+  hospitalId: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const initialState = {
@@ -195,7 +204,23 @@ const initialState = {
 
   currentTypingMessage:
     typeof window !== "undefined"
-      ? (loadFromLocalStorage("currentTypingMessage", null) as currentTypingMessaageProps | null)
+      ? (loadFromLocalStorage(
+          "currentTypingMessage",
+          null
+        ) as currentTypingMessaageProps | null)
+      : null,
+
+  userReviewInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage("userReviewInfo", null) as reviewProps[] | null)
+      : null,
+
+  userSpecificReviewInfo:
+    typeof window !== "undefined"
+      ? (loadFromLocalStorage(
+          "userSpecificReviewInfo",
+          null
+        ) as reviewProps | null)
       : null,
 };
 
@@ -278,6 +303,20 @@ const userSlice = createSlice({
       );
     },
 
+    // this istthe review endpoints reducers
+    saveReviewInfo: (state, action) => {
+      state.userReviewInfo = action.payload;
+      localStorage.setItem("userReviewInfo", JSON.stringify(action.payload));
+    },
+
+    saveSpecificReviewInfo: (state, action) => {
+      state.userSpecificReviewInfo = action.payload;
+      localStorage.setItem(
+        "userSpecificReviewInfo",
+        JSON.stringify(action.payload)
+      );
+    },
+
     //this is specific to an hospital
 
     saveOnlineHospitalsInfo: (state, action) => {
@@ -308,6 +347,7 @@ const userSlice = createSlice({
         JSON.stringify(action.payload)
       );
     },
+
     // clear data reducers
 
     clearHospitalSearchInfo: (state, action) => {
@@ -334,6 +374,8 @@ const userSlice = createSlice({
       localStorage.removeItem("onlineUsers");
       localStorage.removeItem("roomToken");
       localStorage.removeItem("currentTypingMessage");
+      localStorage.removeItem("userReviewInfo");
+      localStorage.removeItem("userSpecificReviewInfo");
     },
   },
 });
@@ -667,14 +709,53 @@ export const userApiCall = apiSlice.injectEndpoints({
       providesTags: ["User", "Hospital"],
     }),
 
-
     // review endpoints
-
     createReview: builder.mutation({
       query: (data) => ({
         url: REVIEW_URL,
         method: "POST",
         data: data,
+      }),
+      invalidatesTags: ["User", "Hospital"],
+    }),
+
+    getReviewById: builder.query({
+      query: (data) => ({
+        url: `${REVIEW_URL}/${data}`,
+        method: "GET",
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
+    getReviewByUserId: builder.query({
+      query: (data) => ({
+        url: `${REVIEW_URL}/user/${data}`,
+        method: "GET",
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
+    getReviewByHospitalId: builder.query({
+      query: (data) => ({
+        url: `${REVIEW_URL}/hospital/${data}`,
+        method: "GET",
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
+    updateReview: builder.mutation({
+      query: (data) => ({
+        url: `${REVIEW_URL}/${data.id}`,
+        method: "PUT",
+        data: data.body,
+      }),
+      invalidatesTags: ["User", "Hospital"],
+    }),
+
+    deleteReview: builder.mutation({
+      query: (data) => ({
+        url: `${REVIEW_URL}/${data}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["User", "Hospital"],
     }),
@@ -726,7 +807,12 @@ export const {
 
   useGetRoomTokenQuery,
 
-  useCreateReviewMutation
+  useCreateReviewMutation,
+  useGetReviewByIdQuery,
+  useGetReviewByHospitalIdQuery,
+  useGetReviewByUserIdQuery,
+  useUpdateReviewMutation,
+  useDeleteReviewMutation,
 } = userApiCall;
 
 export const {
@@ -748,5 +834,8 @@ export const {
 
   saveRoomToken,
   saveCurrentTypingMessage,
+
+  saveReviewInfo,
+  saveSpecificReviewInfo,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -48,4 +48,5 @@ export const AppointmentStartButton = ({
     </Link>
   );
 };
+
 export default AppointmentButton;
