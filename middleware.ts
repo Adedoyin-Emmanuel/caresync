@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
       request.nextUrl.pathname !== "/auth/reset-password"
     ) {
       console.log("Trying to visit a protected route with no token data!");
-      return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+      //return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
     }
   }
 
