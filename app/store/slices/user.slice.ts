@@ -737,7 +737,7 @@ export const userApiCall = apiSlice.injectEndpoints({
 
     getReviewByHospitalId: builder.query({
       query: (data) => ({
-        url: `${REVIEW_URL}/user/${data}`,
+        url: `${REVIEW_URL}/hospital/${data}`,
         method: "GET",
       }),
       providesTags: ["User", "Hospital"],
