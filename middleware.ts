@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-
   const isPublicPath =
     path === "/auth/login" ||
     path === "/auth/signup" ||
@@ -19,6 +18,7 @@ export function middleware(request: NextRequest) {
 
   // if it is a protected route and there is no token
   if (!isPublicPath && !tokenData) {
+    console.log("No token data!");
     return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
   }
 
@@ -30,6 +30,7 @@ export function middleware(request: NextRequest) {
         new URL("/hospital/dashboard", request.nextUrl)
       );
     } else {
+      console.log("No token role!");
       return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
     }
   }
