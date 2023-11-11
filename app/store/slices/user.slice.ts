@@ -825,5 +825,8 @@ export const {
 
   saveRoomToken,
   saveCurrentTypingMessage,
+
+  saveReviewInfo,
+  saveSpecificReviewInfo
 } = userSlice.actions;
 export default userSlice.reducer;
