@@ -719,6 +719,14 @@ export const userApiCall = apiSlice.injectEndpoints({
       invalidatesTags: ["User", "Hospital"],
     }),
 
+    getReviewById: builder.query({
+      query: (data) => ({
+        url: `${REVIEW_URL}/${data}`,
+        method: "GET",
+      }),
+      providesTags: ["User", "Hospital"],
+    }),
+
     getReviewByUserId: builder.query({
       query: (data) => ({
         url: `${REVIEW_URL}/user/${data}`,
@@ -800,6 +808,7 @@ export const {
   useGetRoomTokenQuery,
 
   useCreateReviewMutation,
+  useGetReviewByIdQuery,
   useGetReviewByHospitalIdQuery,
   useGetReviewByUserIdQuery,
   useUpdateReviewMutation,
@@ -827,6 +836,6 @@ export const {
   saveCurrentTypingMessage,
 
   saveReviewInfo,
-  saveSpecificReviewInfo
+  saveSpecificReviewInfo,
 } = userSlice.actions;
 export default userSlice.reducer;

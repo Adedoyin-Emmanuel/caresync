@@ -1,10 +1,8 @@
 "use client";
-import Button from "@/app/components/Button";
 import Loader from "@/app/components/Loader";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Text from "@/app/components/Text";
 import React, { useState, useEffect } from "react";
-import { LuTimer } from "react-icons/lu";
 import ReviewCard from "@/app/components/ReviewCard/ReviewCard";
 import {
   useGetReviewByUserIdQuery,
