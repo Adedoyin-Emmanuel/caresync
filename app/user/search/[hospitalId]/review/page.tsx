@@ -137,7 +137,7 @@ const Review = () => {
                 </section>
 
                 <section className="my-4 mb-5 w-full">
-                  <Button>submit review</Button>
+                  <Button disabled={isLoading}>submit review</Button>
                 </section>
               </form>
             </section>
