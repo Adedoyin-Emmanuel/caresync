@@ -15,7 +15,10 @@ import { logoutUser } from "../slices/auth.slice";
 const user:any = typeof window !== "undefined" && JSON.parse(localStorage.getItem("userDashboardInfo")!);
 
 
-export const socket = io("http://localhost:2800", {
+const socketServerUrl =
+  process.env.NEXT_BASE_SOCKET_URL || "http://localhost:2800/api";
+
+export const socket = io(socketServerUrl, {
   withCredentials: true,
   query: user,
 });
