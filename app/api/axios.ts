@@ -3,13 +3,12 @@
 import axios from "axios";
 
 export const apiBaseUrl =
-  process.env.NEXT_BASE_URL || "http://localhost:2800/api";
+  process.env.NEXT_BASE_URL || "https://caresync-api.onrender.com/api";
 
 const Axios = axios.create({
   baseURL: apiBaseUrl,
   withCredentials: true,
 });
-
 
 
 const refreshAccessToken = async () => {
