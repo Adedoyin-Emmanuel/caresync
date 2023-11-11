@@ -13,15 +13,19 @@ export function middleware(request: NextRequest) {
     path === "/auth/verified" ||
     path === "/auth/reset-password";
 
-  console.log(request.cookies.get("refreshToken")?.value);
   const token = request.cookies.get("refreshToken")?.value || null;
-  const tokenData: any = token && jwt.decode(token);
-  console.log(tokenData);
+  const tokenData: any = jwt.decode(token!);
 
   // if it is a protected route and there is no token
-  if (!tokenData) {
-    if (!isPublicPath) {
-      console.log("No token data!");
+  if (!token || !tokenData) {
+    if (
+      request.nextUrl.pathname !== "/auth/login" &&
+      request.nextUrl.pathname !== "/auth/signup" &&
+      request.nextUrl.pathname !== "/auth/forgot-password" &&
+      request.nextUrl.pathname !== "/auth/verified" &&
+      request.nextUrl.pathname !== "/auth/reset-password"
+    ) {
+      console.log("Trying to visit a protected route with no token data!");
       return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
     }
   }
