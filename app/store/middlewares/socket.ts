@@ -16,7 +16,7 @@ const user:any = typeof window !== "undefined" && JSON.parse(localStorage.getIte
 
 
 const socketServerUrl =
-  process.env.NEXT_BASE_SOCKET_URL || "http://localhost:2800/api";
+  process.env.NEXT_BASE_SOCKET_URL || "https://caresync-api.onrender.com";
 
 export const socket = io(socketServerUrl, {
   withCredentials: true,
