@@ -17,7 +17,8 @@ const user: any =
   JSON.parse(localStorage.getItem("userDashboardInfo")!);
 
 const socketServerUrl =
-  process.env.NEXT_PUBLIC_BASE_SOCKET_URL || "http://localhost:2800/";
+  process.env.NEXT_PUBLIC_BASE_SOCKET_URL ||
+  "https://caresync-api.onrender.com";
 
 export const socket = io(socketServerUrl, {
   withCredentials: true,
