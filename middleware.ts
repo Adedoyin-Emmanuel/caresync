@@ -14,7 +14,8 @@ export function middleware(request: NextRequest) {
     path === "/auth/reset-password";
 
   const token = request.cookies.get("refreshToken")?.value || null;
-  const tokenData: any = token ? jwt.decode(token) : null;
+  const tokenData: any = token && jwt.decode(token);
+  console.log(tokenData);
 
   // if it is a protected route and there is no token
   if (!isPublicPath && !tokenData) {
