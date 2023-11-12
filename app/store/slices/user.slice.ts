@@ -24,6 +24,12 @@ const loadFromLocalStorage = (key: string, defaultValue: any) => {
   return defaultValue;
 };
 
+export const saveToLocalStorage = (key: string, data: any) => { 
+  if (typeof window !== "undefined") {
+    localStorage.setItem(key, data);
+   }
+}
+
 export interface userDashboardInfoProps {
   _id: string;
   name: string;
@@ -230,13 +236,13 @@ const userSlice = createSlice({
   reducers: {
     saveDashboardInfo: (state, action) => {
       state.userDashboardInfo = action.payload;
-      localStorage.setItem("userDashboardInfo", JSON.stringify(action.payload));
+      saveToLocalStorage("userDashboardInfo", JSON.stringify(action.payload));
     },
 
     // all appointment information this is for not specific for a user or hospital
     saveAppointmentInfo: (state, action) => {
       state.userAppointmentInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userAppointmentInfo",
         JSON.stringify(action.payload)
       );
@@ -244,7 +250,7 @@ const userSlice = createSlice({
 
     saveRecentAppointmentInfo: (state, action) => {
       state.recentAppointmentInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userRecentAppointmentInfo",
         JSON.stringify(action.payload)
       );
@@ -252,7 +258,7 @@ const userSlice = createSlice({
 
     saveHealthCareHistoryInfo: (state, action) => {
       state.healthCareHistoryInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userHealthCareHistoryInfo",
         JSON.stringify(action.payload)
       );
@@ -261,7 +267,7 @@ const userSlice = createSlice({
     //action to dispatch when an hospital search for a user
     saveHospitalSearchInfo: (state, action) => {
       state.hospitalSearchInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userHospitalSearchInfo",
         JSON.stringify(action.payload)
       );
@@ -270,7 +276,7 @@ const userSlice = createSlice({
     //action to dispatch when an hospital search for a user and then wants to view his/her profile
     saveHospitalSearchProfileInfo: (state, action) => {
       state.hospitalSearchProfileInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userHospitalSearchProfileInfo",
         JSON.stringify(action.payload)
       );
@@ -279,7 +285,7 @@ const userSlice = createSlice({
     //action to dispatch when a user searches for an hosptial
     saveUserSearchInfo: (state, action) => {
       state.userSearchInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "hospitalUserSearchInfo",
         JSON.stringify(action.payload)
       );
@@ -288,7 +294,7 @@ const userSlice = createSlice({
     //action to dispatch when a user searches for an hosptial and then wants to view their profile
     saveUserSearchProfileInfo: (state, action) => {
       state.userSearchProfileInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "hospitalUserSearchProfileInfo",
         JSON.stringify(action.payload)
       );
@@ -297,7 +303,7 @@ const userSlice = createSlice({
     // this is a specific appointment, like one out of many
     saveUserSpecificAppointmentInfo: (state, action) => {
       state.userSpecificAppointmentInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userSpecificAppointmentInfo",
         JSON.stringify(action.payload)
       );
@@ -306,12 +312,12 @@ const userSlice = createSlice({
     // this istthe review endpoints reducers
     saveReviewInfo: (state, action) => {
       state.userReviewInfo = action.payload;
-      localStorage.setItem("userReviewInfo", JSON.stringify(action.payload));
+      saveToLocalStorage("userReviewInfo", JSON.stringify(action.payload));
     },
 
     saveSpecificReviewInfo: (state, action) => {
       state.userSpecificReviewInfo = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "userSpecificReviewInfo",
         JSON.stringify(action.payload)
       );
@@ -321,28 +327,28 @@ const userSlice = createSlice({
 
     saveOnlineHospitalsInfo: (state, action) => {
       state.onlineHospitals = action.payload;
-      localStorage.setItem("onlineHospitals", JSON.stringify(action.payload));
+      saveToLocalStorage("onlineHospitals", JSON.stringify(action.payload));
     },
 
     //this is specific to a user
 
     saveOnlineUsersInfo: (state, action) => {
       state.onlineUsers = action.payload;
-      localStorage.setItem("onlineUsers", JSON.stringify(action.payload));
+      saveToLocalStorage("onlineUsers", JSON.stringify(action.payload));
     },
 
     // this is for the user and the hospital
 
     saveRoomToken: (state, action) => {
       state.roomToken = action.payload;
-      localStorage.setItem("roomToken", JSON.stringify(action.payload));
+      saveToLocalStorage("roomToken", JSON.stringify(action.payload));
     },
 
     // this is for the user and the hospital
 
     saveCurrentTypingMessage: (state, action) => {
       state.currentTypingMessage = action.payload;
-      localStorage.setItem(
+      saveToLocalStorage(
         "currentTypingMessage",
         JSON.stringify(action.payload)
       );

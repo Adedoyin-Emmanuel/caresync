@@ -46,9 +46,9 @@ const Login = () => {
         dispatch(loginUser(userData));
 
         //route the user to their respective page
-        if (userData.role === "user") {
+        if (role === "user") {
           router.push("/user/dashboard");
-        } else if (userData.role === "hospital") {
+        } else if (role === "hospital") {
           router.push("/hospital/dashboard");
         } else {
           toast.error("Invalid token, please login!");

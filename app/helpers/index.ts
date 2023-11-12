@@ -1,5 +1,4 @@
-import { AnyMxRecord } from "dns";
-
+import { jwtVerify } from "jose";
 export function formatDateTime(dateTimeString: Date) {
   const date = new Date(dateTimeString);
 
@@ -44,7 +43,7 @@ export function formatDateTime(dateTimeString: Date) {
     dateMonthYear,
     hoursAndMinutes,
     formattedDateTime,
-    formattedDate, 
+    formattedDate,
     day,
     month,
     year,
@@ -56,11 +55,11 @@ export function formatDateTime(dateTimeString: Date) {
 
 export function currentTime() {
   const date = new Date();
-   const ampm = date.getHours() >= 12 ? "pm" : "am";
+  const ampm = date.getHours() >= 12 ? "pm" : "am";
 
-   const hours = date.getHours() % 12 || 12;
+  const hours = date.getHours() % 12 || 12;
   const minutes = date.getMinutes();
-  
+
   return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
 }
 
@@ -75,8 +74,6 @@ export function currentMongoTime(dateTimeString: Date) {
   return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
 }
 
-
-
 export function getCurrentDateTime() {
   const now = new Date();
   // format date and time as YYYY-MM-DDTHH:mm (required by date-time-local input)
@@ -88,9 +85,6 @@ export function getCurrentDateTime() {
 
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
-
-
-
 
 export function formatDateToInputValue(isoDateString: Date) {
   const date = new Date(isoDateString);
@@ -113,12 +107,10 @@ export function toJavaScriptDate(mongodbTimestamp: any) {
   return date;
 }
 
-export function isValidAppointment(startDate:any, endDate:any) {
+export function isValidAppointment(startDate: any, endDate: any) {
   // Convert the MongoDB timestamps to JavaScript Date objects.
   const startDateJs = toJavaScriptDate(startDate);
   const endDateJs = toJavaScriptDate(endDate);
-  
-
 
   if (startDateJs > endDateJs) {
     return false;
@@ -132,3 +124,15 @@ export function isValidAppointment(startDate:any, endDate:any) {
 
   return true;
 }
+
+// export const verifyAuth = async (token: string) => {
+//   try {
+//     const verified = await jwtVerify(
+//       token,
+//       new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_PRIVATE_KEY)
+//     );
+//     return verified;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

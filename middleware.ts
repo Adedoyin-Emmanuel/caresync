@@ -14,20 +14,11 @@ export function middleware(request: NextRequest) {
     path === "/auth/reset-password";
 
   const token = request.cookies.get("refreshToken")?.value || null;
-  const tokenData: any = jwt.decode(token!);
+  const tokenData: any = token ? jwt.decode(token) : null;
 
   // if it is a protected route and there is no token
-  if (!token || !tokenData) {
-    if (
-      request.nextUrl.pathname !== "/auth/login" &&
-      request.nextUrl.pathname !== "/auth/signup" &&
-      request.nextUrl.pathname !== "/auth/forgot-password" &&
-      request.nextUrl.pathname !== "/auth/verified" &&
-      request.nextUrl.pathname !== "/auth/reset-password"
-    ) {
-      console.log("Trying to visit a protected route with no token data!");
-      //return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
-    }
+  if (!isPublicPath && !tokenData) {
+    return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
   }
 
   if (isPublicPath && tokenData) {
@@ -38,7 +29,6 @@ export function middleware(request: NextRequest) {
         new URL("/hospital/dashboard", request.nextUrl)
       );
     } else {
-      console.log("No token role!");
       return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
     }
   }

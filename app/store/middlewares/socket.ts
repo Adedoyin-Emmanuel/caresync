@@ -47,7 +47,6 @@ function handleAppointmentChange(
     if (indexOfUpdatedAppointment !== -1) {
       updatedAppointments[indexOfUpdatedAppointment] = appointmentData;
     }
-    console.log(appointmentData);
     store.dispatch(saveUserSpecificAppointmentInfo(appointmentData));
   } else if (changeType === "delete") {
     // For deletions, remove the appointment
@@ -57,9 +56,6 @@ function handleAppointmentChange(
 
     store.dispatch(saveUserSpecificAppointmentInfo(appointmentData));
   }
-
-  console.log(updatedAppointments);
-
   store.dispatch(saveAppointmentInfo(updatedAppointments));
 }
 
@@ -103,22 +99,16 @@ socket.on("approveAppointment", (approvedAppointment) => {
 
 //Chat events
 
-socket.on("userLogin", (userData) => {
-  console.log(userData);
-});
-
 socket.on("userLogout", (data) => {
   store.dispatch(logoutUser());
   store.dispatch(resetUser());
 });
 
 socket.on("onlineUsers", (onlineUsers) => {
-  console.log(onlineUsers);
   store.dispatch(saveOnlineUsersInfo(onlineUsers));
 });
 
 socket.on("onlineHospitals", (onlineHospitals) => {
-  console.log(onlineHospitals);
   store.dispatch(saveOnlineHospitalsInfo(onlineHospitals));
 });
 
