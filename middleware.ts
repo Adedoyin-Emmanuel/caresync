@@ -20,7 +20,10 @@ export function middleware(request: NextRequest) {
   if (!tokenData) {
     if (!isPublicPath) {
       console.log("Trying to access protected route without token");
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+
+      // I really don't know what's going on here but It is working on localhost, I really don't know why it isn't working on deployment
+      //anyhow sha, I would be grateful is anyone can help me fix it.
+      //return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
