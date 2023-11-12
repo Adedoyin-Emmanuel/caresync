@@ -59,6 +59,8 @@ export function middleware(request: NextRequest) {
 }
 
 // // See "Matching Paths" below to learn more
-// export const config = {
-//   matcher: ["/", "/auth/:path*", "/user/:path*", "/hospital/:path*"],
-// };
+export const config = {
+  matcher: [
+    "/((?!api/|_next/|_proxy/|_static|_vercel|favicon.ico|sitemap.xml|robots.txt|caresync.png|doctor.png|favicon.ico|next.svg|vercel.svg|fonts/|assets/).*)",
+  ],
+};
