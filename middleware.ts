@@ -18,18 +18,16 @@ export function middleware(request: NextRequest) {
 
   // if it is a protected route and there is no token
   if (!isPublicPath && !tokenData) {
-    return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   if (isPublicPath && tokenData) {
     if (tokenData?.role === "user") {
-      return NextResponse.redirect(new URL("/user/dashboard", request.nextUrl));
+      return NextResponse.redirect(new URL("/user/dashboard", request.url));
     } else if (tokenData?.role === "hospital") {
-      return NextResponse.redirect(
-        new URL("/hospital/dashboard", request.nextUrl)
-      );
+      return NextResponse.redirect(new URL("/hospital/dashboard", request.url));
     } else {
-      return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
@@ -40,7 +38,7 @@ export function middleware(request: NextRequest) {
       if (tokenData.role !== "user") {
         // Redirect to a suitable page based on the user's role
         return NextResponse.redirect(
-          new URL("/hospital/dashboard", request.nextUrl)
+          new URL("/hospital/dashboard", request.url)
         );
       }
     }
@@ -50,9 +48,7 @@ export function middleware(request: NextRequest) {
       // Check the user's role
       if (tokenData.role !== "hospital") {
         // Redirect to a suitable page based on the user's role
-        return NextResponse.redirect(
-          new URL("/user/dashboard", request.nextUrl)
-        );
+        return NextResponse.redirect(new URL("/user/dashboard", request.url));
       }
     }
   }
