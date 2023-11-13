@@ -3,15 +3,6 @@ import { cookies } from "next/headers";
 
 export const POST = async (request: Request) => {
   try {
-    const { token } = await request.json();
-
-    if (!token) {
-      return NextResponse.json(
-        { message: "No token provided" },
-        { status: 400 }
-      );
-    }
-
     cookies().delete("next_refresh_token");
 
     return NextResponse.json({ message: "Cookie removed successfully" });

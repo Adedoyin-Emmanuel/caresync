@@ -16,7 +16,8 @@ export const POST = async (request: Request) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      expires: 604800000,
+      maxAge: 604800000,
+      path: "/",
     });
 
     return NextResponse.json({ message: "Cookie set successfully" });

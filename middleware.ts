@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 // This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const isPublicPath =
@@ -14,8 +14,10 @@ export function middleware(request: NextRequest) {
     path === "/auth/verified" ||
     path === "/auth/reset-password";
 
-  const token = cookies().get("refreshToken")?.value;
-  const tokenData: any = token && jwt.decode(token);
+  const token = request.cookies.get("next_refresh_token")?.value;
+  const tokenData: any = token && jwt.decode(token!);
+
+  console.log(`Cookie token is ${token}`);
 
   // if it is a protected route and there is no token
   if (!tokenData) {

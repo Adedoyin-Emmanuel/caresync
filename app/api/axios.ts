@@ -5,17 +5,14 @@ import axios from "axios";
 export const apiBaseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "https://caresync-api.onrender.com/api";
 
-  
 const Axios = axios.create({
   baseURL: apiBaseUrl,
   withCredentials: true,
 });
 
-
 const refreshAccessToken = async () => {
   try {
     const response = await Axios.post("/auth/refresh-token");
-
 
     if (response) {
       console.log("Request to refresh token endpoint successful");

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -39,11 +40,23 @@ const Login = () => {
         const jwtPayload: any = jwt.decode(token);
         const tempData = jwtPayload;
         const { role } = tempData;
-        const { accessToken, ...data } = response.data;
+        const { accessToken, refreshToken, ...data } = response.data;
 
         const userData = { ...data, role };
-        
+
         dispatch(loginUser(userData));
+
+        //make request to our auth server
+        const serverResponse = await axios.post("/api/auth/set-token", {
+          token: refreshToken,
+        });
+        if (serverResponse.data) {
+          console.log(serverResponse);
+          //toast.success("Redirecting to dashboard");
+        } else {
+          console.log(serverResponse);
+          //toast.error("Token not set!");
+        }
 
         //route the user to their respective page
         if (role === "user") {
