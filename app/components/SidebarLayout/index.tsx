@@ -148,7 +148,9 @@ const SidebarLayout = ({
           <br />
           <br />
           <br />
-          <br /> <br /> <br />
+          <br />
+          <br />
+          <br />
         </section>
       </section>
 
@@ -272,6 +274,7 @@ export const HospitalSidebarNav = ({
 
         <section className="spacer md:hidden my-10">
           <br /> <br /> <br />
+          <br />
           <br />
           <br />
           <br />

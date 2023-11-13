@@ -51,7 +51,9 @@ const AllReviews = () => {
                 <span className="text-[12px]">
                   {userReviewInfo?.length! > 100
                     ? `${99}+`
-                    : userReviewInfo?.length!}
+                    : totalReviews == 0
+                    ? 0
+                    : userReviewInfo?.length}
                 </span>
               </span>
             </Text>
