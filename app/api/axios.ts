@@ -16,6 +16,7 @@ const refreshAccessToken = async () => {
   try {
     const response = await Axios.post("/auth/refresh-token");
 
+
     if (response) {
       console.log("Request to refresh token endpoint successful");
     }

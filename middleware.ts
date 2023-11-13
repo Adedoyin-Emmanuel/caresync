@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
@@ -13,7 +14,7 @@ export function middleware(request: NextRequest) {
     path === "/auth/verified" ||
     path === "/auth/reset-password";
 
-  const token = request.cookies.get("refreshToken")?.value;
+  const token = cookies().get("refreshToken")?.value;
   const tokenData: any = token && jwt.decode(token);
 
   // if it is a protected route and there is no token
@@ -23,7 +24,7 @@ export function middleware(request: NextRequest) {
 
       // I really don't know what's going on here but It is working on localhost, I really don't know why it isn't working on deployment
       //anyhow sha, I would be grateful is anyone can help me fix it.
-      //return NextResponse.redirect(new URL("/auth/login", request.url));
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
