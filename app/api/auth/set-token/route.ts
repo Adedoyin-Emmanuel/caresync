@@ -10,7 +10,7 @@ export const POST = async (request: Request) => {
         {
           data: {
             message: "No token provided",
-            token: token,
+            token: `Token is ${token}`,
           },
         },
 
