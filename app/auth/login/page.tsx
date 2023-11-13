@@ -48,7 +48,9 @@ const Login = () => {
 
         //make request to our auth server
         try {
-          const serverResponse = await axios.post("/api/auth/set-token", token);
+          const serverResponse = await axios.post("/api/auth/set-token", {
+            token,
+          });
           //console.log(serverResponse);
           if (serverResponse.data) {
             console.log(serverResponse);
