@@ -14,7 +14,9 @@ export async function middleware(request: NextRequest) {
     path === "/auth/verified" ||
     path === "/auth/reset-password";
 
-  const token = request.cookies.get("next_refresh_token")?.value;
+  const token =
+    request.cookies.get("next_refresh_token")?.value ||
+    cookies().get("next_refresh_token")?.value;
   const tokenData: any = token && jwt.decode(token!);
 
   console.log(`Cookie token is ${token}`);

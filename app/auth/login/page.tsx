@@ -50,12 +50,13 @@ const Login = () => {
         const serverResponse = await axios.post("/api/auth/set-token", {
           token: refreshToken,
         });
+        console.log(serverResponse);
         if (serverResponse.data) {
           console.log(serverResponse);
-          //toast.success("Redirecting to dashboard");
+          toast.success("Redirecting to dashboard");
         } else {
           console.log(serverResponse);
-          //toast.error("Token not set!");
+          toast.error("Token not set!");
         }
 
         //route the user to their respective page
