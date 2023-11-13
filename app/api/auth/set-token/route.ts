@@ -10,7 +10,7 @@ export const POST = async (request: Request) => {
         {
           data: {
             message: "No token provided",
-            token: `Token is ${token}`,
+            token: `Token is ${token!}`,
           },
         },
 
@@ -30,7 +30,7 @@ export const POST = async (request: Request) => {
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: `Something went wrong ${error}` },
       { status: 500 }
     );
   }
