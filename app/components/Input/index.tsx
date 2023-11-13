@@ -1,3 +1,5 @@
+"use client";
+
 import React, { MutableRefObject } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

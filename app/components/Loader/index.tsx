@@ -1,3 +1,5 @@
+"use client";
+
 interface LoaderProps {
   size?: "xs" | "sm" | "md" | "lg";
   className?: string;
