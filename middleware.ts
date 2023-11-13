@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
         );
       } else {
         console.log("No role found");
-        //return NextResponse.redirect(new URL("/auth/login", request.url));
+        return NextResponse.redirect(new URL("/auth/login", request.url));
       }
     }
   }
@@ -72,6 +72,6 @@ export async function middleware(request: NextRequest) {
 // // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    "/((?!api/|_next/|_proxy/|_static|_vercel|favicon.ico|sitemap.xml|robots.txt|caresync.png|doctor.png|favicon.ico|next.svg|vercel.svg|fonts/|assets/).*)",
+    "/((?!api/|_next/|_proxy/|_static|_vercel|favicon.ico|sitemap.xml|robots.txt|caresync.png|doctor.png|favicon.ico|next.svg|vercel.svg|fonts/|assets/|/).*)",
   ],
 };

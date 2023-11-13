@@ -41,7 +41,7 @@ const Login = () => {
         const tempData = jwtPayload;
         const { role } = tempData;
         const { accessToken, refreshToken: token, ...data } = response.data;
-
+        console.log(response.data);
         const userData = { ...data, role };
 
         dispatch(loginUser(userData));
@@ -51,16 +51,8 @@ const Login = () => {
           const serverResponse = await axios.post("/api/auth/set-token", {
             token,
           });
-          console.log(serverResponse);
-          if (serverResponse.data) {
-            console.log(serverResponse);
-            toast.success("Redirecting to dashboard");
-          }
         } catch (error: any) {
           toast.error("Token not set");
-          console.log(`Token is ${token}}`);
-          console.log("NextJS Auth Token Error");
-          console.log(error);
         }
 
         //route the user to their respective page
