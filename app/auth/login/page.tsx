@@ -51,14 +51,14 @@ const Login = () => {
           const serverResponse = await axios.post("/api/auth/set-token", {
             token,
           });
-          //console.log(serverResponse);
+          console.log(serverResponse);
           if (serverResponse.data) {
             console.log(serverResponse);
             toast.success("Redirecting to dashboard");
           }
         } catch (error: any) {
           toast.error("Token not set");
-
+          console.log(`Token is ${token}}`);
           console.log("NextJS Auth Token Error");
           console.log(error);
         }
