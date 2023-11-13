@@ -66,7 +66,7 @@ const DashboardCard = ({
           <MdOutlineKeyboardArrowRight />
         </section>
       </section>
-      <h3 className="text-[18px] font-bold my-2">{totalAppointment}</h3>
+      <h3 className="text-[18px] font-bold my-2">{totalAppointment || 0}</h3>
       <section
         className="w-full flex items-end justify-end"
         onClick={appointmentButtonClick}
