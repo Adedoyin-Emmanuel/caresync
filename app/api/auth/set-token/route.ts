@@ -7,7 +7,13 @@ export const POST = async (request: Request) => {
 
     if (!token) {
       return NextResponse.json(
-        { message: "No token provided" },
+        {
+          data: {
+            message: "No token provided",
+            token: token,
+          },
+        },
+
         { status: 400 }
       );
     }

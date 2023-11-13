@@ -36,11 +36,11 @@ const Login = () => {
       const response = await login(formData).unwrap();
       if (response) {
         toast.success(response.message);
-        const token = response.data.accessToken;
-        const jwtPayload: any = jwt.decode(token);
+        const jwtToken = response.data.accessToken;
+        const jwtPayload: any = jwt.decode(jwtToken);
         const tempData = jwtPayload;
         const { role } = tempData;
-        const { accessToken, refreshToken, ...data } = response.data;
+        const { accessToken, refreshToken: token, ...data } = response.data;
 
         const userData = { ...data, role };
 
@@ -49,7 +49,7 @@ const Login = () => {
         //make request to our auth server
         try {
           const serverResponse = await axios.post("/api/auth/set-token", {
-            token: refreshToken,
+            token,
           });
           //console.log(serverResponse);
           if (serverResponse.data) {
