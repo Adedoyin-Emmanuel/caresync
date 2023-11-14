@@ -1,3 +1,7 @@
+# Caresync 🚀
+
+[Live Link](https://getcaresync.vercel.app)
+
 ## Inspiration
 The inspiration behind Caresync was to bridge the gap between healthcare and technology. We aimed to create a platform that seamlessly connects users and hospitals, providing efficient healthcare solutions. This project was fueled by the desire to address real-time healthcare challenges using cutting-edge technology.
 
@@ -23,3 +27,50 @@ Throughout the development of Caresync, we learned invaluable lessons. Our profi
 Incorporating Next.js into our development stack also broadened our knowledge and empowered us to build a large-scale application with improved performance and SEO capabilities. We are proud of the expertise we gained and look forward to applying these skills in future projects.
 
 This write-up encapsulates the journey of Caresync, highlighting the challenges we faced, the accomplishments we achieved, and the knowledge we acquired throughout the development process. We are excited to present this innovative healthcare solution and share our experiences with the world.
+
+
+## Images
+
+
+### Dashboard
+![Dashboard](./assets/img-1.png)
+
+
+### Appointments
+![Appointments](./assets/img-2.png)
+
+### Search Hospitals
+![Search Hospitals](./assets/img-3.png)
+
+
+### Hospital Profile
+![Hospital Profile](./assets/img-4.png)
+
+
+### Messages
+![Messages](./assets/img-5.png)
+
+
+### Message Hospital
+![Message Hospital](./assets/img-6.png)
+
+### Message Hospital
+![Message Hospital](./assets/img-7.png)
+
+
+### User Profile
+![User Profile](./assets/img-8.png)
+
+### Specific Appointment
+![Specific Appointment](./assets/img-9.png)
+
+### Submit Hospital Review
+![Submit Hospital Review](./assets/img-10.png)
+
+
+### View All Reviews Made
+![View Reviews Made](./assets/img-11.png)
+
+
+### Hospital Mini Profile
+![Hospital Mini Profile](./assets/img-12.png)
