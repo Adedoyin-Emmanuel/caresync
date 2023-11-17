@@ -90,7 +90,7 @@ function handleReviewChange(
     store.dispatch(saveSpecificReviewInfo(reviewData));
   }
   store.dispatch(saveReviewInfo(updatedReviews));
-}
+} 
 
 /* listens for a newAppointment event from the server,
 triggers a reducer action that causes an update on the UI 
