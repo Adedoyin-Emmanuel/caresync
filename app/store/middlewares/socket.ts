@@ -11,6 +11,8 @@ import {
   saveReviewInfo,
   saveSpecificReviewInfo,
   reviewProps,
+  saveDashboardInfo,
+  userDashboardInfoProps,
 } from "../slices/user.slice";
 import store from "../store";
 import { logoutUser } from "../slices/auth.slice";
@@ -90,7 +92,7 @@ function handleReviewChange(
     store.dispatch(saveSpecificReviewInfo(reviewData));
   }
   store.dispatch(saveReviewInfo(updatedReviews));
-} 
+}
 
 /* listens for a newAppointment event from the server,
 triggers a reducer action that causes an update on the UI 
@@ -106,6 +108,26 @@ socket.on("newAppointment", (newAppointment) => {
       store.getState().user.userAppointmentInfo || [];
     const updatedAppointment = [newAppointment, ...existingAppointments];
     store.dispatch(saveAppointmentInfo(updatedAppointment));
+
+    const existingDashboardInfo: userDashboardInfoProps | any =
+      store.getState().user.userDashboardInfo || [];
+
+    // the new appointment to replace the old with
+    const newAppointmentDashboardInfo = [
+      newAppointment,
+      ...existingAppointments,
+    ];
+
+    // exclude the former appointment from the dashboardInfo
+    const { appointments, ...newDashboardInfo } = existingDashboardInfo;
+
+    const dataToStore = {
+      newDashboardInfo,
+      appointments: newAppointmentDashboardInfo,
+    };
+
+    //save the new data
+    store.dispatch(saveDashboardInfo(dataToStore));
   }
 });
 
@@ -154,6 +176,28 @@ socket.on("newReview", (newReview) => {
     const existingReview = store.getState().user.userReviewInfo || [];
     const updatedReview = [newReview, ...existingReview];
     store.dispatch(saveReviewInfo(updatedReview));
+
+    //update the review info on the dashboard
+
+    const existingDashboardInfo: userDashboardInfoProps | any =
+      store.getState().user.userDashboardInfo || [];
+
+    // the new appointment to replace the old with
+    const newReviewDashboardInfo = [
+      newReview,
+      ...existingReview,
+    ];
+
+    // exclude the former appointment from the dashboardInfo
+    const { appointments, ...newDashboardInfo } = existingDashboardInfo;
+
+    const dataToStore = {
+      newDashboardInfo,
+      appointments: newReviewDashboardInfo,
+    };
+
+    //save the new data
+    store.dispatch(saveDashboardInfo(dataToStore));
   }
 });
 
@@ -164,8 +208,6 @@ socket.on("updateReview", (updatedReview) => {
 socket.on("deleteReview", (deletedReview) => {
   handleReviewChange(store, "delete", deletedReview);
 });
-
-
 
 const socketMiddleware =
   (store: MiddlewareAPI) =>
