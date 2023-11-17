@@ -121,13 +121,10 @@ socket.on("newAppointment", (newAppointment) => {
     // exclude the former appointment from the dashboardInfo
     const { appointments, ...newDashboardInfo } = existingDashboardInfo;
 
-    const dataToStore = {
-      newDashboardInfo,
-      appointments: newAppointmentDashboardInfo,
-    };
+    newDashboardInfo.appointments = newAppointmentDashboardInfo;
 
     //save the new data
-    store.dispatch(saveDashboardInfo(dataToStore));
+    store.dispatch(saveDashboardInfo(newDashboardInfo));
   }
 });
 
@@ -183,21 +180,14 @@ socket.on("newReview", (newReview) => {
       store.getState().user.userDashboardInfo || [];
 
     // the new appointment to replace the old with
-    const newReviewDashboardInfo = [
-      newReview,
-      ...existingReview,
-    ];
+    const newReviewDashboardInfo = [newReview, ...existingReview];
 
     // exclude the former appointment from the dashboardInfo
     const { appointments, ...newDashboardInfo } = existingDashboardInfo;
-
-    const dataToStore = {
-      newDashboardInfo,
-      appointments: newReviewDashboardInfo,
-    };
+    newDashboardInfo.reviews = newReviewDashboardInfo;
 
     //save the new data
-    store.dispatch(saveDashboardInfo(dataToStore));
+    store.dispatch(saveDashboardInfo(newDashboardInfo));
   }
 });
 
