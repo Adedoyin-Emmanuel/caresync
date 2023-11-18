@@ -70,7 +70,8 @@ const Review = () => {
       //check if the response is legit
       if (response?.data) {
         toast.success(response.message);
-        router.push("/user/dashboard");
+
+        //router.push("/user/dashboard");
       } else {
         toast.error(response.error.message);
       }

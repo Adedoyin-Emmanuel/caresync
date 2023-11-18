@@ -8,6 +8,11 @@ import {
   saveOnlineUsersInfo,
   saveUserSpecificAppointmentInfo,
   userAppointment,
+  saveReviewInfo,
+  saveSpecificReviewInfo,
+  reviewProps,
+  saveDashboardInfo,
+  userDashboardInfoProps,
 } from "../slices/user.slice";
 import store from "../store";
 import { logoutUser } from "../slices/auth.slice";
@@ -59,6 +64,36 @@ function handleAppointmentChange(
   store.dispatch(saveAppointmentInfo(updatedAppointments));
 }
 
+function handleReviewChange(
+  store: ToolkitStore,
+  changeType: string,
+  reviewData: reviewProps
+) {
+  const existingReviews = store.getState().userReviewInfo || [];
+
+  let updatedReviews = [...existingReviews];
+
+  if (changeType === "update") {
+    // For updates,  update the corresponding review data
+    const indexOfUpdatedReview = existingReviews.findIndex(
+      (review: reviewProps) => review._id === reviewData._id
+    );
+
+    if (indexOfUpdatedReview !== -1) {
+      updatedReviews[indexOfUpdatedReview] = reviewData;
+    }
+    store.dispatch(saveSpecificReviewInfo(reviewData));
+  } else if (changeType === "delete") {
+    // For deletions, remove the review
+    updatedReviews = existingReviews.filter(
+      (review: reviewProps) => reviewData._id !== reviewData._id
+    );
+
+    store.dispatch(saveSpecificReviewInfo(reviewData));
+  }
+  store.dispatch(saveReviewInfo(updatedReviews));
+}
+
 /* listens for a newAppointment event from the server,
 triggers a reducer action that causes an update on the UI 
 */
@@ -73,6 +108,23 @@ socket.on("newAppointment", (newAppointment) => {
       store.getState().user.userAppointmentInfo || [];
     const updatedAppointment = [newAppointment, ...existingAppointments];
     store.dispatch(saveAppointmentInfo(updatedAppointment));
+
+    const existingDashboardInfo: userDashboardInfoProps | any =
+      store.getState().user.userDashboardInfo || [];
+
+    // the new appointment to replace the old with
+    const newAppointmentDashboardInfo = [
+      newAppointment,
+      ...existingAppointments,
+    ];
+
+    // exclude the former appointment from the dashboardInfo
+    const { appointments, ...newDashboardInfo } = existingDashboardInfo;
+
+    newDashboardInfo.appointments = newAppointmentDashboardInfo;
+
+    //save the new data
+    store.dispatch(saveDashboardInfo(newDashboardInfo));
   }
 });
 
@@ -97,7 +149,7 @@ socket.on("approveAppointment", (approvedAppointment) => {
   handleAppointmentChange(store, "approve", approvedAppointment);
 });
 
-//Chat events
+/* Chat events */
 
 socket.on("userLogout", (data) => {
   store.dispatch(logoutUser());
@@ -110,6 +162,41 @@ socket.on("onlineUsers", (onlineUsers) => {
 
 socket.on("onlineHospitals", (onlineHospitals) => {
   store.dispatch(saveOnlineHospitalsInfo(onlineHospitals));
+});
+
+/* Review events */
+
+socket.on("newReview", (newReview) => {
+  const id = store.getState().auth.userInfo?._id;
+
+  if (newReview.hospitalId === id || newReview.userId === id) {
+    const existingReview = store.getState().user.userReviewInfo || [];
+    const updatedReview = [newReview, ...existingReview];
+    store.dispatch(saveReviewInfo(updatedReview));
+
+    //update the review info on the dashboard
+
+    const existingDashboardInfo: userDashboardInfoProps | any =
+      store.getState().user.userDashboardInfo || [];
+
+    // the new appointment to replace the old with
+    const newReviewDashboardInfo = [newReview, ...existingReview];
+
+    // exclude the former appointment from the dashboardInfo
+    const { appointments, ...newDashboardInfo } = existingDashboardInfo;
+    newDashboardInfo.reviews = newReviewDashboardInfo;
+
+    //save the new data
+    store.dispatch(saveDashboardInfo(newDashboardInfo));
+  }
+});
+
+socket.on("updateReview", (updatedReview) => {
+  handleReviewChange(store, "update", updatedReview);
+});
+
+socket.on("deleteReview", (deletedReview) => {
+  handleReviewChange(store, "delete", deletedReview);
 });
 
 const socketMiddleware =
