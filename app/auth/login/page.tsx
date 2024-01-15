@@ -130,7 +130,6 @@ const Login = () => {
           <Button disabled={isLoading}> Login</Button>
         </section>
 
-      ,,,,,,,,,,,,,,,,,
       </form>
     </section>
   );
