@@ -37,6 +37,7 @@ Axios.interceptors.response.use(
         //just in case the client still routes the user to a protected route, we've to route them back
         if (typeof window !== "undefined") {
           window.location.href = "/auth/login";
+          await axios.post("/api/auth/reset-token");
         }
         return;
       } else {
