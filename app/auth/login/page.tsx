@@ -130,23 +130,7 @@ const Login = () => {
           <Button disabled={isLoading}> Login</Button>
         </section>
 
-        <section>
-          <Text className="inline">
-            no account?
-            <Link
-              className="capitalize text-secondary px-1"
-              href={"/auth/signup"}
-            >
-              create account
-            </Link>
-            <Link
-              className="capitalize text-secondary px-1"
-              href={"/auth/forgot-password"}
-            >
-              Forgot Password
-            </Link>
-          </Text>
-        </section>
+      ,,,,,,,,,,,,,,,,,
       </form>
     </section>
   );
