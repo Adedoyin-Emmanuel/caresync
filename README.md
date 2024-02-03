@@ -29,6 +29,12 @@ Incorporating Next.js into our development stack also broadened our knowledge an
 This write-up encapsulates the journey of Caresync, highlighting the challenges we faced, the accomplishments we achieved, and the knowledge we acquired throughout the development process. We are excited to present this innovative healthcare solution and share our experiences with the world.
 
 
+
+## What is next for Caresync?
+
+We plan on taking Caresync to the next level by monetizing it. This way, hospitals can earn from the services they are rendering. Also, we plan on adding a feature that allows hospitals to add their staff and assign them to several appointments. That way, the user knows more about the hospital and who exactly is attending to them. The services Caresync provides can also be added to a hospital Management System, that way, the hospital has all features in one and can reach their patients through Caresync. 
+
+
 ## Images
 
 
