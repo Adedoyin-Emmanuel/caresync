@@ -17,7 +17,7 @@ import {
 } from "@/app/store/slices/user.slice";
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
@@ -62,6 +62,10 @@ const Home = () => {
     router.push("/user/appointments/new");
   };
 
+  const handleBotClick = () => {
+    console.log("Hello world");
+  };
+
   return (
     <div className="w-screen h-screen bg-zinc-50">
       {isLoading ? (
@@ -73,8 +77,8 @@ const Home = () => {
               <DashboardCard
                 appointments={userDashboardInfo?.appointments?.length!}
                 className="mt-5"
-                  healthcareHistoryRef={healthCareHistoryRef}
-                  userType="user"
+                healthcareHistoryRef={healthCareHistoryRef}
+                userType="user"
               />
             </section>
 
@@ -188,9 +192,43 @@ const Home = () => {
                 <Text>History dey</Text>
               )}
             </section>
+            <section className="bot bg-purple-200 h-1/2 md:w-[28rem] w-11/12 rounded-lg shadow-md absolute bottom-3  right-2 z-[10000]">
+              <section className="chat-header w-full flex items-center justify-between p-1">
+                <section className="flex items-center gap-5  p-2">
+                  <div className="avatar online">
+                    <div className="w-10 rounded-full">
+                      <img
+                        src="https://api.dicebear.com/7.x/micah/svg?seed=emmysoft"
+                        alt="Caresync bot image"
+                      />
+                    </div>
+                  </div>
+                  <h2 className="capitalize font-semibold text-[16px]">
+                    caresync Ai
+                  </h2>
+                </section>
 
-            
-            <ChatBotButton />
+                <section className="second">
+                  <section className="h-8 w-8 flex items-center justify-center rounded-full bg-white shadow hover:bg-red-400 hover:text-white duration-100 cursor-pointer transition-colors ease-linear">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </section>
+                </section>
+              </section>
+            </section>
+            <ChatBotButton onClick={handleBotClick} />
           </section>
         </SidebarLayout>
       )}
