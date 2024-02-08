@@ -29,6 +29,7 @@ const Home = () => {
   const { data: userData, isLoading } = useGetUserQuery({});
   const { userInfo } = useAppSelector((state) => state.auth);
   const healthCareHistoryRef = useRef<HTMLDivElement | any>(null);
+  const chatBotRef = useRef<HTMLDivElement>(null);
 
   let dataToPass = {
     id: userInfo?._id,
@@ -63,7 +64,13 @@ const Home = () => {
   };
 
   const handleBotClick = () => {
-    console.log("Hello world");
+    chatBotRef.current?.classList.remove("scale-0");
+    chatBotRef.current?.classList.add("scale-100");
+  };
+
+  const handleBotCancelButtonClick = () => {
+    chatBotRef.current?.classList.remove("scale-100");
+    chatBotRef.current?.classList.add("scale-0");
   };
 
   return (
@@ -192,8 +199,11 @@ const Home = () => {
                 <Text>History dey</Text>
               )}
             </section>
-            <section className="bot bg-purple-200 h-1/2 md:w-[28rem] w-11/12 rounded-lg shadow-md absolute bottom-3  right-2 z-[10000]">
-              <section className="chat-header w-full flex items-center justify-between p-1">
+            <section
+              className="bg-purple-200 h-1/2 md:w-[28rem] w-11/12 transform-gpu transition duration-150 ease-linear scale-0 rounded-lg shadow-md absolute bottom-3  right-2 z-[10000]"
+              ref={chatBotRef}
+            >
+              <section className="w-full flex items-center justify-between p-1">
                 <section className="flex items-center gap-5  p-2">
                   <div className="avatar online">
                     <div className="w-10 rounded-full">
@@ -208,7 +218,7 @@ const Home = () => {
                   </h2>
                 </section>
 
-                <section className="second">
+                <section className="">
                   <section className="h-8 w-8 flex items-center justify-center rounded-full bg-white shadow hover:bg-red-400 hover:text-white duration-100 cursor-pointer transition-colors ease-linear">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -217,6 +227,7 @@ const Home = () => {
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="w-6 h-6"
+                      onClick={handleBotCancelButtonClick}
                     >
                       <path
                         strokeLinecap="round"
