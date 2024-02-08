@@ -188,6 +188,8 @@ const Home = () => {
                 <Text>History dey</Text>
               )}
             </section>
+
+            
             <ChatBotButton />
           </section>
         </SidebarLayout>
