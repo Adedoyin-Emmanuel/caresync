@@ -41,7 +41,6 @@ const Login = () => {
         const tempData = jwtPayload;
         const { role } = tempData;
         const { accessToken, refreshToken: token, ...data } = response.data;
-        console.log(response.data);
         const userData = { ...data, role };
 
         dispatch(loginUser(userData));
