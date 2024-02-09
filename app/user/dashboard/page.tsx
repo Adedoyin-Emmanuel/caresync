@@ -29,7 +29,39 @@ const Home = () => {
   const { data: userData, isLoading } = useGetUserQuery({});
   const { userInfo } = useAppSelector((state) => state.auth);
   const healthCareHistoryRef = useRef<HTMLDivElement | any>(null);
-  const chatBotRef = useRef<HTMLDivElement>(null);
+  const chatBotRef = useRef<HTMLFormElement>(null);
+  const chatBotMessageBottomRef = useRef<HTMLDivElement>(null);
+  const [formData, setFormData] = useState({
+    userChat: "",
+  });
+
+  const [chatBodyHeight, setChatBodyHeight] = useState<string>("h-full");
+
+  const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  //it makes more sense to define it here
+
+  interface messageStruct {
+    sender: "bot" | "user";
+    message: string;
+  }
+
+  const [messages, setMessages] = useState<messageStruct[]>([
+    {
+      sender: "bot",
+      message: `Hi, I'm Caresync AI, nice to meet you ${userInfo?.name}`,
+    },
+
+    {
+      sender: "bot",
+      message: ` I can analyze your symptoms to provide rapid and accurate diagnoses for a wide range of health conditions. 
+      I can also provide valuable insights into your overall health and wellness, helping you make informed decisions about your healthcare.
+`,
+    },
+  ]);
 
   let dataToPass = {
     id: userInfo?._id,
@@ -72,6 +104,39 @@ const Home = () => {
     chatBotRef.current?.classList.remove("scale-100");
     chatBotRef.current?.classList.add("scale-0");
   };
+
+  const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const updatedMessages = [...messages];
+
+    updatedMessages.push({ sender: "user", message: formData.userChat });
+
+    setMessages(updatedMessages);
+
+    updatedMessages.push({
+      sender: "bot",
+      message: `Response from bot`,
+    });
+    setMessages(updatedMessages);
+
+    setFormData({ ...formData, userChat: "" });
+    scrollToBottom();
+  };
+
+  const scrollToBottom = () => {
+    const chatBotMessageBottom = chatBotMessageBottomRef.current;
+    if (chatBotMessageBottom) {
+      chatBotMessageBottom.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  useEffect(() => {
+    scrollToBottom();
+
+    if (messages.length >= 10) {
+      setChatBodyHeight("h-auto");
+    }
+  }, [messages]);
 
   return (
     <div className="w-screen h-screen bg-zinc-50">
@@ -199,16 +264,20 @@ const Home = () => {
                 <Text>History dey</Text>
               )}
             </section>
-            <section
-              className="bg-purple-200 h-1/2 md:w-[28rem] w-11/12 transform-gpu transition duration-150 ease-linear scale-0 rounded-lg shadow-md absolute bottom-3  right-2 z-[10000]"
+            <form
+              className="bg-purple-200 h-4/6 absolute overflow-x-hidden scroll-smooth overflow-y-auto md:w-[28rem] w-11/12 transform-gpu transition duration-150 ease-linear scale-0 rounded-lg shadow-md  bottom-3  right-2 z-[10000]"
               ref={chatBotRef}
+              onSubmit={(e) => {
+                handleChatSubmit(e);
+              }}
+              id="chat-container"
             >
-              <section className="w-full flex items-center justify-between p-1">
-                <section className="flex items-center gap-5  p-2">
+              <section className="w-full sticky top-0 z-[10000] bg-white flex items-center justify-between p-1">
+                <section className="w-full flex items-center gap-5  p-2">
                   <div className="avatar online">
                     <div className="w-10 rounded-full">
                       <img
-                        src="https://api.dicebear.com/7.x/micah/svg?seed=emmysoft"
+                        src="https://api.dicebear.com/7.x/micah/svg?seed=ai"
                         alt="Caresync bot image"
                       />
                     </div>
@@ -219,7 +288,7 @@ const Home = () => {
                 </section>
 
                 <section className="">
-                  <section className="h-8 w-8 flex items-center justify-center rounded-full bg-white shadow hover:bg-red-400 hover:text-white duration-100 cursor-pointer transition-colors ease-linear">
+                  <section className="h-8 w-8 flex items-center justify-center rounded-full  shadow bg-red-400 text-white duration-100 cursor-pointer transition-colors ease-linear">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -239,59 +308,63 @@ const Home = () => {
                 </section>
               </section>
 
-              <section className="chat-container w-full p-2">
-                <div className="chat chat-start">
-                  <div className="chat-image avatar">
-                    <div className="w-10 rounded-full">
-                      <img
-                        src="https://api.dicebear.com/7.x/micah/svg?seed=kgifty"
-                        alt="User image"
-                      />
+              <section
+                className={`chat-container w-full ${chatBodyHeight} p-2 overflow-x-hidden overflow-y-clip mb-10`}
+              >
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`chat ${
+                      msg.sender === "user" ? "chat-end" : "chat-start"
+                    }`}
+                  >
+                    <div className="chat-image avatar">
+                      <div className="w-10 rounded-full">
+                        <img
+                          src={`${
+                            msg.sender === "user"
+                              ? userInfo?.profilePicture
+                              : "https://api.dicebear.com/7.x/micah/svg?seed=ai"
+                          }`}
+                          alt={`${msg.sender} image`}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <br />
-                  <div className="chat-bubble bg-white text-black">
-                    You were the Chosen One!
-                  </div>
-                </div>
-                <div className="chat chat-end">
-                  <div className="chat-image avatar">
-                    <div className="w-10 rounded-full">
-                      <img
-                        src="https://api.dicebear.com/7.x/micah/svg?seed=emmysoft"
-                        alt="Caresync bot image"
-                      />
+                    <div className="chat-bubble bg-white text-black break-words">
+                      {msg.message}
                     </div>
+                    <div className="" ref={chatBotMessageBottomRef}></div>
                   </div>
-
-                  <div className="chat-bubble bg-white text-black">
-                    I hate you!
-                  </div>
-                </div>
+                ))}
               </section>
 
-              <div className="fixed bottom-0 left-0 right-0 w-full shadow-md flex items-center">
+              <div className="sticky bottom-0 w-full shadow-md flex items-center">
                 <input
                   type="text"
                   placeholder="Type something..."
-                  className="w-full  border-none focus:outline-none focus:border-transparent p-4"
+                  name="userChat"
+                  onChange={handleInputChange}
+                  value={formData.userChat}
+                  className="w-full border-none focus:outline-none focus:border-transparent p-4"
                 />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="absolute right-1 z-[10000] w-6 h-6 cursor-pointer"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                  />
-                </svg>
+                <button className="flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="absolute right-1 z-[10000] w-6 h-6 cursor-pointer"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                    />
+                  </svg>
+                </button>
               </div>
-            </section>
+            </form>
             <ChatBotButton onClick={handleBotClick} />
           </section>
         </SidebarLayout>

@@ -10,6 +10,7 @@
 }
 
 *,
-body {
+html body {
   font-family: SpaceMono !important;
+  scroll-behavior: smooth;
 }
