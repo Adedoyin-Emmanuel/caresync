@@ -23,6 +23,8 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
 import { DashboardQuickActions } from "@/app/components/DashboardQuickActions/DashboardQuickActions";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,6 +36,8 @@ const Home = () => {
   const [formData, setFormData] = useState({
     userChat: "",
   });
+
+  const [showLoaderSmall, setShowLoaderSmall] = useState<boolean>(false);
 
   const [chatBodyHeight, setChatBodyHeight] = useState<string>("h-full");
 
@@ -105,23 +109,122 @@ const Home = () => {
     chatBotRef.current?.classList.add("scale-0");
   };
 
-  const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    let resp: any = { success: false, data: null, msg: "" };
+    const prompt = `
+    You are a helpful AI assistant named CaresyncAI, an advanced AI dedicated to providing accurate healthcare diagnoses, treatment recommendations, and medical information to users.
+
+    You must provide accurate, relevant, and helpful information only about health diagnoses, healthcare recommendations, diseases and treatments, drugs, medical procedures, and related topics within the healthcare domain.
+
+    You must respond in simple, concise, and understandable language that any user can comprehend.
+
+    If a user asks a question or initiates a discussion that is not directly related to healthcare or medical topics, do not provide an answer or engage in the conversation. Instead, politely redirect their focus back to the healthcare domain and its related content.
+
+    If a user inquires about the creator of CaresyncAI, respond with: "The creator of CaresyncAI is Adedoyin Emmanuel Adeniyi, a Software Engineer. His Twitter profile is https://x.com/Emmysoft_Tm, his GitHub profile is  https://github.com/adedoyin-emmanuel, and his GitLab profile is https://gitlab.com/adedoyin-emmanuel"
+
+    Your expertise is limited to healthcare, medical diagnosis, treatments, and related topics, and you must not provide any information on topics outside the scope of that domain.
+
+    All replies or outputs must be rendered in markdown format.
+
+    Additionally, you must only answer and communicate in English language, regardless of the language used by the user.
+  `;
     e.preventDefault();
+
+    setShowLoaderSmall(true);
 
     const updatedMessages = [...messages];
 
     updatedMessages.push({ sender: "user", message: formData.userChat });
 
     setMessages(updatedMessages);
-
-    updatedMessages.push({
-      sender: "bot",
-      message: `Response from bot`,
-    });
-    setMessages(updatedMessages);
-
     setFormData({ ...formData, userChat: "" });
     scrollToBottom();
+
+    try {
+      const body = {
+        messages: [
+          {
+            role: "system",
+            content: prompt,
+          },
+          {
+            role: "user",
+            content: formData.userChat,
+          },
+        ],
+        model: "gpt-3.5-turbo",
+        max_tokens: 1000,
+        temperature: 0.9,
+        n: 1,
+        top_p: 1,
+        stream: true,
+      };
+
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              process.env.NEXT_PUBLIC_OPEN_AI_KEY as string
+            }`,
+          },
+        }
+      );
+
+      const reader: any = response.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let result = [];
+
+      while (true) {
+        const chunk = await reader?.read();
+        const { done, value } = chunk as any;
+        if (done) {
+          break;
+        }
+
+        const decoded = decoder.decode(value);
+        const lines = decoded.split("\n");
+        const parsedLines = lines
+          .map((l) => l.replace(/^data:/, "").trim())
+          .filter((line) => line !== "" && line !== "[DONE]")
+          .map((line) => JSON.parse(line));
+
+        for (const parsedLine of parsedLines) {
+          const { choices } = parsedLine;
+          const { delta } = choices[0];
+          const { content } = delta;
+          if (content) {
+            result.push(content);
+          }
+        }
+      }
+
+      resp["data"] = result;
+      resp["msg"] = "";
+      resp["success"] = true;
+
+      updatedMessages.push({
+        sender: "bot",
+        message: resp["data"].join(""),
+      });
+
+      setShowLoaderSmall(false);
+      setMessages(updatedMessages);
+      scrollToBottom();
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred");
+      const updatedMessages = [...messages];
+      updatedMessages.push({
+        sender: "bot",
+        message: `Oh sugar, an error occurred 😞`,
+      });
+      setMessages(updatedMessages);
+      setShowLoaderSmall(false);
+    }
   };
 
   const scrollToBottom = () => {
@@ -131,9 +234,7 @@ const Home = () => {
     }
   };
   useEffect(() => {
-    scrollToBottom();
-
-    if (messages.length >= 10) {
+    if (messages.length >= 4) {
       setChatBodyHeight("h-auto");
     }
   }, [messages]);
@@ -312,30 +413,35 @@ const Home = () => {
                 className={`chat-container w-full ${chatBodyHeight} p-2 overflow-x-hidden overflow-y-clip mb-10`}
               >
                 {messages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`chat ${
-                      msg.sender === "user" ? "chat-end" : "chat-start"
-                    }`}
-                  >
-                    <div className="chat-image avatar">
-                      <div className="w-10 rounded-full">
-                        <img
-                          src={`${
-                            msg.sender === "user"
-                              ? userInfo?.profilePicture
-                              : "https://api.dicebear.com/7.x/micah/svg?seed=ai"
-                          }`}
-                          alt={`${msg.sender} image`}
-                        />
+                  <>
+                    <div
+                      key={index}
+                      className={`chat ${
+                        msg.sender === "user" ? "chat-end" : "chat-start"
+                      }`}
+                    >
+                      <div className="chat-image avatar">
+                        <div className="w-10 rounded-full">
+                          <img
+                            src={`${
+                              msg.sender === "user"
+                                ? userInfo?.profilePicture
+                                : "https://api.dicebear.com/7.x/micah/svg?seed=ai"
+                            }`}
+                            alt={`${msg.sender} image`}
+                          />
+                        </div>
+                      </div>
+                      <div className="chat-bubble bg-white text-black break-words">
+                        {msg.message}
                       </div>
                     </div>
-                    <div className="chat-bubble bg-white text-black break-words">
-                      {msg.message}
-                    </div>
-                    <div className="" ref={chatBotMessageBottomRef}></div>
-                  </div>
+                  </>
                 ))}
+              </section>
+
+              <section className="my-2">
+                {showLoaderSmall && <LoaderSmall className="bg-white" />}
               </section>
 
               <div className="sticky bottom-0 w-full shadow-md flex items-center">
@@ -364,6 +470,7 @@ const Home = () => {
                   </svg>
                 </button>
               </div>
+              <div className="" ref={chatBotMessageBottomRef}></div>
             </form>
             <ChatBotButton onClick={handleBotClick} />
           </section>
