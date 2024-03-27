@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import Seo from "@/app/components/Seo/Seo";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -69,68 +70,93 @@ const Login = () => {
     }
   };
   return (
-    <section className="w-screen h-screen flex items-center justify-center">
-      {isLoading && <Loader />}
-      <form
-        className="w-11/12 md:w-1/2 xl:w-1/4"
-        onSubmit={(e) => {
-          handleLogin(e);
-        }}
-      >
-        <section className="header-section my-8">
-          <h3 className="text-4xl capitalize font-bold text-secondary">
-            Login
-          </h3>
-          <Text>bridging health with technology</Text>
-        </section>
+    <>
+      <Seo
+        title="Login"
+        description="Login to your Caresync account"
+        keywords="login, log in"
+      />
+      <section className="w-screen h-screen flex items-center justify-center">
+        {isLoading && <Loader />}
+        <form
+          className="w-11/12 md:w-1/2 xl:w-1/4"
+          onSubmit={(e) => {
+            handleLogin(e);
+          }}
+        >
+          <section className="header-section my-8">
+            <h3 className="text-3xl capitalize font-bold text-secondary">
+              Login
+            </h3>
+            <Text noCapitalize>Bridging health with technology</Text>
+          </section>
 
-        <section className="my-4 mb-5">
-          <label htmlFor="email" className="text-md block my-2">
-            Email
-          </label>
-          <Input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </section>
+          <section className="my-4 mb-5">
+            <label htmlFor="email" className="text-md block my-2">
+              Email
+            </label>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </section>
 
-        <section className="my-4 mb-5">
-          <label htmlFor="email" className="text-md block my-2">
-            Password
-          </label>
-          <Input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-        </section>
+          <section className="my-4 mb-5">
+            <label htmlFor="email" className="text-md block my-2">
+              Password
+            </label>
+            <Input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+          </section>
 
-        <section className="my-4 mb-5">
-          <label htmlFor="signupAs" className="text-md block my-2">
-            Login As
-          </label>
-          <select
-            className="select border-2 border-gray-300 focus:outline-none rounded-md w-full h-16"
-            name="userType"
-            value={formData.userType}
-            onChange={handleInputChange}
-          >
-            <option value="user">User</option>
-            <option value="hospital">Hospital</option>
-          </select>
-        </section>
+          <section className="my-4 mb-5">
+            <label htmlFor="signupAs" className="text-md block my-2">
+              Login As
+            </label>
+            <select
+              className="select border-2 border-gray-300 focus:outline-none rounded-md w-full h-16"
+              name="userType"
+              value={formData.userType}
+              onChange={handleInputChange}
+            >
+              <option value="user">User</option>
+              <option value="hospital">Hospital</option>
+            </select>
+          </section>
 
-        <section className="my-4 mb-5 w-full">
-          <Button disabled={isLoading}> Login</Button>
-        </section>
-
-      </form>
-    </section>
+          <section className="mt-4 mb-2 w-full">
+            <Button disabled={isLoading}> Login</Button>
+          </section>
+          <section>
+            <Text className="inline" noCapitalize>
+              Got no account?
+              <Link
+                className="capitalize text-secondary px-1"
+                href={"/auth/signup"}
+              >
+                create
+              </Link>
+            </Text>
+            <Text className="inline" noCapitalize>
+              <Link
+                href={"/auth/forgot-password"}
+                className="capitalize text-secondary px-1"
+              >
+                <span className="text-black">|</span> Forgot password
+              </Link>
+            </Text>
+          </section>
+        </form>
+      </section>
+    </>
   );
 };
 

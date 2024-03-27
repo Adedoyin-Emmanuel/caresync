@@ -165,6 +165,23 @@ export const HospitalSidebarNav = ({
   showWelcomeMesage,
 }: SidebarLayoutProps) => {
   const currentPath = usePathname();
+  const dispatch = useDispatch<AppDispatch>();
+  const [logout] = useLogoutMutation();
+  const router = useRouter();
+
+  const handleLogoutClick = async () => {
+    try {
+      const response = await logout({}).unwrap();
+      if (response) {
+        toast.success(response.message);
+        dispatch(logoutUser());
+        dispatch(resetUser());
+        router.push("/auth/login");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || error.error || error?.data);
+    }
+  };
 
   return (
     <section className="parent h-screen w-screen flex justify-between">
@@ -256,7 +273,8 @@ export const HospitalSidebarNav = ({
           </Link>
 
           <Link
-            href="logout"
+            href=""
+            onClick={handleLogoutClick}
             className={`dashboard cursor-pointer  ${
               currentPath.includes("logout")
                 ? "text-white bg-accent"

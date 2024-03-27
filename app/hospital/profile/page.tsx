@@ -9,17 +9,15 @@ import { updateUserInfo } from "@/app/store/slices/auth.slice";
 import { saveDashboardInfo } from "@/app/store/slices/user.slice";
 import { useUpdateHospitalMutation } from "@/app/store/slices/user.slice";
 import { useAppSelector } from "@/app/store/store";
-//import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 
-export default function Profile () {
- // const router = useRouter();
+import Seo from "@/app/components/Seo/Seo";
 
+export default function Profile() {
   const { userDashboardInfo } = useAppSelector((state) => state.user);
-  //if (!userDashboardInfo) router.push("/hospital/dashboard");
 
   const [updateHospital, { isLoading: updateHospitalLoading }] =
     useUpdateHospitalMutation();
@@ -62,108 +60,116 @@ export default function Profile () {
   };
 
   return (
-    <div className="w-screen h-screen bg-zinc-50">
-      {updateHospitalLoading ? (
-        <Loader />
-      ) : (
-        <HospitalSidebarNav>
-          <section className="appointments my-5">
-            <h3 className="font-bold text-2xl capitalize text-accent">
-              profile
-            </h3>
-            <Text className="text-sm">update your profile</Text>
-            <section className="update-profile w-full my-8">
-              <section className="image-section flex flex-col items-center justify-center">
-                <div className="avatar cursor-pointer">
-                  <div className="w-24 rounded-full">
-                    <img
-                      className=""
-                      src={userDashboardInfo?.profilePicture}
-                      alt="user profile image"
-                    />
+    <>
+      <Seo title="Update profile" description="Your hospital profile" />
+      <div className="w-screen h-screen bg-zinc-50">
+        {updateHospitalLoading ? (
+          <Loader />
+        ) : (
+          <HospitalSidebarNav>
+            <section className="appointments my-5">
+              <h3 className="font-bold text-2xl capitalize text-accent">
+                profile
+              </h3>
+              <Text className="text-sm">update your profile</Text>
+              <section className="update-profile w-full my-8">
+                <section className="image-section flex flex-col items-center justify-center">
+                  <div className="avatar cursor-pointer">
+                    <div className="w-24 rounded-full">
+                      <img
+                        className=""
+                        src={userDashboardInfo?.profilePicture}
+                        alt="user profile image"
+                      />
+                    </div>
+                    <section className="pen-container bg-accent flex items-center justify-center rounded-full w-8 h-8 transform-gpu text-white translate-y-16 -translate-x-10 hover:scale-110 duration-100 ease-linear hover:bg-secondary hover:text-slate-200">
+                      <AiOutlineCamera className="h-6 w-6" />
+                    </section>
                   </div>
-                  <section className="pen-container bg-accent flex items-center justify-center rounded-full w-8 h-8 transform-gpu text-white translate-y-16 -translate-x-10 hover:scale-110 duration-100 ease-linear hover:bg-secondary hover:text-slate-200">
-                    <AiOutlineCamera className="h-6 w-6" />
-                  </section>
-                </div>
 
-                <form
-                  className="w-full p-1 md:w-1/2 xl:w-2/4"
-                  onSubmit={(e) => handleSubmit(e)}
-                >
-                  <section className="my-4 mb-5">
-                    <label htmlFor="clinicName" className="text-md block my-2">
-                      Fullname
-                    </label>
-                    <Input
-                      type="text"
-                      name="clinicName"
-                      placeholder="Enter your clinic name"
-                      value={formData.clinicName}
-                      onChange={handleInputChange}
-                    />
-                  </section>
+                  <form
+                    className="w-full p-1 md:w-1/2 xl:w-2/4"
+                    onSubmit={(e) => handleSubmit(e)}
+                  >
+                    <section className="my-4 mb-5">
+                      <label
+                        htmlFor="clinicName"
+                        className="text-md block my-2"
+                      >
+                        Fullname
+                      </label>
+                      <Input
+                        type="text"
+                        name="clinicName"
+                        placeholder="Enter your clinic name"
+                        value={formData.clinicName}
+                        onChange={handleInputChange}
+                      />
+                    </section>
 
-                  <section className="my-4 mb-5">
-                    <label htmlFor="username" className="text-md block my-2">
-                      Username
-                    </label>
-                    <Input
-                      type="text"
-                      name="username"
-                      placeholder="Enter your username"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                    />
-                  </section>
+                    <section className="my-4 mb-5">
+                      <label htmlFor="username" className="text-md block my-2">
+                        Username
+                      </label>
+                      <Input
+                        type="text"
+                        name="username"
+                        placeholder="Enter your username"
+                        value={formData.username}
+                        onChange={handleInputChange}
+                      />
+                    </section>
 
-                  <section className="my-4 mb-5">
-                    <label htmlFor="email" className="text-md block my-2">
-                      Email
-                    </label>
-                    <Input
-                      type="text"
-                      name="email"
-                      placeholder="Enter your email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                    />
-                  </section>
-                  <section className="my-4 mb-5">
-                    <label htmlFor="bio" className="text-md block my-2">
-                      Bio
-                    </label>
-                    <textarea
-                      className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
-                      name="bio"
-                      value={formData.bio}
-                      onChange={handleInputChange}
-                    ></textarea>
-                  </section>
+                    <section className="my-4 mb-5">
+                      <label htmlFor="email" className="text-md block my-2">
+                        Email
+                      </label>
+                      <Input
+                        type="text"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                      />
+                    </section>
+                    <section className="my-4 mb-5">
+                      <label htmlFor="bio" className="text-md block my-2">
+                        Bio
+                      </label>
+                      <textarea
+                        className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
+                        name="bio"
+                        value={formData.bio}
+                        onChange={handleInputChange}
+                      ></textarea>
+                    </section>
 
-                  <section className="my-4 mb-5">
-                    <label htmlFor="bio" className="text-md block my-2">
-                      Location
-                    </label>
-                    <Input
-                      type="text"
-                      name="location"
-                      placeholder="Enter your location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                    />
-                  </section>
+                    <section className="my-4 mb-5">
+                      <label htmlFor="bio" className="text-md block my-2">
+                        Location
+                      </label>
+                      <Input
+                        type="text"
+                        name="location"
+                        placeholder="Enter your location"
+                        value={formData.location}
+                        onChange={handleInputChange}
+                      />
+                    </section>
 
-                  <section className="my-4 mb-5 w-full">
-                    <Button disabled={updateHospitalLoading}> Update info</Button>
-                  </section>
-                </form>
+                    <section className="my-4 mb-5 w-full">
+                      <Button disabled={updateHospitalLoading}>
+                        {" "}
+                        Update info
+                      </Button>
+                    </section>
+                  </form>
+                </section>
               </section>
             </section>
-          </section>
-        </HospitalSidebarNav>
-      )}
-    </div>
+          </HospitalSidebarNav>
+        )}
+      </div>
+    </>
   );
-};
-
+}

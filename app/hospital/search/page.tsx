@@ -12,6 +12,7 @@ import {
 import { AppDispatch, useAppSelector } from "@/app/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import Seo from "@/app/components/Seo/Seo";
 
 const SearchUsers = () => {
   const [formData, setFormData] = useState({
@@ -41,64 +42,71 @@ const SearchUsers = () => {
   }, [formData, data]);
 
   return (
-    <div className="w-screen h-screen bg-zinc-50">
-      <HospitalSidebarNav>
-        <section className="my-5">
-          <h3 className="font-bold text-2xl capitalize text-accent">
-            search users
-          </h3>
-          <Text className="text-sm ">Search users, view their profile</Text>
+    <>
+      <Seo
+        title="Find users"
+        description="Find users on caresync"
+        keywords="discover, find users, users, hospitals"
+      />
+      <div className="w-screen h-screen bg-zinc-50">
+        <HospitalSidebarNav>
+          <section className="my-5">
+            <h3 className="font-bold text-2xl capitalize text-accent">
+              search users
+            </h3>
+            <Text className="text-sm ">Search users, view their profile</Text>
 
-          <section>
-            <form className="flex items-center justify-center mt-5">
-              <input
-                type="text"
-                placeholder="Search users"
-                name="userName"
-                className="bg-[#F5F5F5] capitalize p-5 rounded-full w-11/12 lg:w-8/12  outline-none border-2 border-purple-300 focus:border-accent hover:border-accent transition-all duration-150 ease-in my-5 text-sm"
-                onChange={handleInputChange}
-                value={formData.userName}
-              ></input>
-            </form>
+            <section>
+              <form className="flex items-center justify-center mt-5">
+                <input
+                  type="text"
+                  placeholder="Search users"
+                  name="userName"
+                  className="bg-[#F5F5F5] capitalize p-5 rounded-full w-11/12 lg:w-8/12  outline-none border-2 border-purple-300 focus:border-accent hover:border-accent transition-all duration-150 ease-in my-5 text-sm"
+                  onChange={handleInputChange}
+                  value={formData.userName}
+                ></input>
+              </form>
 
-            <section className="w-full">
-              {!isLoading && showData && (
-                <Text className={`text-center text-sm`}>
-                  search result for{" "}
-                  <span className="text-accent">{formData.userName}</span>
-                </Text>
-              )}
-            </section>
+              <section className="w-full">
+                {!isLoading && showData && (
+                  <Text className={`text-center text-sm`}>
+                    search result for{" "}
+                    <span className="text-accent">{formData.userName}</span>
+                  </Text>
+                )}
+              </section>
 
-            <section
-              className={` w-full items-center mx-auto gap-10 ${
-                responseLength !== 0 && "grid"
-              } sm:grid-cols-2 xl:grid-cols-3 my-8`}
-            >
-              {isLoading ? (
-                <LoaderSmall />
-              ) : responseLength == 0 ? (
-                <Text className="text-center my-5">No users found</Text>
-              ) : (
-                userSearchInfo?.map((user) => {
-                  return (
-                    <UserCard
-                      _id={user._id}
-                      address={user.location || "Around the world"}
-                      name={user.name}
-                      isVerified={user.isVerified}
-                      key={user._id}
-                      bio={user.bio}
-                      href={`/hospital/search/${user._id}`}
-                    />
-                  );
-                })
-              )}
+              <section
+                className={` w-full items-center mx-auto gap-10 ${
+                  responseLength !== 0 && "grid"
+                } sm:grid-cols-2 xl:grid-cols-3 my-8`}
+              >
+                {isLoading ? (
+                  <LoaderSmall />
+                ) : responseLength == 0 ? (
+                  <Text className="text-center my-5">No users found</Text>
+                ) : (
+                  userSearchInfo?.map((user) => {
+                    return (
+                      <UserCard
+                        _id={user._id}
+                        address={user.location || "Around the world"}
+                        name={user.name}
+                        isVerified={user.isVerified}
+                        key={user._id}
+                        bio={user.bio}
+                        href={`/hospital/search/${user._id}`}
+                      />
+                    );
+                  })
+                )}
+              </section>
             </section>
           </section>
-        </section>
-      </HospitalSidebarNav>
-    </div>
+        </HospitalSidebarNav>
+      </div>
+    </>
   );
 };
 

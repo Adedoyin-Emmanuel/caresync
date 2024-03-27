@@ -4,6 +4,7 @@ import Button from "@/app/components/Button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Confetti from "react-confetti";
+import Seo from "@/app/components/Seo/Seo";
 
 const Verification = () => {
   const searchParams = useSearchParams();
@@ -15,6 +16,11 @@ const Verification = () => {
 
   return (
     <>
+      <Seo
+        title="Verify"
+        description="Verify your caresync account"
+        keywords="verify account, account verification"
+      />
       {success == "true" && (
         <Confetti height={window?.innerHeight!} width={window?.innerWidth!} />
       )}

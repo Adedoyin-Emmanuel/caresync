@@ -19,6 +19,7 @@ import { SlBadge } from "react-icons/sl";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import AppointmentButton from "@/app/components/AppointmentButton";
+import Seo from "@/app/components/Seo/Seo";
 
 const HospitalProfile = ({ params }: { params: { hospitalId: string } }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,107 +41,114 @@ const HospitalProfile = ({ params }: { params: { hospitalId: string } }) => {
   };
 
   return (
-    <div className="w-screen h-screen bg-zinc-50">
-      {isLoading ? (
-        <Loader />
-      ) : isError ? (
-        <section className="w-full flex items-center flex-col ">
-          <Text className="my-5">Couldn't get hospital details 😥</Text>
-          <section className="my-5">
-            <Button onClick={handleSearchHospitals}>Search Hospitals</Button>
+    <>
+      <Seo
+        title={`${
+          hospitalSearchProfileInfo?.clinicName
+            ? hospitalSearchProfileInfo?.clinicName
+            : "Hospital"
+        }'s Profile`}
+      />
+      <div className="w-screen h-screen bg-zinc-50">
+        {isLoading ? (
+          <Loader />
+        ) : isError ? (
+          <section className="w-full flex items-center flex-col ">
+            <Text className="my-5">Couldn't get hospital details 😥</Text>
+            <section className="my-5">
+              <Button onClick={handleSearchHospitals}>Search Hospitals</Button>
+            </section>
           </section>
-        </section>
-      ) : (
-        <SidebarLayout>
-          <section className=" my-5">
-            <section className="w-full">
-              <section className="w-full my-5">
-                <section className="w-full flex flex-col items-center">
-                  <div className="avatar cursor-pointer">
-                    <div className="w-24 rounded-full">
-                      <img
-                        className=""
-                        src={hospitalSearchProfileInfo?.profilePicture}
-                        alt="hospital profile image"
-                      />
+        ) : (
+          <SidebarLayout>
+            <section className=" my-5">
+              <section className="w-full">
+                <section className="w-full my-5">
+                  <section className="w-full flex flex-col items-center">
+                    <div className="avatar cursor-pointer">
+                      <div className="w-24 rounded-full">
+                        <img
+                          className=""
+                          src={hospitalSearchProfileInfo?.profilePicture}
+                          alt="hospital profile image"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <section className="profile w-full p-1 md:p-0 md:w-1/2 xl:w-2/6">
-                    <section className="w-full flex items-center justify-between mt-5">
-                      <h3 className="font-bold text-[20px] capitalize flex items-center gap-x-1">
-                        {hospitalSearchProfileInfo?.clinicName}
-                        <span>
-                          {" "}
-                          {hospitalSearchProfileInfo?.isVerified && (
-                            <Verified big={true} />
-                          )}
-                        </span>
-                      </h3>
+                    <section className="profile w-full p-1 md:p-0 md:w-1/2 xl:w-2/6">
+                      <section className="w-full flex items-center justify-between mt-5">
+                        <h3 className="font-bold text-[20px] capitalize flex items-center gap-x-1">
+                          {hospitalSearchProfileInfo?.clinicName}
+                          <span>
+                            {" "}
+                            {hospitalSearchProfileInfo?.isVerified && (
+                              <Verified big={true} />
+                            )}
+                          </span>
+                        </h3>
 
-                      <Link
-                        href={`/user/search/${params.hospitalId}/review?hId=${hospitalSearchProfileInfo?._id}`}
-                      >
-                        <section className="bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
-                          review hospital
+                        <Link
+                          href={`/user/search/${params.hospitalId}/review?hId=${hospitalSearchProfileInfo?._id}`}
+                        >
+                          <section className="bg-accent rounded-[20px] text-sm py-1 px-3 text-white text-center capitalize cursor-pointer hover:bg-secondary transition-colors duration-100 ease-in">
+                            review hospital
+                          </section>
+                        </Link>
+                      </section>
+
+                      <Text noCapitalize className="text-sm">
+                        @{hospitalSearchProfileInfo?.username}
+                      </Text>
+
+                      <Text className="text-sm mt-2">
+                        {hospitalSearchProfileInfo?.bio}
+                      </Text>
+
+                      <section className="w-full flex flex-col items-start my-5">
+                        <section className=" flex items-center justify-center gap-x-2 my-1">
+                          <GrLocation className="w-5 h-5" />
+                          <Text className="text-sm">
+                            {hospitalSearchProfileInfo?.location || "Lagos 9ja"}
+                          </Text>
                         </section>
-                      </Link>
-                    </section>
 
-                    <Text noCapitalize className="text-sm">
-                      @{hospitalSearchProfileInfo?.username}
-                    </Text>
+                        <section className="flex items-center justify-center gap-x-2 my-1">
+                          <HiOutlineShieldCheck className="w-5 h-5" />
+                          <Text className="text-sm">
+                            {hospitalSearchProfileInfo?.allTotalAppointments}{" "}
+                            total checkups
+                          </Text>
+                        </section>
 
-                    <Text className="text-sm mt-2">
-                      {hospitalSearchProfileInfo?.bio}
-                    </Text>
+                        <section className="flex items-center justify-center gap-x-2 my-1">
+                          <SlBadge className="w-5 h-5" />
+                          <Text className="text-sm">
+                            {hospitalSearchProfileInfo?.reviews.length} reviews
+                          </Text>
+                        </section>
 
-                    <section className="w-full flex flex-col items-start my-5">
-                      <section className=" flex items-center justify-center gap-x-2 my-1">
-                        <GrLocation className="w-5 h-5" />
-                        <Text className="text-sm">
-                          {hospitalSearchProfileInfo?.location || "Lagos 9ja"}
-                        </Text>
+                        <section className="flex items-center justify-center gap-x-2 my-1">
+                          <MdDateRange className="w-5 h-5" />
+                          <Text className="text-sm">
+                            joined{" "}
+                            {moment(
+                              new Date(hospitalSearchProfileInfo?.createdAt!)
+                            )
+                              .startOf("days")
+                              .fromNow()}{" "}
+                          </Text>
+                        </section>
                       </section>
-
-                      <section className="flex items-center justify-center gap-x-2 my-1">
-                        <HiOutlineShieldCheck className="w-5 h-5" />
-                        <Text className="text-sm">
-                          {hospitalSearchProfileInfo?.allTotalAppointments}{" "}
-                          total checkups
-                        </Text>
-                      </section>
-
-                      <section className="flex items-center justify-center gap-x-2 my-1">
-                        <SlBadge className="w-5 h-5" />
-                        <Text className="text-sm">
-                          {hospitalSearchProfileInfo?.reviews.length} reviews
-                        </Text>
-                      </section>
-
-                      <section className="flex items-center justify-center gap-x-2 my-1">
-                        <MdDateRange className="w-5 h-5" />
-                        <Text className="text-sm">
-                          joined{" "}
-                          {moment(
-                            new Date(hospitalSearchProfileInfo?.createdAt!)
-                          )
-                            .startOf("days")
-                            .fromNow()}{" "}
-                        </Text>
-                      </section>
-
-                     
                     </section>
                   </section>
                 </section>
               </section>
-                </section>
-                <AppointmentButton/>
-          </section>
-        </SidebarLayout>
-      )}
-    </div>
+              <AppointmentButton />
+            </section>
+          </SidebarLayout>
+        )}
+      </div>
+    </>
   );
 };
 

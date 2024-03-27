@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 @font-face {
-  src: url("/fonts/space-grotesk.ttf");
-  font-family: SpaceMono;
+  src: url("/fonts/BricolageGrotesque-Regular-BF648bd5781d794.otf");
+  font-family: Bricolage;
   font-weight: normal;
   font-style: normal;
 }
 
 *,
 html body {
-  font-family: SpaceMono !important;
+  font-family: Bricolage !important;
   scroll-behavior: smooth;
 }

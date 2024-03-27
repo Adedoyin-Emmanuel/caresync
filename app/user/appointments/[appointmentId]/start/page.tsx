@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import Seo from "@/app/components/Seo/Seo";
 
 const StartAppointment = () => {
   const pathName = usePathname();
@@ -100,72 +101,85 @@ const StartAppointment = () => {
   };
 
   return (
-    <div className="w-screen h-screen bg-zinc-50">
-      {isLoading ? (
-        <Loader />
-      ) : isError ? (
-        <section className="w-full flex items-center flex-col ">
-          <Text className="my-5">Couldn't get appointment details 😥</Text>
-          <section className="my-5 w-full p-2 md:w-1/4 mx-auto">
-            <Button onClick={viewAllAppointments}>All appointments</Button>
-          </section>
-        </section>
-      ) : (
-        <SidebarLayout>
-          {tokenDataLoading ? (
-            <LoaderSmall />
-          ) : tokenDataError ? (
-            <section className="w-full flex items-center flex-col ">
-              <Text className="my-5">Couldn't join room 😥</Text>
-              <section className="my-5 w-full p-2 md:w-1/4 mx-auto">
-                <Button onClick={viewAllAppointments}>All appointments</Button>
-              </section>
+    <>
+      <Seo
+        title={`${userSpecificAppointmentInfo?.title}`}
+        description={`${userSpecificAppointmentInfo?.description}`}
+        keywords="Start appointment, meeting"
+      />
+      <div className="w-screen h-screen bg-zinc-50">
+        {isLoading ? (
+          <Loader />
+        ) : isError ? (
+          <section className="w-full flex items-center flex-col ">
+            <Text className="my-5">Couldn't get appointment details 😥</Text>
+            <section className="my-5 w-full p-2 md:w-1/4 mx-auto">
+              <Button onClick={viewAllAppointments}>All appointments</Button>
             </section>
-          ) : (
-            <section className="create-room">
-              <h3 className="font-bold text-2xl capitalize my-5">
-                appointment with{" "}
-                <span className="text-accent">
-                  {hospitalSearchProfileInfo?.clinicName}
-                </span>
-              </h3>
+          </section>
+        ) : (
+          <SidebarLayout>
+            {tokenDataLoading ? (
+              <LoaderSmall />
+            ) : tokenDataError ? (
+              <section className="w-full flex items-center flex-col ">
+                <Text className="my-5">Couldn't join room 😥</Text>
+                <section className="my-5 w-full p-2 md:w-1/4 mx-auto">
+                  <Button onClick={viewAllAppointments}>
+                    All appointments
+                  </Button>
+                </section>
+              </section>
+            ) : (
+              <section className="create-room">
+                <h3 className="font-bold text-2xl capitalize my-5">
+                  appointment with{" "}
+                  <span className="text-accent">
+                    {hospitalSearchProfileInfo?.clinicName}
+                  </span>
+                </h3>
 
-              <section
-                className={`button-container md:w-80 mx-auto my-5 ${
-                  showButton ? "block" : "hidden"
-                }`}
-              >
-                <Button onClick={handleJoinRoom} disabled={tokenDataLoading} className="my-5">
-                  join meeting room
-                </Button>
-
-                        <Link
-                          className="my-5"
-                  href={`/user/search/${userSpecificAppointmentInfo?.hospitalId!}/review?hId=${userSpecificAppointmentInfo?.hospitalId!}`}
+                <section
+                  className={`button-container md:w-80 mx-auto my-5 ${
+                    showButton ? "block" : "hidden"
+                  }`}
                 >
-                  <Button>Review Hospital</Button>
-                </Link>
+                  <Button
+                    onClick={handleJoinRoom}
+                    disabled={tokenDataLoading}
+                    className="my-5"
+                  >
+                    join meeting room
+                  </Button>
+
+                  <Link
+                    className="my-5"
+                    href={`/user/search/${userSpecificAppointmentInfo?.hospitalId!}/review?hId=${userSpecificAppointmentInfo?.hospitalId!}`}
+                  >
+                    <Button>Review Hospital</Button>
+                  </Link>
+                </section>
               </section>
-            </section>
-          )}
-          <section className="meeting-area w-full h-full">
-            {tokenData && (
-              <LiveKitRoom
-                audio={true}
-                video={true}
-                token={roomToken}
-                serverUrl={serverUrl}
-                connectOptions={{ autoSubscribe: true }}
-                data-lk-theme="default"
-                style={{ height: "100vh" }}
-              >
-                <VideoConference />
-              </LiveKitRoom>
             )}
-          </section>
-        </SidebarLayout>
-      )}
-    </div>
+            <section className="meeting-area w-full h-full">
+              {tokenData && (
+                <LiveKitRoom
+                  audio={true}
+                  video={true}
+                  token={roomToken}
+                  serverUrl={serverUrl}
+                  connectOptions={{ autoSubscribe: true }}
+                  data-lk-theme="default"
+                  style={{ height: "100vh" }}
+                >
+                  <VideoConference />
+                </LiveKitRoom>
+              )}
+            </section>
+          </SidebarLayout>
+        )}
+      </div>
+    </>
   );
 };
 
