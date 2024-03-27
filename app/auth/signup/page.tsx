@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import Seo from "@/app/components/Seo/Seo";
 
 const Signup = () => {
   const formRef = useRef<HTMLFormElement | any>(null);
@@ -70,6 +71,11 @@ const Signup = () => {
 
   return (
     <>
+      <Seo
+        title="Signup"
+        description="Create your Caresync account"
+        keywords="signup, create account, register"
+      />
       <section className="w-screen h-screen flex items-center justify-center">
         {userLoading || (hospitalLoading && <Loader />)}
         <form
