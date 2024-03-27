@@ -10,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="mytheme">
+    <html lang="en" data-theme="mytheme" suppressHydrationWarning>
       <Seo />
       <body className="bg-zinc-50">
         <Toaster />

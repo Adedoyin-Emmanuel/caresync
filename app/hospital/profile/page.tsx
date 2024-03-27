@@ -61,7 +61,7 @@ export default function Profile() {
 
   return (
     <>
-      <Seo title="Yourr profile" description="Your hospital profile" />
+      <Seo title="Update profile" description="Your hospital profile" />
       <div className="w-screen h-screen bg-zinc-50">
         {updateHospitalLoading ? (
           <Loader />
