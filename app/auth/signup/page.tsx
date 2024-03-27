@@ -80,10 +80,10 @@ const Signup = () => {
           ref={formRef}
         >
           <section className="header-section my-8">
-            <h3 className="text-4xl capitalize font-bold text-secondary">
+            <h3 className="text-3xl capitalize font-bold text-secondary">
               Signup
             </h3>
-            <Text>bridging health with technology</Text>
+            <Text noCapitalize>Bridging health with technology</Text>
           </section>
 
           <section className="my-4 mb-5">
@@ -153,7 +153,7 @@ const Signup = () => {
             </select>
           </section>
 
-          <section className="my-4 mb-5 w-full">
+          <section className="mt-4 mb-2 w-full">
             <Button disabled={userLoading || hospitalLoading}>Sign up</Button>
           </section>
 

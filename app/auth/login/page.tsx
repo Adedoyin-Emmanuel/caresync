@@ -78,10 +78,10 @@ const Login = () => {
         }}
       >
         <section className="header-section my-8">
-          <h3 className="text-4xl capitalize font-bold text-secondary">
+          <h3 className="text-3xl capitalize font-bold text-secondary">
             Login
           </h3>
-          <Text>bridging health with technology</Text>
+          <Text noCapitalize>Bridging health with technology</Text>
         </section>
 
         <section className="my-4 mb-5">
@@ -125,10 +125,28 @@ const Login = () => {
           </select>
         </section>
 
-        <section className="my-4 mb-5 w-full">
+        <section className="mt-4 mb-2 w-full">
           <Button disabled={isLoading}> Login</Button>
         </section>
-
+        <section>
+          <Text className="inline" noCapitalize>
+            Got no account?
+            <Link
+              className="capitalize text-secondary px-1"
+              href={"/auth/signup"}
+            >
+              create
+            </Link>
+          </Text>
+          <Text className="inline" noCapitalize>
+            <Link
+              href={"/auth/forgot-password"}
+              className="capitalize text-secondary px-1"
+            >
+              <span className="text-black">|</span> Forgot password
+            </Link>
+          </Text>
+        </section>
       </form>
     </section>
   );

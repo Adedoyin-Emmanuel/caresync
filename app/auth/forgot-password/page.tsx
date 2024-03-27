@@ -21,7 +21,6 @@ const ForgotPassword = () => {
   };
 
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
-  const router = useRouter();
 
   const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,8 +28,7 @@ const ForgotPassword = () => {
       //
       const response: any = await forgotPassword(formData);
       if (response.data) {
-          toast.success(response.data.message);
-          
+        toast.success(response.data.message);
       } else {
         toast.error(response.error.data.message);
       }
@@ -48,7 +46,7 @@ const ForgotPassword = () => {
         }}
       >
         <section className="header-section my-8">
-          <h3 className="text-4xl capitalize font-bold text-secondary">
+          <h3 className="text-3xl capitalize font-bold text-secondary">
             forgot password
           </h3>
           <Text>bridging health with technology</Text>
@@ -81,13 +79,13 @@ const ForgotPassword = () => {
           </select>
         </section>
 
-        <section className="my-4 mb-5 w-full">
+        <section className="mt-4 mb-2 w-full">
           <Button disabled={isLoading}>send email</Button>
         </section>
 
         <section>
           <Text className="inline">
-            don't have an account?
+            Got no account?
             <Link
               className="capitalize text-secondary px-1"
               href={"/auth/signup"}
