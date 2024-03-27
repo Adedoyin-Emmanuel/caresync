@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import Seo from "@/app/components/Seo/Seo";
 
 const SubmitAppointment = () => {
   const [formData, setFormData] = useState({
@@ -73,97 +74,103 @@ const SubmitAppointment = () => {
   };
 
   return (
-    <div className="w-screen h-screen bg-zinc-50">
-      <SidebarLayout>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <section className="new-appointment w-full">
-            <section className="w-11/12 md:w-3/4 xl:w-2/4 mx-auto my-8">
-              <form
-                className="w-full"
-                onSubmit={(e) => {
-                  handleFormSubmit(e);
-                }}
-              >
-                <section className="form-header my-5">
-                  <h3 className="font-bold text-2xl capitalize text-accent">
-                    Create appointment
-                  </h3>
-                  <Text className="text-sm">
-                    submitting appointment request to{" "}
-                    <span className="text-accent font-bold">
-                      {hospitalSearchProfileInfo?.clinicName}
-                    </span>
-                  </Text>
-                </section>
-                <section className="my-4 mb-5">
-                  <label htmlFor="name" className="text-md block my-2">
-                    Appointment title
-                  </label>
-                  <Input
-                    type="text"
-                    name="title"
-                    placeholder="Enter appointment title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="text-sm"
-                  />
-                </section>
+    <>
+      <Seo
+        title={`Submit Appointment`}
+        description="Submit appointment to hospital"
+      />
+      <div className="w-screen h-screen bg-zinc-50">
+        <SidebarLayout>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <section className="new-appointment w-full">
+              <section className="w-11/12 md:w-3/4 xl:w-2/4 mx-auto my-8">
+                <form
+                  className="w-full"
+                  onSubmit={(e) => {
+                    handleFormSubmit(e);
+                  }}
+                >
+                  <section className="form-header my-5">
+                    <h3 className="font-bold text-2xl capitalize text-accent">
+                      Create appointment
+                    </h3>
+                    <Text className="text-sm">
+                      submitting appointment request to{" "}
+                      <span className="text-accent font-bold">
+                        {hospitalSearchProfileInfo?.clinicName}
+                      </span>
+                    </Text>
+                  </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="name" className="text-md block my-2">
+                      Appointment title
+                    </label>
+                    <Input
+                      type="text"
+                      name="title"
+                      placeholder="Enter appointment title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      required
+                      className="text-sm"
+                    />
+                  </section>
 
-                <section className="my-4 mb-5">
-                  <label htmlFor="description" className="text-md block my-2">
-                    Appointment description
-                  </label>
-                  <textarea
-                    className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
-                    name="description"
-                    placeholder="Enter appointment description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    rows={3}
-                    required
-                  ></textarea>
-                </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="description" className="text-md block my-2">
+                      Appointment description
+                    </label>
+                    <textarea
+                      className="textarea border-2 border-gray-300 focus:outline-none rounded-md w-full textarea-md"
+                      name="description"
+                      placeholder="Enter appointment description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      rows={3}
+                      required
+                    ></textarea>
+                  </section>
 
-                <section className="my-4 mb-5">
-                  <label htmlFor="startDate" className="text-md block my-2">
-                    Start date and time
-                  </label>
-                  <Input
-                    type="datetime-local"
-                    name="startDate"
-                    value={formData.startDate}
-                    min={getCurrentDateTime()}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="startDate" className="text-md block my-2">
+                      Start date and time
+                    </label>
+                    <Input
+                      type="datetime-local"
+                      name="startDate"
+                      value={formData.startDate}
+                      min={getCurrentDateTime()}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </section>
 
-                <section className="my-4 mb-5">
-                  <label htmlFor="email" className="text-md block my-2">
-                    End date and time
-                  </label>
-                  <Input
-                    type="datetime-local"
-                    name="endDate"
-                    value={formData.endDate}
-                    min={getCurrentDateTime()}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </section>
+                  <section className="my-4 mb-5">
+                    <label htmlFor="email" className="text-md block my-2">
+                      End date and time
+                    </label>
+                    <Input
+                      type="datetime-local"
+                      name="endDate"
+                      value={formData.endDate}
+                      min={getCurrentDateTime()}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </section>
 
-                <section className="my-4 mb-5 w-full">
-                  <Button disabled={isLoading}>create appointment</Button>
-                </section>
-              </form>
+                  <section className="my-4 mb-5 w-full">
+                    <Button disabled={isLoading}>create appointment</Button>
+                  </section>
+                </form>
+              </section>
             </section>
-          </section>
-        )}
-      </SidebarLayout>
-    </div>
+          )}
+        </SidebarLayout>
+      </div>
+    </>
   );
 };
 

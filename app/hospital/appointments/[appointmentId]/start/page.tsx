@@ -101,7 +101,11 @@ const StartAppointment = () => {
 
   return (
     <>
-      <Seo title="Start appointment" description={`Start your appointment`} keywords="Start appointment, meeting"/>
+      <Seo
+        title={`${userSpecificAppointmentInfo?.title}`}
+        description={`${userSpecificAppointmentInfo?.description}`}
+        keywords="Start appointment, meeting"
+      />
       <div className="w-screen h-screen bg-zinc-50">
         {isLoading ? (
           <Loader />
