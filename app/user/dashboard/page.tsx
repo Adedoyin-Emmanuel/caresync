@@ -99,6 +99,10 @@ const Home = () => {
     router.push("/user/appointments/new");
   };
 
+  const handleSymptomsCheckerClick = () => {
+    router.push("/user/dashboard/symptoms-checker");
+  };
+
   const handleBotClick = () => {
     chatBotRef.current?.classList.remove("scale-0");
     chatBotRef.current?.classList.add("scale-100");
@@ -368,7 +372,12 @@ const Home = () => {
                     conditions based on your symptoms.
                   </Text>
 
-                  <Button className="bg-accent">Symptoms checker</Button>
+                  <Button
+                    className="bg-accent"
+                    onClick={handleSymptomsCheckerClick}
+                  >
+                    Symptoms checker
+                  </Button>
                 </section>
               </section>
 
