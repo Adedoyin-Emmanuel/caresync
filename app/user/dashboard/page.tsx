@@ -356,6 +356,20 @@ const Home = () => {
                     </section>
                   </section>
                 </section>
+                <br />
+                <br />
+                <section className="symptoms-checker">
+                  <h3 className="font-bold capitalize text-[18px] md:text-[20px]">
+                    symptoms checker
+                  </h3>
+
+                  <Text noCapitalize className="my-4">
+                    Symptoms checker to help you identify potential health
+                    conditions based on your symptoms.
+                  </Text>
+
+                  <Button className="bg-accent">Symptoms checker</Button>
+                </section>
               </section>
 
               <section className="health-care-history w-full md:hidden my-5 p-2">
