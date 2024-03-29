@@ -15,7 +15,7 @@ import Seo from "@/app/components/Seo/Seo";
 
 const NewAppointment = () => {
   const [formData, setFormData] = useState({
-    hospitalName: "",
+    hospitalName: "caresync",
   });
 
   const dispatch = useDispatch<AppDispatch>();

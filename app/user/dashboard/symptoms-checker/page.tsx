@@ -7,6 +7,8 @@ import Input from "@/app/components/Input";
 import Button from "@/app/components/Button";
 import { LoaderSmall } from "@/app/components/Loader";
 import toast from "react-hot-toast";
+import axios from "axios";
+import Link from "next/link";
 
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -19,33 +21,12 @@ const SymptomsChecker = () => {
 
   const [claudeAIResponse, setClaudeAIResponse] = useState<string>("");
   const [isAIFetchingData, setIsAIFetchingData] = useState<boolean>(false);
-
-  const ANTHROPIC_API_KEY = process.env
-    .NEXT_PUBLIC_BASE_CLAUDE_AI_KEY as string;
-
-  const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+  const [dataDonCome, setDataDonCome] = useState<boolean>(false); // This will control when to show the book appointment butttno
 
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const CUSTOM_PROMPT = `
-
-  You are a helpful AI symptoms checker named Caresync,
-  an advanced AI dedicated to helping users identify potential health conditions based on their symptoms.
-  You must provide accurate, relevant, and helpful information only about health diagnoses, healthcare recommendations, diseases and treatments, drugs, possible disease, rate of urgency, medical procedures, and related topics within the healthcare domain.
-  The user must provide you with their symptoms, then they provide you with their age and their gender which can only be Male, Female or Child.
-  You must respond in simple, concise, and understandable language that any user can comprehend.
-  If a user asks a question or initiates a discussion that is not directly related to healthcare, medical topics or symptoms , diseases etc.
-  Do not provide an answer or engage in the conversation. Instead, politely redirect their focus back to the healthcare domain and its related content.
-  If a user inquires about the creator of Caresync, respond with: "The creator of  Caresync  is Adedoyin Emmanuel Adeniyi, a Software Engineer."
-  Your expertise is limited to healthcare, medical diagnosis, treatments, and related topics, and you must not provide any information on topics outside the scope of that domain.
-  If a user inquires about the symptoms of a specific disease, you must provide accurate information about the symptoms of that disease.
-  You must also tell the user to not hesitate to book an appointment with an hospital from the appointment tab on the dashboard.
-  Additionally, you must only answer and communicate in English language, regardless of the language used by the user
-
-  `;
 
   const handleSubmitButtonClick = async () => {
     console.log(formData);
@@ -56,22 +37,13 @@ const SymptomsChecker = () => {
     if (!symptoms || !birthYear || !gender)
       return toast.error("Please fill the necessary fields");
 
-    const USER_PROMPT = `
-    I've the following symptoms ${symptoms}
-
-     I'm a ${gender} and I was born in ${birthYear}
-    `;
-
     try {
-      const response = await anthropic.completions.create({
-        model: "claude-2.1",
-        max_tokens_to_sample: 1024,
-        prompt: `${CUSTOM_PROMPT} ${USER_PROMPT}`,
-      });
+      const response = await axios.post("/api/symptoms-checker", formData);
 
       setIsAIFetchingData(false);
       console.log(response);
-      setClaudeAIResponse(response.completion);
+      setClaudeAIResponse(response.data.data.completion);
+      setDataDonCome(true);
     } catch (error: any) {
       setIsAIFetchingData(false);
       console.log(error);
@@ -137,7 +109,12 @@ const SymptomsChecker = () => {
               />
 
               <section className="mt-4 w-full ">
-                <Button onClick={handleSubmitButtonClick}>Submit</Button>
+                <Button
+                  onClick={handleSubmitButtonClick}
+                  disabled={isAIFetchingData}
+                >
+                  Submit
+                </Button>
               </section>
             </section>
 
@@ -160,6 +137,12 @@ const SymptomsChecker = () => {
               >
                 {isAIFetchingData ? <LoaderSmall /> : claudeAIResponse}
               </section>
+
+              {dataDonCome && (
+                <Link href={"/user/appointments/new"}>
+                  <Button className={`my-4`}>Book an appointment</Button>
+                </Link>
+              )}
             </section>
           </section>
         </section>
