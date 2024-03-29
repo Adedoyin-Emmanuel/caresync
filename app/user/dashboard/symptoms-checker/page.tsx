@@ -1,12 +1,28 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Seo from "@/app/components/Seo/Seo";
 import Text from "@/app/components/Text";
 import Input from "@/app/components/Input";
+import Button from "@/app/components/Button";
 
 const SymptomsChecker = () => {
+  const [formData, setFormData] = useState({
+    symptoms: "",
+    gender: "male",
+    birthYear: "",
+  });
+
+  const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmitButtonClick = () => {
+    console.log(formData);
+  };
+
   return (
     <>
       <Seo
@@ -24,7 +40,7 @@ const SymptomsChecker = () => {
             Identify potential health conditions based on your symptoms
           </Text>
 
-          <section className="my-5 md:grid grid-cols-3">
+          <section className="my-5 grid md:grid-cols-3 grid-cols-1 w-full">
             <section className="p-3 w-full border">
               <Text noCapitalize className="flex items-center gap-x-2">
                 Select symptoms
@@ -40,18 +56,33 @@ const SymptomsChecker = () => {
                 type="text"
                 placeholder="Type your symptoms here"
                 className=""
+                name="symptoms"
+                value={formData.symptoms}
+                onChange={handleInputChange}
               />
 
               <select
                 className="select border-2 border-gray-300 focus:outline-none rounded-md w-full my-5 h-16"
                 name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
               >
-                <option value="adult-male">Male</option>
-                <option value="adult-female">Female</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
                 <option value="child">Child</option>
               </select>
 
-              <Input type="number" placeholder="Enter your birthyear" />
+              <Input
+                type="number"
+                placeholder="Enter your birth year"
+                name="birthYear"
+                value={formData.birthYear}
+                onChange={handleInputChange}
+              />
+
+              <section className="mt-4 w-full ">
+                <Button onClick={handleSubmitButtonClick}>Submit</Button>
+              </section>
             </section>
 
             <section className="w-full p-3 border">
@@ -99,7 +130,25 @@ const SymptomsChecker = () => {
                     </p>
                   </div>
                 </div>
+
+                <div className="collapse collapse-arrow join-item border border-base-300">
+                  <input type="radio" name="my-accordion-4" />
+                  <Text noCapitalize className="collapse-title">
+                    Restlessness
+                  </Text>
+                  <div className="collapse-content">
+                    <p className="text-sm">
+                      Do you've you been hyper-active recently?
+                    </p>
+                  </div>
+                </div>
               </div>
+              {/* 
+              <section className="mt-4 w-full flex items-end justify-end">
+                <Button className="md:w-5 w-full">
+                  Analyze disease pattern
+                </Button>
+              </section> */}
             </section>
 
             <section className="w-full p-3 border">
