@@ -37,6 +37,7 @@ const authSlice = createSlice({
         const logoutUser = async () => {
           await axios.post("/api/auth/reset-token");
         };
+        
         logoutUser();
       }
       return initialState;
