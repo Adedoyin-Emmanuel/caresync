@@ -1,11 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import SidebarLayout from "@/app/components/SidebarLayout";
 import Seo from "@/app/components/Seo/Seo";
 import Text from "@/app/components/Text";
 import Input from "@/app/components/Input";
 import Button from "@/app/components/Button";
+import { LoaderSmall } from "@/app/components/Loader";
+import toast from "react-hot-toast";
+
+import Anthropic from "@anthropic-ai/sdk";
 
 const SymptomsChecker = () => {
   const [formData, setFormData] = useState({
@@ -14,13 +17,66 @@ const SymptomsChecker = () => {
     birthYear: "",
   });
 
+  const [claudeAIResponse, setClaudeAIResponse] = useState<string>("");
+  const [isAIFetchingData, setIsAIFetchingData] = useState<boolean>(false);
+
+  const ANTHROPIC_API_KEY = process.env
+    .NEXT_PUBLIC_BASE_CLAUDE_AI_KEY as string;
+
+  const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+
   const handleInputChange = (e: React.FormEvent<HTMLFormElement> | any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmitButtonClick = () => {
+  const CUSTOM_PROMPT = `
+
+  You are a helpful AI symptoms checker named Caresync,
+  an advanced AI dedicated to helping users identify potential health conditions based on their symptoms.
+  You must provide accurate, relevant, and helpful information only about health diagnoses, healthcare recommendations, diseases and treatments, drugs, possible disease, rate of urgency, medical procedures, and related topics within the healthcare domain.
+  The user must provide you with their symptoms, then they provide you with their age and their gender which can only be Male, Female or Child.
+  You must respond in simple, concise, and understandable language that any user can comprehend.
+  If a user asks a question or initiates a discussion that is not directly related to healthcare, medical topics or symptoms , diseases etc.
+  Do not provide an answer or engage in the conversation. Instead, politely redirect their focus back to the healthcare domain and its related content.
+  If a user inquires about the creator of Caresync, respond with: "The creator of  Caresync  is Adedoyin Emmanuel Adeniyi, a Software Engineer."
+  Your expertise is limited to healthcare, medical diagnosis, treatments, and related topics, and you must not provide any information on topics outside the scope of that domain.
+  If a user inquires about the symptoms of a specific disease, you must provide accurate information about the symptoms of that disease.
+  You must also tell the user to not hesitate to book an appointment with an hospital from the appointment tab on the dashboard.
+  Additionally, you must only answer and communicate in English language, regardless of the language used by the user
+
+  `;
+
+  const handleSubmitButtonClick = async () => {
     console.log(formData);
+    setIsAIFetchingData(true);
+
+    const { birthYear, gender, symptoms } = formData;
+
+    if (!symptoms || !birthYear || !gender)
+      return toast.error("Please fill the necessary fields");
+
+    const USER_PROMPT = `
+    I've the following symptoms ${symptoms}
+
+     I'm a ${gender} and I was born in ${birthYear}
+    `;
+
+    try {
+      const response = await anthropic.completions.create({
+        model: "claude-2.1",
+        max_tokens_to_sample: 1024,
+        prompt: `${CUSTOM_PROMPT} ${USER_PROMPT}`,
+      });
+
+      setIsAIFetchingData(false);
+      console.log(response);
+      setClaudeAIResponse(response.completion);
+    } catch (error: any) {
+      setIsAIFetchingData(false);
+      console.log(error);
+      toast.error("Oh sugar! Something went wrong.");
+    }
   };
 
   return (
@@ -40,10 +96,10 @@ const SymptomsChecker = () => {
             Identify potential health conditions based on your symptoms
           </Text>
 
-          <section className="my-5 grid md:grid-cols-3 grid-cols-1 w-full">
+          <section className="my-5 grid md:grid-cols-2 grid-cols-1 w-full">
             <section className="p-3 w-full border">
               <Text noCapitalize className="flex items-center gap-x-2">
-                Select symptoms
+                Enter symptoms
                 <span
                   className="bg-accent  text-center flex items-center justify-center font-bold h-6 w-6
              text-white rounded-full text-[12px]"
@@ -87,7 +143,7 @@ const SymptomsChecker = () => {
 
             <section className="w-full p-3 border">
               <Text noCapitalize className="flex items-center gap-x-2">
-                Selected symptoms
+                Possible diseases
                 <span
                   className="bg-accent  text-center flex items-center justify-center font-bold h-6 w-6
              text-white rounded-full text-[12px]"
@@ -97,74 +153,13 @@ const SymptomsChecker = () => {
               </Text>
               <br />
 
-              <div className="join join-vertical w-full">
-                <div className="collapse collapse-arrow join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" defaultChecked />
-                  <Text noCapitalize className="collapse-title">
-                    Reduced appetite
-                  </Text>
-                  <div className="collapse-content">
-                    <p className="text-sm">Do you've reduced appetite</p>
-                  </div>
-                </div>
-                <div className="collapse collapse-arrow join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <Text noCapitalize className="collapse-title">
-                    Tiredness
-                  </Text>
-                  <div className="collapse-content">
-                    <p className="text-sm">
-                      Do you feel tired lately even when you don't do anything
-                      stressful?
-                    </p>
-                  </div>
-                </div>
-                <div className="collapse collapse-arrow join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <Text noCapitalize className="collapse-title">
-                    Sleeplessness
-                  </Text>
-                  <div className="collapse-content">
-                    <p className="text-sm">
-                      Do you've difficulties sleeping recently?
-                    </p>
-                  </div>
-                </div>
-
-                <div className="collapse collapse-arrow join-item border border-base-300">
-                  <input type="radio" name="my-accordion-4" />
-                  <Text noCapitalize className="collapse-title">
-                    Restlessness
-                  </Text>
-                  <div className="collapse-content">
-                    <p className="text-sm">
-                      Do you've you been hyper-active recently?
-                    </p>
-                  </div>
-                </div>
-              </div>
-              {/* 
-              <section className="mt-4 w-full flex items-end justify-end">
-                <Button className="md:w-5 w-full">
-                  Analyze disease pattern
-                </Button>
-              </section> */}
-            </section>
-
-            <section className="w-full p-3 border">
-              <Text noCapitalize className="flex items-center gap-x-2">
-                Possible diseases
-                <span
-                  className="bg-accent  text-center flex items-center justify-center font-bold h-6 w-6
-             text-white rounded-full text-[12px]"
-                >
-                  <span className="text-[12px]">3</span>
-                </span>
-              </Text>
-              <br />
-
-              <Text className="">Pediatrics</Text>
-              <Text className="">Pediatrics</Text>
+              <section
+                className={`w-full ${
+                  isAIFetchingData && "flex items-center justify-center"
+                }`}
+              >
+                {isAIFetchingData ? <LoaderSmall /> : claudeAIResponse}
+              </section>
             </section>
           </section>
         </section>
